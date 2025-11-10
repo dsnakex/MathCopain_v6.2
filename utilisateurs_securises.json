@@ -1,0 +1,62 @@
+{
+    "pierre": {
+        "pin": "1234",
+        "prenom_affichage": "Pierre",
+        "profil": {
+            "niveau": "CE1",
+            "points": 0,
+            "badges": [],
+            "exercices_reussis": 0,
+            "exercices_totaux": 0,
+            "taux_reussite": 0,
+            "date_creation": "2025-11-04 03:59:24.187339",
+            "date_derniere_session": "2025-11-04 03:59:24.187947",
+            "progression": {
+                "CE1": 0,
+                "CE2": 0,
+                "CM1": 0,
+                "CM2": 0
+            }
+        }
+    },
+    "pascal": {
+        "pin": "0612",
+        "prenom_affichage": "Pascal",
+        "profil": {
+            "niveau": "CE1",
+            "points": 0,
+            "badges": [],
+            "exercices_reussis": 0,
+            "exercices_totaux": 0,
+            "taux_reussite": 0,
+            "date_creation": "2025-11-04 04:04:58.701080",
+            "date_derniere_session": "2025-11-04 04:04:58.701566",
+            "progression": {
+                "CE1": 0,
+                "CE2": 0,
+                "CM1": 0,
+                "CM2": 0
+            }
+        }
+    },
+    "maiwenn": {
+        "pin": "0209",
+        "prenom_affichage": "Maiwenn",
+        "profil": {
+            "niveau": "CE1",
+            "points": 0,
+            "badges": [],
+            "exercices_reussis": 0,
+            "exercices_totaux": 0,
+            "taux_reussite": 0,
+            "date_creation": "2025-11-08 20:09:36.158514",
+            "date_derniere_session": "2025-11-08 20:09:36.158548",
+            "progression": {
+                "CE1": 0,
+                "CE2": 0,
+                "CM1": 0,
+                "CM2": 0
+            }
+        }
+    }
+}

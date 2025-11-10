@@ -1,0 +1,25 @@
+{
+    "pascal": {
+        "points": 10,
+        "exercices_reussis": 1,
+        "exercices_totaux": 6,
+        "badges": [
+            "🌟 Premier Pas",
+            "💪 Persévérant"
+        ],
+        "niveau": "CE1",
+        "date_derniere_session": "2025-11-03T06:31:02.300180",
+        "progress_history": []
+    },
+    "": {
+        "points": 55,
+        "exercices_reussis": 4,
+        "exercices_totaux": 7,
+        "badges": [
+            "🌟 Premier Pas"
+        ],
+        "niveau": "CE1",
+        "date_derniere_session": "2025-11-03T07:20:13.403399",
+        "progress_history": []
+    }
+}

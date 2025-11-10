@@ -1,0 +1,269 @@
+{
+  "Pascal": {
+    "niveau": "CM1",
+    "points": 15,
+    "badges": [],
+    "exercices_reussis": 12,
+    "exercices_totaux": 13,
+    "taux_reussite": 92,
+    "date_creation": "2025-11-03",
+    "date_derniere_session": "2025-11-10T13:33",
+    "progression": {
+      "CE1": 0,
+      "CE2": 0,
+      "CM1": 100,
+      "CM2": 0
+    },
+    "stats_par_type": {
+      "addition": {
+        "correct": 2,
+        "total": 2
+      },
+      "soustraction": {
+        "correct": 0,
+        "total": 0
+      },
+      "multiplication": {
+        "correct": 0,
+        "total": 0
+      },
+      "division": {
+        "correct": 0,
+        "total": 0
+      },
+      "probleme": {
+        "correct": 0,
+        "total": 0
+      },
+      "fractions": {
+        "correct": 0,
+        "total": 0
+      },
+      "géométrie": {
+        "correct": 0,
+        "total": 0
+      }
+    },
+    "exercise_history": [
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-09T20:47:58.368515",
+        "time_taken": null
+      },
+      {
+        "type": "decimaux",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-10T12:55:50.265143",
+        "time_taken": null
+      },
+      {
+        "type": "decimaux",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-10T12:56:07.880643",
+        "time_taken": null
+      },
+      {
+        "type": "decimaux",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-10T12:56:28.123141",
+        "time_taken": null
+      },
+      {
+        "type": "addition",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-10T13:08:35.532370",
+        "time_taken": null
+      },
+      {
+        "type": "addition",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-10T13:08:41.921759",
+        "time_taken": null
+      },
+      {
+        "type": "proportionnalite",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-10T13:26:26.019238",
+        "time_taken": null
+      },
+      {
+        "type": "proportionnalite",
+        "correct": false,
+        "difficulty": 3,
+        "timestamp": "2025-11-10T13:26:33.303208",
+        "time_taken": null
+      },
+      {
+        "type": "proportionnalite",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-10T13:26:49.935728",
+        "time_taken": null
+      },
+      {
+        "type": "mesures",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-10T13:33:13.881618",
+        "time_taken": null
+      }
+    ]
+  },
+  "Maiwenn": {
+    "niveau": "CM2",
+    "points": 20,
+    "badges": [],
+    "exercices_reussis": 13,
+    "exercices_totaux": 15,
+    "taux_reussite": 86,
+    "date_creation": "2025-11-09",
+    "date_derniere_session": "2025-11-09T14:20",
+    "progression": {
+      "CE1": 0,
+      "CE2": 0,
+      "CM1": 0,
+      "CM2": 33
+    },
+    "exercise_history": [
+      {
+        "type": "addition",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-09T09:23:08.090625",
+        "time_taken": null
+      },
+      {
+        "type": "soustraction",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-09T09:35:53.983822",
+        "time_taken": null
+      },
+      {
+        "type": "addition",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-09T09:36:21.926935",
+        "time_taken": null
+      },
+      {
+        "type": "addition",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-09T09:36:28.368229",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:17:33.909067",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:17:39.718909",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:17:43.985986",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:17:48.318668",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:17:53.376577",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:18:15.245544",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:18:19.700309",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 2,
+        "timestamp": "2025-11-09T14:18:24.040623",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": false,
+        "difficulty": 3,
+        "timestamp": "2025-11-09T14:19:57.964103",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": false,
+        "difficulty": 4,
+        "timestamp": "2025-11-09T14:20:06.258533",
+        "time_taken": null
+      },
+      {
+        "type": "geometrie",
+        "correct": true,
+        "difficulty": 3,
+        "timestamp": "2025-11-09T14:20:19.928132",
+        "time_taken": null
+      }
+    ],
+    "stats_par_type": {
+      "addition": {
+        "correct": 3,
+        "total": 3
+      },
+      "soustraction": {
+        "correct": 1,
+        "total": 1
+      },
+      "multiplication": {
+        "correct": 0,
+        "total": 0
+      },
+      "division": {
+        "correct": 0,
+        "total": 0
+      },
+      "probleme": {
+        "correct": 0,
+        "total": 0
+      },
+      "fractions": {
+        "correct": 0,
+        "total": 0
+      }
+    }
+  }
+}
