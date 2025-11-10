@@ -1,4 +1,4 @@
-# MathCopain v5 — Application de calcul mental
+# MathCopain v6.2 — Application de calcul mental
 
 **MathCopain** est une application pédagogique pour apprendre le calcul mental du CE1 au CM2 par le jeu. Cette version propose un système d'exercices et de jeux, un suivi personnalisé des compétences et une adaptation dynamique selon la progression de chaque élève.
 
@@ -34,6 +34,6 @@ Les données sont stockées de façon sécurisée dans des fichiers JSON pour ch
 Toute suggestion ou PR est bienvenue ! Contact : mathcopain.contact@gmail.com
 
 ## Auteur
-Développé par Pascal Dao. Version v5.2 (nov. 2025)
+Développé par Pascal Dao. Version v6.2 (nov. 2025)
 
 ---
