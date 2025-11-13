@@ -4,6 +4,7 @@ Exercices de proportionnalité CM1-CM2
 """
 
 import random
+import streamlit as st
 
 # ========================================
 # GÉNÉRATEURS D'EXERCICES
@@ -248,9 +249,10 @@ def generer_vitesse(niveau):
 # FONCTIONS UTILITAIRES
 # ========================================
 
-def expliquer_regle_de_trois(qte1, valeur1, qte2, valeur2):
+@st.cache_data
+def expliquer_regle_de_trois(qte1: float, valeur1: float, qte2: float, valeur2: float) -> str:
     """
-    Génère explication pédagogique règle de trois
+    ✅ Génère explication pédagogique règle de trois (CACHÉ)
     """
     
     prix_unitaire = valeur1 / qte1
@@ -269,9 +271,10 @@ def expliquer_regle_de_trois(qte1, valeur1, qte2, valeur2):
     return explication
 
 
-def expliquer_pourcentage(nombre, pourcentage, resultat):
+@st.cache_data
+def expliquer_pourcentage(nombre: float, pourcentage: float, resultat: float) -> str:
     """
-    Explication calcul pourcentage
+    ✅ Explication calcul pourcentage (CACHÉ)
     """
     
     explication = f"### 💡 Calculer {pourcentage}% de {nombre}\n\n"

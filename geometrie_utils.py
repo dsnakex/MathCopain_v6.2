@@ -5,6 +5,8 @@ Exercices de géométrie CE1-CM2
 
 import random
 import math
+import streamlit as st
+from typing import Dict
 
 # ========================================
 # GÉNÉRATEURS D'EXERCICES
@@ -208,17 +210,18 @@ def generer_angle(niveau):
 # FONCTIONS SVG (Visualisations)
 # ========================================
 
-def dessiner_forme_svg(forme_nom, dimensions, size=300):
+@st.cache_data
+def dessiner_forme_svg(forme_nom: str, dimensions: Dict, size: int = 300) -> str:
     """
-    Génère SVG d'une forme géométrique
-    
+    ✅ Génère SVG d'une forme géométrique (CACHÉ)
+
     Args:
         forme_nom: "Carré", "Rectangle", "Triangle", "Cercle", etc.
         dimensions: dict avec dimensions (cote, longueur, largeur, etc.)
         size: taille SVG
-    
+
     Returns:
-        string HTML avec SVG
+        string HTML avec SVG (mémorisé si paramètres identiques)
     """
     
     center = size // 2
@@ -324,9 +327,10 @@ def dessiner_forme_svg(forme_nom, dimensions, size=300):
     return svg
 
 
-def dessiner_angle_svg(mesure_degres, size=300):
+@st.cache_data
+def dessiner_angle_svg(mesure_degres: int, size: int = 300) -> str:
     """
-    Dessine un angle avec arc - VERSION SIMPLIFIÉE
+    ✅ Dessine un angle avec arc - VERSION SIMPLIFIÉE (CACHÉ)
     """
     
     center_x = 75

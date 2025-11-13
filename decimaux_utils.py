@@ -4,6 +4,7 @@ Exercices sur les nombres décimaux CM1-CM2
 """
 
 import random
+import streamlit as st
 
 # ========================================
 # GÉNÉRATEURS D'EXERCICES
@@ -211,9 +212,10 @@ def calculer_score_decimal(reponse, correct, tolerance=0.1):
         return 0, f"Trop loin (écart: {distance:.2f})"
 
 
-def expliquer_comparaison_decimaux(a, b):
+@st.cache_data
+def expliquer_comparaison_decimaux(a: float, b: float) -> str:
     """
-    Génère une explication pédagogique pour comparer décimaux
+    ✅ Génère une explication pédagogique pour comparer décimaux (CACHÉ)
     """
     
     # Séparer partie entière et décimale
@@ -256,9 +258,10 @@ def expliquer_comparaison_decimaux(a, b):
     return explication
 
 
-def expliquer_addition_decimaux(a, b, resultat):
+@st.cache_data
+def expliquer_addition_decimaux(a: float, b: float, resultat: float) -> str:
     """
-    Explication pédagogique addition décimaux
+    ✅ Explication pédagogique addition décimaux (CACHÉ)
     """
     
     explication = f"### 💡 Méthode\n\n"
