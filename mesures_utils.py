@@ -4,6 +4,7 @@ Exercices de mesures et conversions CE1-CM2
 """
 
 import random
+import streamlit as st
 
 # ========================================
 # GÉNÉRATEURS D'EXERCICES
@@ -235,9 +236,10 @@ def generer_probleme_duree(niveau):
 # FONCTIONS UTILITAIRES
 # ========================================
 
-def expliquer_conversion(valeur_depart, unite_depart, unite_arrivee, reponse):
+@st.cache_data
+def expliquer_conversion(valeur_depart: float, unite_depart: str, unite_arrivee: str, reponse: float) -> str:
     """
-    Génère explication pour conversion
+    ✅ Génère explication pour conversion (CACHÉ)
     """
     
     explication = f"### 💡 Méthode de conversion\n\n"
