@@ -10,8 +10,10 @@ from adaptive_system import AdaptiveSystem
 from skill_tracker import SkillTracker
 
 # =============== CSS ===============
+@st.cache_data
 def local_css():
-    st.markdown("""
+    """CSS caché pour améliorer les performances de chargement"""
+    return """
     <style>
     .categorie-header {
         font-size: 24px; font-weight: bold; margin: 20px 0 10px 0;
@@ -46,7 +48,7 @@ def local_css():
         padding: 15px; border-radius: 10px; background-color: #fff5f0; margin: 10px 0; border-left: 5px solid #ff6b6b;
     }
     </style>
-    """, unsafe_allow_html=True)
+    """
 
 # =============== SESSION INIT ===============
 def init_session_state():
@@ -845,10 +847,8 @@ def main():
         st.session_state['profil'] = profil
     
     init_session_state()
-    local_css()
-    init_session_state()
-    local_css()
-    
+    st.markdown(local_css(), unsafe_allow_html=True)
+
     with st.sidebar:
         # --- Section PROFIL ÉLÈVE ---
         if not st.session_state.get('authentifie', False):
