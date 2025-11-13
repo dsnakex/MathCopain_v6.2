@@ -470,6 +470,101 @@ def verifier_badges(points, badges_actuels):
     return nouveaux_badges
 
 # =============== EXERCICE RAPIDE SECTION ===============
+# Callbacks pour éliminer st.rerun()
+def _callback_exercice_addition():
+    st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
+def _callback_exercice_soustraction():
+    st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
+def _callback_exercice_tables():
+    st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
+def _callback_exercice_division():
+    st.session_state.exercice_courant = generer_division(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
+def _callback_validation_exercice():
+    """Callback pour valider un exercice"""
+    ex = st.session_state.exercice_courant
+    reponse = st.session_state.input_ex
+
+    # Déterminer le type d'exercice
+    if "+" in ex['question']:
+        exercice_type = "addition"
+    elif "-" in ex['question']:
+        exercice_type = "soustraction"
+    elif "×" in ex['question']:
+        exercice_type = "multiplication"
+    elif "÷" in ex['question']:
+        exercice_type = "division"
+    else:
+        exercice_type = "autre"
+
+    # Validation de la réponse
+    if '÷' in ex['question'] and 'reste' in ex:
+        quotient_correct = ex['reponse']
+        correct = (reponse == quotient_correct)
+    else:
+        correct = (reponse == ex['reponse'])
+
+    # Enregistrer dans système adaptatif
+    if "profil" in st.session_state:
+        tracker = SkillTracker(st.session_state.profil)
+        tracker.record_exercise(exercice_type, correct, difficulty=3)
+
+    st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
+    if correct:
+        st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
+        st.session_state.points += 10
+
+    maj_streak(correct)
+    bonus = calculer_bonus_streak(st.session_state.streak['current'])
+    if correct and bonus > 0:
+        st.session_state.points += bonus
+
+    st.session_state.feedback_correct = correct
+    st.session_state.feedback_reponse = reponse
+    st.session_state.dernier_exercice = ex
+    st.session_state.dernier_exercice_type = exercice_type
+    st.session_state.show_feedback = True
+    st.session_state.scores_history.append({
+        'type': 'Calcul Mental',
+        'points': 10 + bonus,
+        'date': str(date.today())
+    })
+    nouveaux = verifier_badges(st.session_state.points, st.session_state.badges)
+    st.session_state.badges.extend(nouveaux)
+    auto_save_profil(correct)
+
+def _callback_reessayer_exercice():
+    """Callback pour réessayer un exercice similaire"""
+    exercice_type = st.session_state.get('dernier_exercice_type', 'autre')
+    if exercice_type == "addition":
+        st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+    elif exercice_type == "soustraction":
+        st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+    elif exercice_type == "multiplication":
+        st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+    elif exercice_type == "division":
+        st.session_state.exercice_courant = generer_division(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
+def _callback_exercice_suivant():
+    """Callback pour passer à l'exercice suivant"""
+    if "+" in st.session_state.dernier_exercice.get('question', ''):
+        st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+    elif "-" in st.session_state.dernier_exercice.get('question', ''):
+        st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+    elif "÷" in st.session_state.dernier_exercice.get('question', ''):
+        st.session_state.exercice_courant = generer_division(st.session_state.niveau)
+    else:
+        st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
 def exercice_rapide_section():
     st.markdown('<div class="categorie-header">📚 Exercice Rapide - Calcul Mental</div>', unsafe_allow_html=True)
     st.write("⚡ Sois rapide et précis !")
@@ -479,40 +574,22 @@ def exercice_rapide_section():
         # Pour les CE1, on ne montre pas la division
         col1, col2, col3 = st.columns(3)
         with col1:
-            if st.button("➕ Addition", key="btn_add", use_container_width=True):
-                st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
-                st.session_state.show_feedback = False
-                st.rerun()
+            st.button("➕ Addition", key="btn_add", use_container_width=True, on_click=_callback_exercice_addition)
         with col2:
-            if st.button("➖ Soustraction", key="btn_sub", use_container_width=True):
-                st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
-                st.session_state.show_feedback = False
-                st.rerun()
+            st.button("➖ Soustraction", key="btn_sub", use_container_width=True, on_click=_callback_exercice_soustraction)
         with col3:
-            if st.button("🔢 Tables", key="btn_mult", use_container_width=True):
-                st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
-                st.session_state.show_feedback = False
-                st.rerun()
+            st.button("🔢 Tables", key="btn_mult", use_container_width=True, on_click=_callback_exercice_tables)
     else:
         # Pour les autres niveaux, on montre les 4 boutons
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            if st.button("➕ Addition", key="btn_add", use_container_width=True):
-                st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+            st.button("➕ Addition", key="btn_add", use_container_width=True, on_click=_callback_exercice_addition)
         with col2:
-            if st.button("➖ Soustraction", key="btn_sub", use_container_width=True):
-                st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+            st.button("➖ Soustraction", key="btn_sub", use_container_width=True, on_click=_callback_exercice_soustraction)
         with col3:
-            if st.button("🔢 Tables", key="btn_mult", use_container_width=True):
-                st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+            st.button("🔢 Tables", key="btn_mult", use_container_width=True, on_click=_callback_exercice_tables)
         with col4:
-            if st.button("➗ Division", key="btn_div", use_container_width=True):
-                st.session_state.exercice_courant = generer_division(st.session_state.niveau)
-        
-        # Si un bouton a été cliqué, on reset le feedback et on relance
-        if any(st.session_state[f"btn_{op}"] for op in ["add", "sub", "mult", "div"]):
-            st.session_state.show_feedback = False
-            st.rerun()
+            st.button("➗ Division", key="btn_div", use_container_width=True, on_click=_callback_exercice_division)
 
     st.markdown("---")
     if st.session_state.exercice_courant:
@@ -525,55 +602,7 @@ def exercice_rapide_section():
             with col2:
                 st.write("")
                 st.write("")
-                if st.button("✅ Valider", use_container_width=True, key="btn_val_ex"):
-                    # ✅ DÉFINIR exercice_type D'ABORD
-                    if "+" in ex['question']:
-                        exercice_type = "addition"
-                    elif "-" in ex['question']:
-                        exercice_type = "soustraction"
-                    elif "×" in ex['question']:
-                        exercice_type = "multiplication"
-                    elif "÷" in ex['question']:
-                        exercice_type = "division"
-                    else:
-                        exercice_type = "autre"
-                    
-                    # Validation de la réponse
-                    if '÷' in ex['question'] and 'reste' in ex:
-                        quotient_correct = ex['reponse']
-                        correct = (reponse == quotient_correct)
-                    else:
-                        correct = (reponse == ex['reponse'])
-
-                    # 🆕 ENREGISTRER DANS SYSTÈME ADAPTATIF
-                    if "profil" in st.session_state:
-                        tracker = SkillTracker(st.session_state.profil)
-                        tracker.record_exercise(exercice_type, correct, difficulty=3)
-
-                    st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
-                    if correct:
-                        st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
-                        st.session_state.points += 10
-                    
-                    maj_streak(correct)
-                    bonus = calculer_bonus_streak(st.session_state.streak['current'])
-                    if correct and bonus > 0:
-                        st.session_state.points += bonus
-
-                    st.session_state.feedback_correct = correct
-                    st.session_state.feedback_reponse = reponse
-                    st.session_state.dernier_exercice = ex
-                    st.session_state.dernier_exercice_type = exercice_type  # ✅ Sauvegarder le type
-                    st.session_state.show_feedback = True
-                    st.session_state.scores_history.append({
-                        'type': 'Calcul Mental', 
-                        'points': 10 + bonus, 
-                        'date': str(date.today())
-                    })
-                    nouveaux = verifier_badges(st.session_state.points, st.session_state.badges)
-                    st.session_state.badges.extend(nouveaux)
-                    auto_save_profil(correct)
-                    st.rerun()
+                st.button("✅ Valider", use_container_width=True, key="btn_val_ex", on_click=_callback_validation_exercice)
         if st.session_state.show_feedback and st.session_state.dernier_exercice:
             st.markdown("---")
             if st.session_state.feedback_correct:
@@ -603,50 +632,95 @@ def exercice_rapide_section():
 
 
                 # Bouton "Réessayer même type"
-                if st.button("🔄 Réessayer un similaire", key="btn_retry"):
-                    if exercice_type == "addition":
-                        st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
-                    elif exercice_type == "soustraction":
-                        st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
-                    elif exercice_type == "multiplication":
-                        st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
-                    elif exercice_type == "division":  # 🆕 NOUVEAU
-                        st.session_state.exercice_courant = generer_division(st.session_state.niveau)
-                    st.session_state.show_feedback = False
-                    st.rerun()
+                st.button("🔄 Réessayer un similaire", key="btn_retry", on_click=_callback_reessayer_exercice)
 
             # Bouton "SUIVANT" (commun à juste/faux)
-            if st.button("➡️ SUIVANT", use_container_width=True, key="btn_next"):
-                if "+" in st.session_state.dernier_exercice.get('question', ''):
-                    st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
-                elif "-" in st.session_state.dernier_exercice.get('question', ''):
-                    st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
-                elif "÷" in st.session_state.dernier_exercice.get('question', ''):  # 🆕 NOUVEAU
-                    st.session_state.exercice_courant = generer_division(st.session_state.niveau)
-                else:
-                    st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
-                st.session_state.show_feedback = False
-                st.rerun()
+            st.button("➡️ SUIVANT", use_container_width=True, key="btn_next", on_click=_callback_exercice_suivant)
 
 # ================= SECTION JEUX ===================
+# Callbacks pour jeux
+def _callback_jeu_droite():
+    st.session_state.jeu_type = 'droite'
+    st.session_state.exercice_courant = generer_droite_numerique(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
+def _callback_jeu_memory():
+    st.session_state.jeu_type = 'memory'
+    st.session_state.jeu_memory = generer_memory_emoji(st.session_state.niveau)
+    st.session_state.memory_first_flip = None
+    st.session_state.memory_second_flip = None
+    st.session_state.memory_incorrect_pair = None
+
+def _callback_validation_droite():
+    dn = st.session_state.exercice_courant
+    reponse = st.session_state.slider_dn
+    score, message = calculer_score_droite(reponse, dn['nombre'])
+    st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
+    if score > 0:
+        st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
+        st.session_state.points += score
+    maj_streak(score > 0)
+    bonus = calculer_bonus_streak(st.session_state.streak['current'])
+    if score > 0 and bonus > 0:
+        st.session_state.points += bonus
+    st.session_state.feedback_correct = score >= 20
+    st.session_state.feedback_reponse = reponse
+    st.session_state.dernier_exercice = {'nombre': dn['nombre'], 'message': message, 'score': score}
+    st.session_state.show_feedback = True
+
+    if "profil" in st.session_state:
+        tracker = SkillTracker(st.session_state.profil)
+        tracker.record_exercise('droite_numerique', score > 0, difficulty=dn['max'] // 1000)
+
+    st.session_state.scores_history.append({'type': 'Droite Numérique', 'points': score + bonus, 'date': str(date.today())})
+    nouveaux = verifier_badges(st.session_state.points, st.session_state.badges)
+    st.session_state.badges.extend(nouveaux)
+    auto_save_profil(score > 0)
+
+def _callback_suivant_droite():
+    st.session_state.exercice_courant = generer_droite_numerique(st.session_state.niveau)
+    st.session_state.show_feedback = False
+
+def _callback_nouvelle_partie_memory():
+    st.session_state.jeu_memory = generer_memory_emoji(st.session_state.niveau)
+    st.session_state.memory_first_flip = None
+    st.session_state.memory_second_flip = None
+    st.session_state.memory_incorrect_pair = None
+
+def _callback_memory_card(idx):
+    """Callback pour cliquer sur une carte Memory"""
+    memory = st.session_state.jeu_memory
+    # Premier clic
+    if st.session_state.memory_first_flip is None:
+        st.session_state.memory_first_flip = idx
+        memory['revealed'].add(idx)
+    # Deuxième clic
+    elif st.session_state.memory_second_flip is None and idx != st.session_state.memory_first_flip:
+        st.session_state.memory_second_flip = idx
+        memory['revealed'].add(idx)
+        # Vérification automatique après deuxième clic
+        first_idx = st.session_state.memory_first_flip
+        second_idx = idx
+        if memory['cards'][first_idx] == memory['cards'][second_idx]:
+            memory['matched'].add(first_idx)
+            memory['matched'].add(second_idx)
+            st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
+            st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
+            st.session_state.points += 5
+        else:
+            st.session_state.memory_incorrect_pair = {first_idx, second_idx}
+        st.session_state.memory_first_flip = None
+        st.session_state.memory_second_flip = None
+        auto_save_profil(True)
+
 def jeu_section():
     st.markdown('<div class="categorie-header">🎮 Jeux</div>', unsafe_allow_html=True)
     st.write("Sélectionne un jeu !")
     col1, col2 = st.columns(2)
     with col1:
-        if st.button("📊 Droite Numérique", use_container_width=True, key="btn_droite"):
-            st.session_state.jeu_type = 'droite'
-            st.session_state.exercice_courant = generer_droite_numerique(st.session_state.niveau)
-            st.session_state.show_feedback = False
-            st.rerun()
+        st.button("📊 Droite Numérique", use_container_width=True, key="btn_droite", on_click=_callback_jeu_droite)
     with col2:
-        if st.button("🧠 Memory", use_container_width=True, key="btn_memory"):
-            st.session_state.jeu_type = 'memory'
-            st.session_state.jeu_memory = generer_memory_emoji(st.session_state.niveau)
-            st.session_state.memory_first_flip = None
-            st.session_state.memory_second_flip = None
-            st.session_state.memory_incorrect_pair = None
-            st.rerun()
+        st.button("🧠 Memory", use_container_width=True, key="btn_memory", on_click=_callback_jeu_memory)
     st.markdown("---")
     # DROITE NUMÉRIQUE
     if st.session_state.get('jeu_type') == 'droite' and st.session_state.exercice_courant:
@@ -656,31 +730,7 @@ def jeu_section():
         if not st.session_state.show_feedback:
             st.write("⬇️ Déplace le curseur :")
             reponse = st.slider("Position", min_value=dn['min'], max_value=dn['max'], value=dn['max']//2, key="slider_dn", label_visibility="collapsed")
-            if st.button("✅ Valider", use_container_width=True, key="btn_val_droite"):
-                score, message = calculer_score_droite(reponse, dn['nombre'])
-                st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
-                if score > 0:
-                    st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
-                    st.session_state.points += score
-                maj_streak(score > 0)
-                bonus = calculer_bonus_streak(st.session_state.streak['current'])
-                if score > 0 and bonus > 0:
-                    st.session_state.points += bonus
-                st.session_state.feedback_correct = score >= 20
-                st.session_state.feedback_reponse = reponse
-                st.session_state.dernier_exercice = {'nombre': dn['nombre'], 'message': message, 'score': score}
-                st.session_state.show_feedback = True
-
-                # 🆕 ENREGISTRER DANS SYSTÈME ADAPTATIF
-                if "profil" in st.session_state:
-                    tracker = SkillTracker(st.session_state.profil)
-                    tracker.record_exercise('droite_numerique', score > 0, difficulty=dn['max'] // 1000)
-
-                st.session_state.scores_history.append({'type': 'Droite Numérique', 'points': score + bonus, 'date': str(date.today())})
-                nouveaux = verifier_badges(st.session_state.points, st.session_state.badges)
-                st.session_state.badges.extend(nouveaux)
-                auto_save_profil(score > 0)
-                st.rerun()
+            st.button("✅ Valider", use_container_width=True, key="btn_val_droite", on_click=_callback_validation_droite)
         if st.session_state.show_feedback and st.session_state.dernier_exercice:
             st.markdown("---")
             st.info(f"🎯 Tu as placé : **{st.session_state.feedback_reponse}**")
@@ -696,10 +746,7 @@ def jeu_section():
                 st.write(f"**Ton placement :** {st.session_state.feedback_reponse}")
                 st.write(f"**Distance :** {abs(st.session_state.feedback_reponse - st.session_state.dernier_exercice['nombre'])} unités")
             with col2:
-                if st.button("➡️ SUIVANT", use_container_width=True, key="btn_next_droite"):
-                    st.session_state.exercice_courant = generer_droite_numerique(st.session_state.niveau)
-                    st.session_state.show_feedback = False
-                    st.rerun()
+                st.button("➡️ SUIVANT", use_container_width=True, key="btn_next_droite", on_click=_callback_suivant_droite)
     # MEMORY
     elif st.session_state.get('jeu_type') == 'memory' and st.session_state.jeu_memory:
         st.subheader("🧠 Memory - Trouve les paires !")
@@ -727,34 +774,7 @@ def jeu_section():
                         unsafe_allow_html=True)
                     st.button("✓", key=f"mem_{idx}_revealed", disabled=True, use_container_width=True)
                 else:
-                    if st.button("?", key=f"mem_{idx}", use_container_width=True):
-                        # Premier clic
-                        if st.session_state.memory_first_flip is None:
-                            st.session_state.memory_first_flip = idx
-                            memory['revealed'].add(idx)
-                            st.rerun()
-                        # Deuxième clic
-                        elif st.session_state.memory_second_flip is None and idx != st.session_state.memory_first_flip:
-                            st.session_state.memory_second_flip = idx
-                            memory['revealed'].add(idx)
-                            st.rerun()
-        if st.session_state.memory_first_flip is not None and st.session_state.memory_second_flip is not None:
-            first_idx = st.session_state.memory_first_flip
-            second_idx = st.session_state.memory_second_flip
-            if memory['cards'][first_idx] == memory['cards'][second_idx]:
-                memory['matched'].add(first_idx)
-                memory['matched'].add(second_idx)
-                st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
-                st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
-                st.session_state.points += 5
-                st.success("🎉 Paire trouvée!")
-            else:
-                st.info("⏳ Pas une paire... La carte sera cachée au prochain tour.")
-                st.session_state.memory_incorrect_pair = {first_idx, second_idx}
-            st.session_state.memory_first_flip = None
-            st.session_state.memory_second_flip = None
-            auto_save_profil(True)  # Memory = progression même si non notée "juste"/"faux"
-            st.rerun()
+                    st.button("?", key=f"mem_{idx}", use_container_width=True, on_click=_callback_memory_card, args=(idx,))
         if len(memory['matched']) == len(memory['cards']):
             st.markdown("---")
             st.markdown(f'<div class="feedback-success">🎉 BRAVO ! Tu as trouvé toutes les paires !</div>', unsafe_allow_html=True)
@@ -762,12 +782,7 @@ def jeu_section():
             st.session_state.points += 50
             st.session_state.scores_history.append({'type': 'Memory', 'points': 50, 'date': str(date.today())})
             auto_save_profil(True)
-            if st.button("➡️ Nouvelle partie", use_container_width=True, key="btn_new_memory"):
-                st.session_state.jeu_memory = generer_memory_emoji(st.session_state.niveau)
-                st.session_state.memory_first_flip = None
-                st.session_state.memory_second_flip = None
-                st.session_state.memory_incorrect_pair = None
-                st.rerun()
+            st.button("➡️ Nouvelle partie", use_container_width=True, key="btn_new_memory", on_click=_callback_nouvelle_partie_memory)
 
 # ============== DÉFI SECTION ==============
 # ============== DÉFI SECTION - VERSION CORRIGÉE ==============
