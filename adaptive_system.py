@@ -139,7 +139,7 @@ class AdaptiveSystem:
             {'addition': 0.65, 'soustraction': 0.42, ...}
         """
         # ✅ Utiliser les types définis dans le SkillTracker pour la cohérence
-        exercise_types = ['addition', 'soustraction', 'multiplication', 'division', 'probleme', 'fractions', 'géométrie', 'décimaux', 'proportionnalite', 'mesures']
+        exercise_types = ['addition', 'soustraction', 'multiplication', 'division', 'probleme', 'fractions', 'géométrie', 'décimaux', 'proportionnalite', 'mesures', 'monnaie']
         skill_levels = {}
         
         for ex_type in exercise_types:
