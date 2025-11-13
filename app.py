@@ -2843,7 +2843,7 @@ def mesures_section():
 
 def monnaie_section():
     """
-    Section pour apprendre à rendre la monnaie (CE2-CM2)
+    Section pour apprendre à rendre la monnaie (CE1-CM2)
     SANS DÉCIMAUX - utilise euros et centimes séparés
     """
     st.markdown('<div class="categorie-header">💰 Rendre la Monnaie</div>', unsafe_allow_html=True)
@@ -2852,7 +2852,8 @@ def monnaie_section():
 
     # Choix du type d'exercice
     types_exercices = {
-        "CE2": ["Calcul simple", "Problème réaliste"],
+        "CE1": ["Calcul simple", "Problème réaliste"],
+        "CE2": ["Calcul simple", "Composer la monnaie", "Problème réaliste"],
         "CM1": ["Calcul simple", "Composer la monnaie", "Problème réaliste"],
         "CM2": ["Calcul simple", "Composer la monnaie", "Problème réaliste"]
     }

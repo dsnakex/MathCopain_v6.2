@@ -1,6 +1,6 @@
 """
 monnaie_utils.py
-Exercices pour apprendre à rendre la monnaie CE2-CM2
+Exercices pour apprendre à rendre la monnaie CE1-CM2
 SANS DÉCIMAUX - utilise euros et centimes séparés
 """
 
@@ -29,6 +29,13 @@ PIECES_BILLETS = [
 ]
 
 CONTEXTES_ACHATS = {
+    "CE1": [
+        ("bonbon", (100, 300)),        # 1-3€ (euros entiers)
+        ("pomme", (100, 200)),         # 1-2€
+        ("pain", (100, 200)),          # 1-2€
+        ("gomme", (100, 200)),         # 1-2€
+        ("crayon", (100, 300)),        # 1-3€
+    ],
     "CE2": [
         ("pain", (100, 300)),          # 1-3€
         ("bonbon", (20, 100)),         # 0.20-1€
@@ -106,14 +113,16 @@ def generer_calcul_rendu(niveau: str) -> Dict:
     article, (prix_min, prix_max) = random.choice(articles)
 
     # Générer prix (en centimes)
-    if niveau == "CE2":
-        # CE2 : Euros entiers ou demi-euros (50 centimes)
-        prix = random.choice([
-            random.randint(1, 10) * 100,  # Euros entiers
-            random.randint(1, 8) * 100 + 50  # X euros et 50 centimes
-        ])
+    if niveau == "CE1":
+        # CE1 : Euros entiers uniquement (1€, 2€, 3€)
+        prix = random.randint(1, 3) * 100
+    elif niveau == "CE2":
+        # CE2 : Introduction des centimes (10, 20, 50 centimes)
+        euros = random.randint(1, 5)
+        centimes = random.choice([0, 10, 20, 50])
+        prix = euros * 100 + centimes
     elif niveau == "CM1":
-        # CM1 : Multiples de 10 centimes
+        # CM1 : Tous les multiples de 10 centimes
         euros = random.randint(prix_min // 100, prix_max // 100)
         centimes = random.choice([0, 10, 20, 30, 40, 50, 60, 70, 80, 90])
         prix = euros * 100 + centimes
@@ -124,7 +133,11 @@ def generer_calcul_rendu(niveau: str) -> Dict:
     # Choisir billet pour payer (arrondi supérieur)
     euros_prix = (prix + 99) // 100  # Arrondi supérieur
 
-    if niveau == "CE2":
+    if niveau == "CE1":
+        # CE1 : Billets simples (5€, 10€)
+        billets_possibles = [5, 10]
+        billet_paye = next(b for b in billets_possibles if b >= euros_prix)
+    elif niveau == "CE2":
         billets_possibles = [5, 10, 20]
         billet_paye = next(b for b in billets_possibles if b >= euros_prix)
     elif niveau == "CM1":
@@ -153,14 +166,18 @@ def generer_composition_monnaie(niveau: str) -> Dict:
     Exercice : Donner la composition en pièces/billets
     """
     # Montant à composer
-    if niveau == "CE2":
-        # CE2 : Montants simples
+    if niveau == "CE1":
+        # CE1 : Euros entiers uniquement (1€, 2€, 3€, 5€)
+        montant = random.choice([100, 200, 300, 500])
+    elif niveau == "CE2":
+        # CE2 : Introduction des centimes (10, 20, 50c)
         montant = random.choice([
-            100, 200, 500,  # 1€, 2€, 5€
-            150, 250, 350,  # 1.50€, 2.50€, 3.50€
+            100, 200, 300, 500,  # 1€, 2€, 3€, 5€
+            110, 120, 150,       # 1.10€, 1.20€, 1.50€
+            210, 220, 250,       # 2.10€, 2.20€, 2.50€
         ])
     elif niveau == "CM1":
-        # CM1 : Montants moyens
+        # CM1 : Montants moyens (multiples de 10c)
         montant = random.randint(50, 1000)
         montant = (montant // 10) * 10  # Arrondi à 10 centimes
     else:  # CM2
@@ -180,12 +197,27 @@ def generer_probleme_realiste(niveau: str) -> Dict:
     """
     Exercice : Problème réaliste avec plusieurs achats
     """
-    if niveau == "CE2":
-        # CE2 : 2 articles simples
+    if niveau == "CE1":
+        # CE1 : 1 ou 2 articles très simples (euros entiers)
+        article = random.choice(["bonbon", "pomme", "pain"])
+        prix = random.randint(1, 3) * 100  # 1-3€
+
+        paye = random.choice([5, 10]) * 100  # Paye avec 5€ ou 10€
+        # S'assurer que paye > prix
+        while paye <= prix:
+            paye = random.choice([5, 10]) * 100
+
+        rendu = paye - prix
+        total = prix
+
+        question = f"Tu achètes un(e) {article} à {centimes_vers_euros_texte(prix)}. Tu payes avec {centimes_vers_euros_texte(paye)}. Combien te rend-on ?"
+
+    elif niveau == "CE2":
+        # CE2 : 2 articles avec centimes
         article1 = random.choice(["pain", "bonbon", "gomme"])
         article2 = random.choice(["cahier", "stylo", "crayon"])
-        prix1 = random.randint(1, 3) * 100  # 1-3€
-        prix2 = random.randint(1, 4) * 100  # 1-4€
+        prix1 = random.randint(1, 3) * 100 + random.choice([0, 10, 20, 50])
+        prix2 = random.randint(1, 4) * 100 + random.choice([0, 10, 20, 50])
 
         total = prix1 + prix2
         paye = ((total + 99) // 500 + 1) * 500  # Arrondi au billet de 5€ supérieur
