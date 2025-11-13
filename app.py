@@ -192,9 +192,10 @@ def generer_division(niveau):
             dividende = (quotient * diviseur) + reste
     
     return {'question': f"{dividende} ÷ {diviseur}", 'reponse': dividende // diviseur, 'reste': dividende % diviseur}
+@st.cache_data
 def generer_explication(exercice_type, question, reponse_utilisateur, reponse_correcte):
     """
-    Génère explication pédagogique selon type d'erreur
+    Génère explication pédagogique selon type d'erreur (CACHÉ)
     """
     
     if exercice_type == "addition":
@@ -358,7 +359,9 @@ def generer_droite_numerique(niveau):
     nombre = random.randint(0, max_val)
     return {'nombre': nombre, 'min': 0, 'max': max_val}
 
+@st.cache_data
 def calculer_score_droite(reponse, correct):
+    """Calcule score droite numérique selon distance (CACHÉ)"""
     distance = abs(reponse - correct)
     max_val = correct if correct > 0 else 100
     if distance <= max_val * 0.10:
@@ -417,7 +420,9 @@ def maj_streak(correct):
     else:
         st.session_state.streak['current'] = 0
 
+@st.cache_data
 def calculer_bonus_streak(streak):
+    """Calcule bonus selon streak (CACHÉ)"""
     if streak >= 10:
         return 25
     elif streak >= 5:
