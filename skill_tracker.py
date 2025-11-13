@@ -28,10 +28,11 @@ class SkillTracker:
                 'probleme': {'correct': 0, 'total': 0},
                 'fractions': {'correct': 0, 'total': 0},
                 'géométrie': {'correct': 0, 'total': 0},
-                'decimaux': {'correct': 0, 'total': 0},  # AJOUTER
+                'decimaux': {'correct': 0, 'total': 0},
                 'proportionnalite': {'correct': 0, 'total': 0},
-                'mesures': {'correct': 0, 'total': 0}  # AJOUTER  # AJOUTER
-            
+                'mesures': {'correct': 0, 'total': 0},
+                'monnaie': {'correct': 0, 'total': 0}  # NOUVEAU
+
             }
         
         # Initialiser historique exercices

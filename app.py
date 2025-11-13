@@ -8,6 +8,14 @@ from fractions_utils import pizza_interactive, afficher_fraction_droite, dessine
 from division_utils import generer_division_simple, generer_division_reste  # ← AJOUTER
 from adaptive_system import AdaptiveSystem
 from skill_tracker import SkillTracker
+from monnaie_utils import (  # ← NOUVEAU MODULE
+    generer_calcul_rendu,
+    generer_composition_monnaie,
+    generer_probleme_realiste,
+    dessiner_pieces_monnaie,
+    expliquer_calcul_rendu,
+    centimes_vers_euros_texte
+)
 
 # =============== CSS ===============
 @st.cache_data
@@ -930,7 +938,7 @@ def main():
     st.markdown("---")
     
     # NAVIGATION PRINCIPALE
-    categories = ["Exercice", "Jeu", "Fractions", "Géométrie", "Décimaux", "Proportionnalité", "Mesures", "Entraîneur", "Défi", "Statistiques"]
+    categories = ["Exercice", "Jeu", "Fractions", "Géométrie", "Décimaux", "Proportionnalité", "Mesures", "Monnaie", "Entraîneur", "Défi", "Statistiques"]
     categorie_selectionnee = st.radio(
         "Choisis ce que tu veux faire :", 
         categories, 
@@ -970,7 +978,10 @@ def main():
         proportionnalite_section()
     elif categorie_selectionnee == "Mesures":
         mesures_section()
-    
+
+    elif categorie_selectionnee == "Monnaie":
+        monnaie_section()
+
     elif categorie_selectionnee == "Entraîneur":  # ✅ CORRECTION ICI
         mode_entraineur_section()
     
@@ -2825,6 +2836,227 @@ def mesures_section():
                     
                     auto_save_profil(correct)
                     st.rerun()
+
+# ============================================
+# 💰 MONNAIE - Apprendre à rendre la monnaie
+# ============================================
+
+def monnaie_section():
+    """
+    Section pour apprendre à rendre la monnaie (CE1-CM2)
+    SANS DÉCIMAUX - utilise euros et centimes séparés
+    """
+    st.markdown('<div class="categorie-header">💰 Rendre la Monnaie</div>', unsafe_allow_html=True)
+
+    st.info("💡 Apprends à calculer le rendu de monnaie sans te tromper !")
+
+    # Choix du type d'exercice
+    types_exercices = {
+        "CE1": ["Calcul simple", "Problème réaliste"],
+        "CE2": ["Calcul simple", "Composer la monnaie", "Problème réaliste"],
+        "CM1": ["Calcul simple", "Composer la monnaie", "Problème réaliste"],
+        "CM2": ["Calcul simple", "Composer la monnaie", "Problème réaliste"]
+    }
+
+    niveau = st.session_state.get('niveau', 'CE2')
+    types_dispo = types_exercices.get(niveau, types_exercices["CE2"])
+
+    type_exercice = st.radio(
+        "Choisis ton exercice :",
+        types_dispo,
+        horizontal=True,
+        key="monnaie_type"
+    )
+
+    st.markdown("---")
+
+    # ========= CALCUL SIMPLE =========
+    if type_exercice == "Calcul simple":
+        st.subheader("🧮 Calcul du rendu de monnaie")
+
+        # Générer ou récupérer exercice
+        if 'monnaie_exercice' not in st.session_state or st.session_state.get('monnaie_nouveau', False):
+            st.session_state.monnaie_exercice = generer_calcul_rendu(niveau)
+            st.session_state.monnaie_feedback = False
+            st.session_state.monnaie_nouveau = False
+
+        ex = st.session_state.monnaie_exercice
+
+        # Affichage de la question
+        st.markdown(f"### {ex['question']}")
+
+        st.info(f"💸 **Prix :** {ex['prix_texte']}\n\n💵 **Tu payes avec :** {ex['paye_texte']}")
+
+        if not st.session_state.get('monnaie_feedback', False):
+            # Saisie de la réponse (en euros et centimes séparés)
+            col1, col2 = st.columns(2)
+            with col1:
+                euros_reponse = st.number_input("Euros à rendre :", min_value=0, max_value=50, value=0, key="mon_euros")
+            with col2:
+                centimes_reponse = st.number_input("Centimes à rendre :", min_value=0, max_value=99, value=0, key="mon_cents")
+
+            if st.button("✅ Vérifier", key="mon_verify", use_container_width=True):
+                reponse_totale = euros_reponse * 100 + centimes_reponse
+                correct = (reponse_totale == ex['reponse_centimes'])
+
+                st.session_state.monnaie_correct = correct
+                st.session_state.monnaie_reponse = reponse_totale
+                st.session_state.monnaie_feedback = True
+
+                # Stats
+                st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
+                if correct:
+                    st.session_state.points += 20
+                    st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
+
+                # Système adaptatif
+                if "profil" in st.session_state:
+                    tracker = SkillTracker(st.session_state.profil)
+                    tracker.record_exercise('monnaie', correct, difficulty=3)
+
+                auto_save_profil(correct)
+                st.rerun()
+
+        else:
+            # Afficher feedback
+            if st.session_state.monnaie_correct:
+                st.success("🎉 Bravo ! C'est la bonne réponse !")
+                st.balloons()
+            else:
+                st.error(f"❌ Pas tout à fait ! La bonne réponse était : {ex['reponse_texte']}")
+
+                # Explication détaillée
+                st.markdown("---")
+                explication = expliquer_calcul_rendu(
+                    ex['prix_centimes'],
+                    ex['paye_centimes'],
+                    ex['reponse_centimes']
+                )
+                st.markdown(explication)
+
+            # Bouton suivant
+            if st.button("➡️ Exercice suivant", key="mon_next", use_container_width=True):
+                st.session_state.monnaie_nouveau = True
+                st.session_state.monnaie_feedback = False
+                st.rerun()
+
+    # ========= COMPOSER LA MONNAIE =========
+    elif type_exercice == "Composer la monnaie":
+        st.subheader("💵 Composer le rendu avec pièces et billets")
+
+        # Générer ou récupérer exercice
+        if 'monnaie_compo_ex' not in st.session_state or st.session_state.get('monnaie_compo_nouveau', False):
+            st.session_state.monnaie_compo_ex = generer_composition_monnaie(niveau)
+            st.session_state.monnaie_compo_feedback = False
+            st.session_state.monnaie_compo_nouveau = False
+
+        ex = st.session_state.monnaie_compo_ex
+
+        st.markdown(f"### {ex['question']}")
+
+        if not st.session_state.get('monnaie_compo_feedback', False):
+            st.info("💡 Indique le nombre de billets et pièces à utiliser (solution optimale)")
+
+            # Afficher la composition optimale comme réponse
+            if st.button("💡 Voir la solution", key="mon_compo_solution", use_container_width=True):
+                st.session_state.monnaie_compo_feedback = True
+                st.rerun()
+        else:
+            # Afficher la solution
+            st.success(f"✅ Solution optimale pour {ex['montant_texte']} :")
+
+            # Affichage visuel des pièces
+            html_pieces = dessiner_pieces_monnaie(ex['composition'])
+            st.markdown(html_pieces, unsafe_allow_html=True)
+
+            # Détail texte
+            st.markdown("**Détail :**")
+            for valeur, nom, quantite in ex['composition']:
+                st.write(f"- {quantite} × {nom}")
+
+            # Stats
+            if not st.session_state.get('monnaie_compo_counted', False):
+                st.session_state.points += 10
+                st.session_state.monnaie_compo_counted = True
+                auto_save_profil(True)
+
+            # Bouton suivant
+            if st.button("➡️ Exercice suivant", key="mon_compo_next", use_container_width=True):
+                st.session_state.monnaie_compo_nouveau = True
+                st.session_state.monnaie_compo_feedback = False
+                st.session_state.monnaie_compo_counted = False
+                st.rerun()
+
+    # ========= PROBLÈME RÉALISTE =========
+    elif type_exercice == "Problème réaliste":
+        st.subheader("🛒 Problème de la vie réelle")
+
+        # Générer ou récupérer exercice
+        if 'monnaie_pb_ex' not in st.session_state or st.session_state.get('monnaie_pb_nouveau', False):
+            st.session_state.monnaie_pb_ex = generer_probleme_realiste(niveau)
+            st.session_state.monnaie_pb_feedback = False
+            st.session_state.monnaie_pb_nouveau = False
+
+        ex = st.session_state.monnaie_pb_ex
+
+        # Affichage de la question
+        st.markdown(f"### {ex['question']}")
+
+        if not st.session_state.get('monnaie_pb_feedback', False):
+            # Saisie de la réponse (en euros et centimes séparés)
+            col1, col2 = st.columns(2)
+            with col1:
+                euros_reponse = st.number_input("Euros à rendre :", min_value=0, max_value=50, value=0, key="mon_pb_euros")
+            with col2:
+                centimes_reponse = st.number_input("Centimes à rendre :", min_value=0, max_value=99, value=0, key="mon_pb_cents")
+
+            if st.button("✅ Vérifier", key="mon_pb_verify", use_container_width=True):
+                reponse_totale = euros_reponse * 100 + centimes_reponse
+                correct = (reponse_totale == ex['reponse_centimes'])
+
+                st.session_state.monnaie_pb_correct = correct
+                st.session_state.monnaie_pb_reponse = reponse_totale
+                st.session_state.monnaie_pb_feedback = True
+
+                # Stats
+                st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
+                if correct:
+                    st.session_state.points += 30  # Plus de points pour problème complexe
+                    st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
+
+                # Système adaptatif
+                if "profil" in st.session_state:
+                    tracker = SkillTracker(st.session_state.profil)
+                    tracker.record_exercise('monnaie', correct, difficulty=4)
+
+                auto_save_profil(correct)
+                st.rerun()
+
+        else:
+            # Afficher feedback
+            if st.session_state.monnaie_pb_correct:
+                st.success("🎉 Excellent ! Tu as tout bon !")
+                st.balloons()
+            else:
+                st.error(f"❌ Presque ! La bonne réponse était : {ex['reponse_texte']}")
+
+                # Explication détaillée
+                st.markdown("---")
+                st.markdown("### 📚 Explication")
+                st.info(f"**Total à payer :** {ex['total_texte']}")
+                st.info(f"**Tu payes avec :** {ex['paye_texte']}")
+                explication = expliquer_calcul_rendu(
+                    ex['total_centimes'],
+                    ex['paye_centimes'],
+                    ex['reponse_centimes']
+                )
+                st.markdown(explication)
+
+            # Bouton suivant
+            if st.button("➡️ Exercice suivant", key="mon_pb_next", use_container_width=True):
+                st.session_state.monnaie_pb_nouveau = True
+                st.session_state.monnaie_pb_feedback = False
+                st.rerun()
 
 # ============================================
 # 🎓 MODE ENTRAÎNEUR - APPRENTISSAGE GUIDÉ
