@@ -1,0 +1,3 @@
+"""
+Modules MathCopain - Organisation modulaire
+"""

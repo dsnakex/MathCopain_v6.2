@@ -16,47 +16,9 @@ from monnaie_utils import (  # ← NOUVEAU MODULE
     expliquer_calcul_rendu,
     centimes_vers_euros_texte
 )
-
-# =============== CSS ===============
-@st.cache_data
-def local_css():
-    """CSS caché pour améliorer les performances de chargement"""
-    return """
-    <style>
-    .categorie-header {
-        font-size: 24px; font-weight: bold; margin: 20px 0 10px 0;
-        padding: 10px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        color: white; border-radius: 10px;
-    }
-    .exercice-box {
-        padding: 30px; border-radius: 10px; background-color: #f0f2f6; margin: 20px 0;
-        border-left: 5px solid #667eea; font-size: 32px; font-weight: bold; text-align: center;
-    }
-    .badge {
-        display: inline-block; padding: 8px 12px; margin: 5px;
-        border-radius: 15px; background-color: #FFD700;
-        font-weight: bold; font-size: 14px;
-    }
-    .feedback-success {
-        padding: 15px; border-radius: 10px; background-color: #d4edda; border: 2px solid #28a745; color: #155724; margin: 15px 0; font-weight: bold; font-size: 18px;
-    }
-    .feedback-error {
-        padding: 15px; border-radius: 10px; background-color: #f8d7da; border: 2px solid #dc3545; color: #721c24; margin: 15px 0; font-weight: bold; font-size: 18px;
-    }
-    .streak-box {
-        padding: 15px; background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; text-align: center; font-size: 20px; font-weight: bold; margin: 10px 0;
-    }
-    .daily-challenge-box {
-        padding: 15px; background-color: #e7f3ff; border: 2px solid #2196f3; border-radius: 10px; margin: 10px 0;
-    }
-    .leaderboard-box {
-        padding: 15px; background-color: #f3e5f5; border: 2px solid #9c27b0; border-radius: 10px; margin: 10px 0;
-    }
-    .aller-loin-box {
-        padding: 15px; border-radius: 10px; background-color: #fff5f0; margin: 10px 0; border-left: 5px solid #ff6b6b;
-    }
-    </style>
-    """
+# Modules refactorisés Phase 3
+from modules.exercices import generer_addition, generer_soustraction, generer_tables, generer_division
+from modules.ui.styles import local_css
 
 # =============== SESSION INIT ===============
 def init_session_state():
@@ -121,77 +83,7 @@ def auto_save_profil(succes):
     st.session_state["profil"] = profil
 
 # =============== EXERCICES GENERATEURS ===============
-def generer_addition(niveau):
-    if niveau == "CE1":
-        a, b = random.randint(1, 10), random.randint(1, 10)
-    elif niveau == "CE2":
-        a, b = random.randint(10, 50), random.randint(10, 50)
-    elif niveau == "CM1":
-        a, b = random.randint(50, 100), random.randint(50, 100)
-    else:
-        a, b = random.randint(100, 200), random.randint(100, 200)
-    return {'question': f"{a} + {b}", 'reponse': a + b}
-
-def generer_soustraction(niveau):
-    if niveau == "CE1":
-        a, b = random.randint(10, 20), random.randint(1, 10)
-    elif niveau == "CE2":
-        a, b = random.randint(50, 100), random.randint(10, 50)
-    elif niveau == "CM1":
-        a, b = random.randint(100, 500), random.randint(50, 100)
-    else:
-        a, b = random.randint(500, 1000), random.randint(100, 500)
-    return {'question': f"{a} - {b}", 'reponse': a - b}
-
-def generer_tables(niveau):
-    if niveau == "CE1":
-        table, mult = random.randint(2, 5), random.randint(1, 10)
-    elif niveau == "CE2":
-        table, mult = random.randint(2, 9), random.randint(1, 10)
-    elif niveau == "CM1":
-        table, mult = random.randint(1, 12), random.randint(1, 12)
-    else:
-        table, mult = random.randint(1, 15), random.randint(1, 15)
-    return {'question': f"{table} × {mult}", 'reponse': table * mult}
-def generer_division(niveau):
-    """
-    Génère division pour exercices rapides
-    """
-    if niveau == "CE1":
-        # CE1 : pas encore de divisions
-        return generer_tables(niveau)  # Fallback sur tables
-    
-    elif niveau == "CE2":
-        # CE2 : divisions simples (quotient exact)
-        quotient = random.randint(2, 9)
-        diviseur = random.randint(2, 5)
-        dividende = quotient * diviseur
-    
-    elif niveau == "CM1":
-        # CM1 : divisions plus grandes, avec ou sans reste
-        if random.random() < 0.7:  # 70% sans reste
-            quotient = random.randint(3, 12)
-            diviseur = random.randint(2, 9)
-            dividende = quotient * diviseur
-        else:  # 30% avec reste
-            diviseur = random.randint(3, 7)
-            quotient = random.randint(3, 9)
-            reste = random.randint(1, diviseur - 1)
-            dividende = (quotient * diviseur) + reste
-    
-    else:  # CM2
-        # CM2 : divisions complexes, souvent avec reste
-        if random.random() < 0.5:  # 50% sans reste
-            quotient = random.randint(5, 15)
-            diviseur = random.randint(3, 12)
-            dividende = quotient * diviseur
-        else:  # 50% avec reste
-            diviseur = random.randint(4, 9)
-            quotient = random.randint(4, 12)
-            reste = random.randint(1, diviseur - 1)
-            dividende = (quotient * diviseur) + reste
-    
-    return {'question': f"{dividende} ÷ {diviseur}", 'reponse': dividende // diviseur, 'reste': dividende % diviseur}
+# Déplacé vers modules/exercices.py (Phase 3)
 @st.cache_data
 def generer_explication(exercice_type, question, reponse_utilisateur, reponse_correcte):
     """
