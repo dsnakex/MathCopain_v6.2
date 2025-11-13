@@ -551,10 +551,11 @@ def exercice_rapide_section():
                     bonus = calculer_bonus_streak(st.session_state.streak['current'])
                     if correct and bonus > 0:
                         st.session_state.points += bonus
-                    
+
                     st.session_state.feedback_correct = correct
                     st.session_state.feedback_reponse = reponse
                     st.session_state.dernier_exercice = ex
+                    st.session_state.dernier_exercice_type = exercice_type  # ✅ Sauvegarder le type
                     st.session_state.show_feedback = True
                     st.session_state.scores_history.append({
                         'type': 'Calcul Mental', 
@@ -579,6 +580,9 @@ def exercice_rapide_section():
                 st.markdown("---")
                 st.markdown("### 📚 Comprendre l'erreur")
 
+                # ✅ Récupérer le type d'exercice depuis session_state
+                exercice_type = st.session_state.get('dernier_exercice_type', 'autre')
+
                 # Générer explication
                 explication = generer_explication(
                     exercice_type,
@@ -588,8 +592,8 @@ def exercice_rapide_section():
                 )
                 st.markdown(explication)
 
-                
-                
+
+
                 # Bouton "Réessayer même type"
                 if st.button("🔄 Réessayer un similaire", key="btn_retry"):
                     if exercice_type == "addition":
