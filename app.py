@@ -2854,7 +2854,7 @@ def monnaie_section():
 
     # ========= COMPOSER LA MONNAIE =========
     elif type_exercice == "Composer la monnaie":
-        st.subheader("💵 Composer le rendu avec pièces et billets")
+        st.subheader("💵 Composer le montant avec pièces et billets")
 
         # Générer ou récupérer exercice
         if 'monnaie_compo_ex' not in st.session_state or st.session_state.get('monnaie_compo_nouveau', False):
@@ -2866,18 +2866,101 @@ def monnaie_section():
 
         st.markdown(f"### {ex['question']}")
 
+        # Afficher le montant à composer bien visible
+        st.info(f"🎯 **Montant à composer : {ex['montant_texte']}**")
+
         if not st.session_state.get('monnaie_compo_feedback', False):
-            st.info("💡 Indique le nombre de billets et pièces à utiliser (solution optimale)")
+            st.markdown("💡 Choisis les billets et pièces pour composer ce montant :")
 
-            # Afficher la composition optimale comme réponse
-            if st.button("💡 Voir la solution", key="mon_compo_solution", use_container_width=True):
-                st.session_state.monnaie_compo_feedback = True
-                st.rerun()
+            # Interface de sélection des pièces/billets
+            st.markdown("#### 💶 Billets")
+            col1, col2, col3, col4 = st.columns(4)
+            with col1:
+                billets_50 = st.number_input("Billets de 50€", min_value=0, max_value=10, value=0, key="b50")
+            with col2:
+                billets_20 = st.number_input("Billets de 20€", min_value=0, max_value=10, value=0, key="b20")
+            with col3:
+                billets_10 = st.number_input("Billets de 10€", min_value=0, max_value=10, value=0, key="b10")
+            with col4:
+                billets_5 = st.number_input("Billets de 5€", min_value=0, max_value=10, value=0, key="b5")
+
+            st.markdown("#### 🪙 Pièces (euros)")
+            col1, col2 = st.columns(2)
+            with col1:
+                pieces_2e = st.number_input("Pièces de 2€", min_value=0, max_value=20, value=0, key="p2e")
+            with col2:
+                pieces_1e = st.number_input("Pièces de 1€", min_value=0, max_value=20, value=0, key="p1e")
+
+            st.markdown("#### 🪙 Pièces (centimes)")
+            col1, col2, col3, col4, col5 = st.columns(5)
+            with col1:
+                pieces_50c = st.number_input("50c", min_value=0, max_value=20, value=0, key="p50c")
+            with col2:
+                pieces_20c = st.number_input("20c", min_value=0, max_value=20, value=0, key="p20c")
+            with col3:
+                pieces_10c = st.number_input("10c", min_value=0, max_value=20, value=0, key="p10c")
+            with col4:
+                pieces_5c = st.number_input("5c", min_value=0, max_value=20, value=0, key="p5c")
+            with col5:
+                pieces_2c = st.number_input("2c", min_value=0, max_value=20, value=0, key="p2c")
+
+            pieces_1c = st.number_input("Pièces de 1 centime", min_value=0, max_value=20, value=0, key="p1c")
+
+            # Calcul du total proposé par l'élève
+            total_propose = (billets_50 * 5000 + billets_20 * 2000 + billets_10 * 1000 + billets_5 * 500 +
+                           pieces_2e * 200 + pieces_1e * 100 + pieces_50c * 50 + pieces_20c * 20 +
+                           pieces_10c * 10 + pieces_5c * 5 + pieces_2c * 2 + pieces_1c * 1)
+
+            # Afficher le total en temps réel
+            from monnaie_utils import centimes_vers_euros_texte
+            st.markdown(f"**Ton total actuel : {centimes_vers_euros_texte(total_propose)}**")
+
+            # Boutons
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("✅ Vérifier ma réponse", key="mon_compo_verify", use_container_width=True):
+                    correct = (total_propose == ex['montant_centimes'])
+
+                    # Compter le nombre de pièces utilisées
+                    nb_pieces_eleve = (billets_50 + billets_20 + billets_10 + billets_5 + pieces_2e +
+                                      pieces_1e + pieces_50c + pieces_20c + pieces_10c + pieces_5c +
+                                      pieces_2c + pieces_1c)
+                    nb_pieces_optimal = sum(q for _, _, q in ex['composition'])
+
+                    st.session_state.monnaie_compo_correct = correct
+                    st.session_state.monnaie_compo_optimal = (nb_pieces_eleve == nb_pieces_optimal)
+                    st.session_state.monnaie_compo_feedback = True
+
+                    # Stats
+                    st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
+                    if correct:
+                        st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
+                        points_gagnes = 15 if nb_pieces_eleve == nb_pieces_optimal else 10
+                        st.session_state.points += points_gagnes
+                    auto_save_profil(correct)
+                    st.rerun()
+
+            with col2:
+                if st.button("💡 Voir la solution optimale", key="mon_compo_solution", use_container_width=True):
+                    st.session_state.monnaie_compo_feedback = True
+                    st.session_state.monnaie_compo_voir_solution = True
+                    st.rerun()
         else:
-            # Afficher la solution
-            st.success(f"✅ Solution optimale pour {ex['montant_texte']} :")
+            # Afficher le résultat
+            if st.session_state.get('monnaie_compo_voir_solution', False):
+                st.info("💡 Voici la solution optimale (minimum de pièces/billets) :")
+            elif st.session_state.get('monnaie_compo_correct', False):
+                if st.session_state.get('monnaie_compo_optimal', False):
+                    st.success("🎉 PARFAIT ! Tu as trouvé la solution optimale ! (+15 points)")
+                    st.balloons()
+                else:
+                    st.success("✅ BRAVO ! Le montant est correct ! (+10 points)")
+                    st.info("💡 Il existe une solution avec moins de pièces/billets")
+            else:
+                st.error("❌ Le montant n'est pas correct. Voici la solution optimale :")
 
-            # Affichage visuel des pièces
+            # Affichage visuel des pièces optimales
+            st.markdown(f"**Solution optimale pour {ex['montant_texte']} :**")
             html_pieces = dessiner_pieces_monnaie(ex['composition'])
             st.markdown(html_pieces, unsafe_allow_html=True)
 
@@ -2886,17 +2969,11 @@ def monnaie_section():
             for valeur, nom, quantite in ex['composition']:
                 st.write(f"- {quantite} × {nom}")
 
-            # Stats
-            if not st.session_state.get('monnaie_compo_counted', False):
-                st.session_state.points += 10
-                st.session_state.monnaie_compo_counted = True
-                auto_save_profil(True)
-
             # Bouton suivant
             if st.button("➡️ Exercice suivant", key="mon_compo_next", use_container_width=True):
                 st.session_state.monnaie_compo_nouveau = True
                 st.session_state.monnaie_compo_feedback = False
-                st.session_state.monnaie_compo_counted = False
+                st.session_state.monnaie_compo_voir_solution = False
                 st.rerun()
 
     # ========= PROBLÈME RÉALISTE =========
