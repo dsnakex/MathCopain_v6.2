@@ -294,44 +294,22 @@ def dessiner_pieces_monnaie(composition: List[Tuple[int, str, int]]) -> str:
         if valeur >= 500:
             # Billet
             for _ in range(quantite):
-                html_parts.append(f'''
-                <div style="
-                    width: 80px;
-                    height: 50px;
-                    background: {couleur};
-                    border: 2px solid #333;
-                    border-radius: 5px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-weight: bold;
-                    font-size: 14px;
-                ">
-                    {valeur // 100}€
-                </div>
-                ''')
+                html_parts.append(
+                    f'<div style="width: 80px; height: 50px; background: {couleur}; '
+                    f'border: 2px solid #333; border-radius: 5px; display: flex; '
+                    f'align-items: center; justify-content: center; color: white; '
+                    f'font-weight: bold; font-size: 14px;">{valeur // 100}€</div>'
+                )
         else:
             # Pièce
             for _ in range(quantite):
                 texte = f"{valeur // 100}€" if valeur >= 100 else f"{valeur}c"
-                html_parts.append(f'''
-                <div style="
-                    width: 50px;
-                    height: 50px;
-                    background: {couleur};
-                    border: 3px solid #8B6914;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: #333;
-                    font-weight: bold;
-                    font-size: 12px;
-                ">
-                    {texte}
-                </div>
-                ''')
+                html_parts.append(
+                    f'<div style="width: 50px; height: 50px; background: {couleur}; '
+                    f'border: 3px solid #8B6914; border-radius: 50%; display: flex; '
+                    f'align-items: center; justify-content: center; color: #333; '
+                    f'font-weight: bold; font-size: 12px;">{texte}</div>'
+                )
 
     html_parts.append('</div>')
     return ''.join(html_parts)
