@@ -1,0 +1,92 @@
+🎯 CONTEXTE POUR CLAUDE CHAT - MathCopain v6.2
+================================================
+
+# Projet
+Application Streamlit d'apprentissage maths enfants CE1-CM2 (6-12 ans)
+
+# Situation actuelle
+- Performance améliorée de 90% (59s → 5-6s pour 20 exercices)
+- Architecture partiellement modulaire (modules/ créée)
+- 6 modules pédagogiques : Fractions, Géométrie, Décimaux, Mesures, Proportionnalité, Monnaie
+- Système adaptatif pour ajuster difficulté selon performance élève
+
+# Travail réalisé (3 phases)
+✅ Phase 1 : Cache (CSS, I/O, SVG) → -85%
+✅ Phase 2 : Callbacks (18 st.rerun() éliminés) → -15%
+✅ Phase 3 : Architecture modulaire (modules/ créée)
+✅ Nouveau : Module Monnaie CE1-CM2 (sans décimaux)
+
+# Architecture actuelle
+app.py (4894 lignes) - Encore monolithique
+├── modules/
+│   ├── exercices.py (générateurs)
+│   └── ui/styles.py (CSS)
+├── *_utils.py (6 modules pédagogiques cachés)
+├── adaptive_system.py
+└── utilisateur.py (cache mémoire)
+
+# Points d'attention
+⚠️ app.py encore volumineux (4894 lignes)
+⚠️ 98 st.rerun() restants (impact faible ~2-3%)
+⚠️ Pas de tests unitaires
+⚠️ Authentification basique JSON (pas scalable)
+⚠️ Streamlit = session-based (limite scalabilité)
+
+# Pistes d'évolution à discuter
+
+## Court terme (1-2 jours)
+1. Éliminer 98 st.rerun() restants
+2. Tests unitaires
+3. Extraire sections → modules/sections/
+
+## Moyen terme (1-2 semaines)
+4. Composants UI réutilisables
+5. Graphiques progression + historique
+6. Mode multijoueur/compétition
+7. Thèmes visuels (dark mode)
+
+## Long terme (1-3 mois)
+8. Backend FastAPI (séparation frontend/backend)
+9. PostgreSQL (remplacer JSON)
+10. Système recommandations IA
+11. App mobile
+12. Gamification avancée (XP, quêtes, missions)
+
+# Questions pour toi (Claude Chat)
+
+## Stratégie
+- Prochaine priorité : performance, fonctionnalités, ou architecture ?
+- Rester sur Streamlit ou migrer vers stack plus scalable ?
+- Le module Monnaie doit-il être étendu (épargne, budget) ?
+
+## Technique
+- Comment organiser les 98 st.rerun() restants : tout refactorer ou laisser ?
+- Quel pattern pour extraire sections pédagogiques (classe de base, factory, fichiers séparés) ?
+- Système de plugins pour nouveaux modules ?
+- Lazy loading des modules bénéfique ?
+
+## Performance
+- Où sont les prochains goulots d'étranglement ?
+- Redis nécessaire ou cache Streamlit suffit pour 100+ users ?
+
+## Fonctionnel
+- Gamification : quels features ont le + d'impact engagement élèves ?
+- Système badges/achievements dynamiques basé sur patterns d'apprentissage ?
+- Mode collaboratif (élèves s'entraident) ou compétitif (classements) ?
+
+## Analytics
+- Système tracking pour analyser progression élèves ?
+- Détection automatique difficultés d'apprentissage ?
+- Dashboard enseignant/parent ?
+
+# Ton avis SVP
+Quelle devrait être la roadmap optimale en termes de :
+1. Impact pédagogique (engagement élèves)
+2. Faisabilité technique (effort/bénéfice)
+3. Scalabilité (croissance utilisateurs)
+4. Maintenabilité (code propre)
+
+Priorise les 5 actions les plus impactantes avec justification.
+
+---
+Fichiers détails : SYNTHESE_OPTIMISATIONS.md (450+ lignes) et RESUME_EXECUTIF.md (150 lignes)
