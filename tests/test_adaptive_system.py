@@ -1,7 +1,7 @@
 """Tests pour le système adaptatif de MathCopain."""
 import pytest
 from datetime import datetime, timedelta
-from adaptive_system import AdaptiveSystem
+from core.adaptive_system import AdaptiveSystem
 
 
 @pytest.fixture

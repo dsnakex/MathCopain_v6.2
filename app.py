@@ -6,8 +6,10 @@ from ui_authentification import verifier_authentification
 from utilisateur import charger_utilisateur, sauvegarder_utilisateur, obtenir_tous_eleves, profil_par_defaut  # ← AJOUTER
 from fractions_utils import pizza_interactive, afficher_fraction_droite, dessiner_pizza  # ← VÉRIFIER
 from division_utils import generer_division_simple, generer_division_reste  # ← AJOUTER
-from adaptive_system import AdaptiveSystem
-from skill_tracker import SkillTracker
+
+# ✅ REFACTORED Phase 2: Import from core package
+from core import AdaptiveSystem, SkillTracker, SessionManager, DataManager
+
 from monnaie_utils import (  # ← NOUVEAU MODULE
     generer_calcul_rendu,
     generer_composition_monnaie,

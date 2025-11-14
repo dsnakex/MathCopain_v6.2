@@ -1,7 +1,7 @@
 """Tests pour le suivi des compétences (SkillTracker)."""
 import pytest
 from datetime import datetime
-from skill_tracker import SkillTracker
+from core.skill_tracker import SkillTracker
 
 
 @pytest.fixture
