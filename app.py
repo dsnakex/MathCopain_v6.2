@@ -625,8 +625,9 @@ def jeu_section():
         st.subheader(f"📍 Place le nombre {dn['nombre']} sur la droite")
         st.write(f"*De {dn['min']} à {dn['max']}*")
         if not st.session_state.show_feedback:
-            st.write("⬇️ Déplace le curseur :")
-            reponse = st.slider("Position", min_value=dn['min'], max_value=dn['max'], value=dn['max']//2, key="slider_dn", label_visibility="collapsed")
+            st.write("⬇️ Déplace le curseur pour placer le nombre :")
+            st.write("💡 **Astuce** : Essaye d'estimer où se trouve le nombre sans voir la valeur !")
+            reponse = st.slider("Position", min_value=dn['min'], max_value=dn['max'], value=dn['max']//2, key="slider_dn", label_visibility="collapsed", format=" ")
             st.button("✅ Valider", use_container_width=True, key="btn_val_droite", on_click=_callback_validation_droite)
         if st.session_state.show_feedback and st.session_state.dernier_exercice:
             st.markdown("---")
