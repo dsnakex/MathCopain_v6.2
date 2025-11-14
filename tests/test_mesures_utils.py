@@ -140,9 +140,9 @@ class TestConversionMasse:
 class TestConversionCapacite:
     """Tests des conversions de capacité."""
 
-    @pytest.mark.parametrize("niveau", ["CE1", "CE2", "CM1", "CM2"])
+    @pytest.mark.parametrize("niveau", ["CE2", "CM1", "CM2"])
     def test_generation_par_niveau(self, niveau):
-        """Générer conversion de capacité pour chaque niveau."""
+        """Générer conversion de capacité pour chaque niveau (CE2+)."""
         conversion = generer_conversion_capacite(niveau)
 
         assert 'valeur_depart' in conversion
@@ -150,6 +150,11 @@ class TestConversionCapacite:
         assert 'unite_arrivee' in conversion
         assert 'reponse' in conversion
         assert 'question' in conversion
+
+    def test_ce1_non_implemente(self):
+        """CE1 n'a pas encore de conversions de capacité."""
+        result = generer_conversion_capacite("CE1")
+        assert result is None
 
     def test_valeur_depart_positive(self):
         """La valeur de départ doit être positive."""
