@@ -8,7 +8,7 @@ from fractions_utils import pizza_interactive, afficher_fraction_droite, dessine
 from division_utils import generer_division_simple, generer_division_reste  # ← AJOUTER
 
 # ✅ REFACTORED Phase 2: Import from core package
-from core import AdaptiveSystem, SkillTracker, SessionManager, DataManager
+from core import AdaptiveSystem, SkillTracker, SessionManager, DataManager, exercise_generator
 
 from monnaie_utils import (  # ← NOUVEAU MODULE
     generer_calcul_rendu,
@@ -19,7 +19,8 @@ from monnaie_utils import (  # ← NOUVEAU MODULE
     centimes_vers_euros_texte
 )
 # Modules refactorisés Phase 3
-from modules.exercices import generer_addition, generer_soustraction, generer_tables, generer_division
+# ✅ Deprecated: Now using core.exercise_generator
+# from modules.exercices import generer_addition, generer_soustraction, generer_tables, generer_division
 from modules.ui.styles import local_css
 
 # =============== SESSION INIT ===============
@@ -85,226 +86,12 @@ def auto_save_profil(succes):
     st.session_state["profil"] = profil
 
 # =============== EXERCICES GENERATEURS ===============
-# Déplacé vers modules/exercices.py (Phase 3)
-@st.cache_data
-def generer_explication(exercice_type, question, reponse_utilisateur, reponse_correcte):
-    """
-    Génère explication pédagogique selon type d'erreur (CACHÉ)
-    """
-    
-    if exercice_type == "addition":
-        a, b = map(int, question.replace(" ", "").split("+"))
-        
-        # Décomposition par dizaines
-        if a >= 10 or b >= 10:
-            dizaine_a = (a // 10) * 10
-            unite_a = a % 10
-            dizaine_b = (b // 10) * 10
-            unite_b = b % 10
-            
-            explication = f"""
-            💡 **Décomposons ensemble:**
-            
-            {a} = {dizaine_a} + {unite_a}
-            {b} = {dizaine_b} + {unite_b}
-            
-            **Étape 1:** Additionne les dizaines
-            → {dizaine_a} + {dizaine_b} = {dizaine_a + dizaine_b}
-            
-            **Étape 2:** Additionne les unités
-            → {unite_a} + {unite_b} = {unite_a + unite_b}
-            
-            **Étape 3:** Somme finale
-            → {dizaine_a + dizaine_b} + {unite_a + unite_b} = **{reponse_correcte}**
-            """
-        else:
-            # Méthode des bonds
-            explication = f"""
-            💡 **Méthode des bonds:**
-            
-            Commence à {a}
-            → Fais un bond de {b}
-            → Tu arrives à **{reponse_correcte}**
-            
-            Ou autrement: {a} + {b//2} = {a + b//2}, puis +{b - b//2} = **{reponse_correcte}**
-            """
-            
-        # Astuce selon difficulté
-        if b == 9:
-            astuce = f"✨ **Astuce:** Pour +9, fais +10 puis -1 → {a}+10={a+10}, puis -1={reponse_correcte}"
-        elif b == 8:
-            astuce = f"✨ **Astuce:** Pour +8, fais +10 puis -2 → {a}+10={a+10}, puis -2={reponse_correcte}"
-        else:
-            astuce = ""
-            
-        return explication + "\n" + astuce
-    
-    elif exercice_type == "soustraction":
-        a, b = map(int, question.replace(" ", "").split("-"))
-        
-        # Vérifier si retenue
-        if a % 10 < b % 10:
-            explication = f"""
-            💡 **Soustraction avec retenue:**
-            
-            {a} - {b} = ?
-            
-            **Problème:** On ne peut pas enlever {b % 10} de {a % 10}
-            
-            **Solution:**
-            1. Emprunte une dizaine
-            2. {a} devient {(a//10 - 1)*10 + 10 + a%10}
-            3. Maintenant: {10 + a%10} - {b%10} = {10 + a%10 - b%10}
-            4. Puis: {(a//10 - 1)*10} - {(b//10)*10} = {(a//10 - 1)*10 - (b//10)*10}
-            5. Total: **{reponse_correcte}**
-            """
-        else:
-            explication = f"""
-            💡 **Soustraction simple:**
-            
-            {a} - {b} = ?
-            
-            Enlève les dizaines: {(a//10)*10} - {(b//10)*10} = {(a//10 - b//10)*10}
-            Enlève les unités: {a%10} - {b%10} = {a%10 - b%10}
-            Résultat: **{reponse_correcte}**
-            """
-            
-        return explication
-    
-    elif exercice_type == "multiplication":
-        table, mult = map(int, question.replace(" ", "").replace("×", " ").split())
-        
-        # Stratégies selon multiplication
-        strategies = []
-        
-        # Stratégie 1: Doubler
-        if mult % 2 == 0:
-            demi = mult // 2
-            strategies.append(f"**Méthode 1 (Doubler):**\n{table}×{demi} = {table*demi}\nDouble: {table*demi}×2 = **{reponse_correcte}**")
-        
-        # Stratégie 2: Par 10
-        if mult <= 10:
-            strategies.append(f"**Méthode 2 (Par 10):**\n{table}×10 = {table*10}\nEnlève {table}×{10-mult}: {table*10} - {table*(10-mult)} = **{reponse_correcte}**")
-        
-        # Stratégie 3: Décomposer
-        if mult >= 6:
-            strategies.append(f"**Méthode 3 (Décomposer):**\n{table}×5 = {table*5}\n{table}×{mult-5} = {table*(mult-5)}\nSomme: {table*5} + {table*(mult-5)} = **{reponse_correcte}**")
-        
-        explication = f"💡 **Plusieurs façons de calculer {table}×{mult}:**\n\n" + "\n\n".join(strategies)
-        explication += f"\n\n✨ **Choisis la méthode qui te semble la plus facile!**"
-        
-        return explication
-    
-    elif exercice_type == "division":
-        try:
-            dividende, diviseur = map(int, question.replace(" ", "").replace("÷", " ").split())
-        except:
-            return "Regarde bien le calcul et réessaye!"
-        
-        quotient = dividende // diviseur
-        reste = dividende % diviseur
-        
-        explication = f"""
-        💡 **Division : {dividende} ÷ {diviseur}**
-        
-        **Méthode 1 : Par les tables**
-        Cherche dans la table de {diviseur} :
-        """
-        
-        # Afficher table de référence
-        table_ref = []
-        for i in range(1, 13):
-            resultat = diviseur * i
-            if resultat <= dividende + diviseur:
-                if resultat == dividende:
-                    table_ref.append(f"✅ {diviseur} × {i} = {resultat} ← C'est ça!")
-                elif resultat < dividende:
-                    table_ref.append(f"{diviseur} × {i} = {resultat}")
-                else:
-                    table_ref.append(f"⚠️ {diviseur} × {i} = {resultat} (trop grand)")
-                    break
-        
-        explication += "\n" + "\n".join(table_ref)
-        
-        if reste > 0:
-            explication += f"""
-            
-            **Attention : Il y a un reste!**
-            {dividende} = ({diviseur} × {quotient}) + {reste}
-            
-            Donc : **{dividende} ÷ {diviseur} = {quotient} reste {reste}**
-            """
-        else:
-            explication += f"""
-            
-            **Résultat exact : {dividende} ÷ {diviseur} = {quotient}**
-            """
-        
-        explication += """
-        
-        ✨ **Astuce :** Pour vérifier, multiplie le quotient par le diviseur!
-        """
-        
-        return explication
-    
-    return "Regarde bien le calcul et réessaye!"
-def generer_droite_numerique(niveau):
-    max_val = {"CE1": 100, "CE2": 1000, "CM1": 10000}.get(niveau, 100000)
-    nombre = random.randint(0, max_val)
-    return {'nombre': nombre, 'min': 0, 'max': max_val}
-
-@st.cache_data
-def calculer_score_droite(reponse, correct):
-    """Calcule score droite numérique selon distance (CACHÉ)"""
-    distance = abs(reponse - correct)
-    max_val = correct if correct > 0 else 100
-    if distance <= max_val * 0.10:
-        return 20, "Excellent ! (±10%)"
-    elif distance <= max_val * 0.20:
-        return 5, "Presque ! (±20%)"
-    else:
-        return 0, f"Trop loin (distance: {distance})"
-
-def generer_memory_emoji(niveau):
-    emojis = ['🍎', '🐶', '🎨', '🌟', '🎭', '🎸', '🚀', '🏆', '🎮', '🍕', '🐱', '⚽', '🎪', '🎯', '🌈', '🍦']
-    if niveau == "CE1":
-        paires = emojis[:4]
-    elif niveau == "CE2":
-        paires = emojis[:6]
-    elif niveau == "CM1":
-        paires = emojis[:8]
-    else:
-        paires = emojis[:10]
-    cards = paires + paires
-    random.shuffle(cards)
-    return {
-        'cards': cards,
-        'revealed': set(),
-        'matched': set()
-    }
-
-def generer_probleme(niveau):
-    contextes = [
-        ("Marie a {a} billes. Son ami lui en donne {b}.", "Combien a-t-elle ?", "addition"),
-        ("Théo a {a} euros. Il achète quelque chose qui coûte {b} euros.", "Combien lui reste-t-il ?", "soustraction"),
-        ("Il y a {a} rangées de {b} chaises.", "Combien de chaises en tout ?", "multiplication"),
-        ("On partage {a} bonbons entre {b} enfants.", "Combien chacun a ?", "division")
-    ]
-    contexte_base, question, operation = random.choice(contextes)
-    params = {'CE1': (5, 20, 2, 10), 'CE2': (20, 50, 5, 30), 'CM1': (50, 200, 10, 50)}
-    a1, a2, b1, b2 = params.get(niveau, (100, 500, 20, 100))
-    a, b = random.randint(a1, a2), random.randint(b1, b2)
-    contexte = contexte_base.format(a=a, b=b)
-    if operation == "addition":
-        reponse = a + b
-    elif operation == "soustraction":
-        if a < b: a, b = b, a
-        reponse = a - b
-    elif operation == "multiplication":
-        reponse = a * b
-    else:
-        reponse = a // b if b > 0 else 0
-    return {'question': f"{contexte} {question}", 'reponse': reponse}
+# ✅ REFACTORED Phase 2: Moved to core/exercise_generator.py
+# All exercise generation functions are now in core.exercise_generator module:
+# - generer_addition, generer_soustraction, generer_tables, generer_division
+# - generer_probleme, generer_droite_numerique, generer_memory_emoji
+# - generer_explication, generer_daily_challenge
+# - calculer_score_droite
 
 # =============== BADGES, STREAK, LEADERBOARD, DÉFI JOUR ===============
 def maj_streak(correct):
@@ -337,24 +124,6 @@ def afficher_leaderboard():
         st.write(f"{medal} **{score['points']} pts** - {score['type']}")
     st.markdown('</div>', unsafe_allow_html=True)
 
-def generer_daily_challenge():
-    today = str(date.today())
-    if st.session_state.daily_challenge.get('today_date') != today:
-        random.seed(today)
-        challenges = [
-            {'type': 'addition', 'objectif': 5, 'text': 'Enchaîne 5 bonnes réponses en Addition'},
-            {'type': 'soustraction', 'objectif': 5, 'text': 'Enchaîne 5 bonnes réponses en Soustraction'},
-            {'type': 'tables', 'objectif': 5, 'text': 'Enchaîne 5 bonnes réponses aux Tables'},
-            {'type': 'droite', 'objectif': 3, 'text': 'Fais 3 bonnes estimations à la Droite'}
-        ]
-        challenge = random.choice(challenges)
-        st.session_state.daily_challenge = {
-            'today_date': today,
-            'completed': False,
-            'challenge': challenge,
-            'progress': 0
-        }
-
 def verifier_badges(points, badges_actuels):
     badges_disponibles = {
         'premier_pas': {'seuil': 1, 'nom': '🌟 Premier Pas'},
@@ -371,19 +140,19 @@ def verifier_badges(points, badges_actuels):
 # =============== EXERCICE RAPIDE SECTION ===============
 # Callbacks pour éliminer st.rerun()
 def _callback_exercice_addition():
-    st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+    st.session_state.exercice_courant = exercise_generator.generer_addition(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def _callback_exercice_soustraction():
-    st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+    st.session_state.exercice_courant = exercise_generator.generer_soustraction(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def _callback_exercice_tables():
-    st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+    st.session_state.exercice_courant = exercise_generator.generer_tables(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def _callback_exercice_division():
-    st.session_state.exercice_courant = generer_division(st.session_state.niveau)
+    st.session_state.exercice_courant = exercise_generator.generer_division(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def _callback_validation_exercice():
@@ -443,25 +212,25 @@ def _callback_reessayer_exercice():
     """Callback pour réessayer un exercice similaire"""
     exercice_type = st.session_state.get('dernier_exercice_type', 'autre')
     if exercice_type == "addition":
-        st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_addition(st.session_state.niveau)
     elif exercice_type == "soustraction":
-        st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_soustraction(st.session_state.niveau)
     elif exercice_type == "multiplication":
-        st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_tables(st.session_state.niveau)
     elif exercice_type == "division":
-        st.session_state.exercice_courant = generer_division(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_division(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def _callback_exercice_suivant():
     """Callback pour passer à l'exercice suivant"""
     if "+" in st.session_state.dernier_exercice.get('question', ''):
-        st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_addition(st.session_state.niveau)
     elif "-" in st.session_state.dernier_exercice.get('question', ''):
-        st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_soustraction(st.session_state.niveau)
     elif "÷" in st.session_state.dernier_exercice.get('question', ''):
-        st.session_state.exercice_courant = generer_division(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_division(st.session_state.niveau)
     else:
-        st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_tables(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def exercice_rapide_section():
@@ -520,7 +289,7 @@ def exercice_rapide_section():
                 exercice_type = st.session_state.get('dernier_exercice_type', 'autre')
 
                 # Générer explication
-                explication = generer_explication(
+                explication = exercise_generator.generer_explication(
                     exercice_type,
                     st.session_state.dernier_exercice['question'],
                     st.session_state.feedback_reponse,
@@ -540,12 +309,12 @@ def exercice_rapide_section():
 # Callbacks pour jeux
 def _callback_jeu_droite():
     st.session_state.jeu_type = 'droite'
-    st.session_state.exercice_courant = generer_droite_numerique(st.session_state.niveau)
+    st.session_state.exercice_courant = exercise_generator.generer_droite_numerique(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def _callback_jeu_memory():
     st.session_state.jeu_type = 'memory'
-    st.session_state.jeu_memory = generer_memory_emoji(st.session_state.niveau)
+    st.session_state.jeu_memory = exercise_generator.generer_memory_emoji(st.session_state.niveau)
     st.session_state.memory_first_flip = None
     st.session_state.memory_second_flip = None
     st.session_state.memory_incorrect_pair = None
@@ -553,7 +322,7 @@ def _callback_jeu_memory():
 def _callback_validation_droite():
     dn = st.session_state.exercice_courant
     reponse = st.session_state.slider_dn
-    score, message = calculer_score_droite(reponse, dn['nombre'])
+    score, message = exercise_generator.calculer_score_droite(reponse, dn['nombre'])
     st.session_state.stats_par_niveau[st.session_state.niveau]['total'] += 1
     if score > 0:
         st.session_state.stats_par_niveau[st.session_state.niveau]['correct'] += 1
@@ -577,11 +346,11 @@ def _callback_validation_droite():
     auto_save_profil(score > 0)
 
 def _callback_suivant_droite():
-    st.session_state.exercice_courant = generer_droite_numerique(st.session_state.niveau)
+    st.session_state.exercice_courant = exercise_generator.generer_droite_numerique(st.session_state.niveau)
     st.session_state.show_feedback = False
 
 def _callback_nouvelle_partie_memory():
-    st.session_state.jeu_memory = generer_memory_emoji(st.session_state.niveau)
+    st.session_state.jeu_memory = exercise_generator.generer_memory_emoji(st.session_state.niveau)
     st.session_state.memory_first_flip = None
     st.session_state.memory_second_flip = None
     st.session_state.memory_incorrect_pair = None
@@ -691,7 +460,7 @@ def defi_section():
     st.write("💡 Résous des problèmes du monde réel.")
     
     if st.button("🚀 Commencer Défi", use_container_width=True, key="btn_start_defi"):
-        st.session_state.exercice_courant = generer_probleme(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_probleme(st.session_state.niveau)
         st.session_state.show_feedback = False
         st.rerun()
     
@@ -756,7 +525,7 @@ def defi_section():
                 st.write(f"**Réponse :** {st.session_state.dernier_exercice['reponse']}")
             with col2:
                 if st.button("➡️ SUIVANT", use_container_width=True, key="btn_next_defi"):
-                    st.session_state.exercice_courant = generer_probleme(st.session_state.niveau)
+                    st.session_state.exercice_courant = exercise_generator.generer_probleme(st.session_state.niveau)
                     st.session_state.show_feedback = False
                     st.rerun()
 
@@ -835,7 +604,7 @@ def main():
     st.title("🎓 MathCopain - Le Calcul Mental sans Pression")
     
     # Daily challenge
-    generer_daily_challenge()
+    exercise_generator.generer_daily_challenge()
     if st.session_state.daily_challenge['challenge']:
         challenge = st.session_state.daily_challenge['challenge']
         st.markdown(f'<div class="daily-challenge-box">', unsafe_allow_html=True)
@@ -4498,17 +4267,17 @@ def lancer_exercice_recommande(recommended_type):
     
     # 2. Générer le nouvel exercice
     if recommended_type == "addition":
-        st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_addition(st.session_state.niveau)
     elif recommended_type == "soustraction":
-        st.session_state.exercice_courant = generer_soustraction(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_soustraction(st.session_state.niveau)
     elif recommended_type == "multiplication":
-        st.session_state.exercice_courant = generer_tables(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_tables(st.session_state.niveau)
     elif recommended_type == "division":
-        st.session_state.exercice_courant = generer_division(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_division(st.session_state.niveau)
     elif recommended_type == "probleme":
-        st.session_state.exercice_courant = generer_probleme(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_probleme(st.session_state.niveau)
     else: # Fallback
-        st.session_state.exercice_courant = generer_addition(st.session_state.niveau)
+        st.session_state.exercice_courant = exercise_generator.generer_addition(st.session_state.niveau)
     
     # 3. Réinitialiser le feedback pour le nouvel exercice
     st.session_state.show_feedback = False
