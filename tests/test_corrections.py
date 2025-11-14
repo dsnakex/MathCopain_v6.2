@@ -132,5 +132,5 @@ class TestPatternsErreurs:
             ("6", 5),  # Réponse attendue 5, utilisateur dit 6
         ]
         # Vérifier qu'il y a un pattern +1
-        differences =  - erreur for erreur in erreurs]
+        differences = [int(erreur[0]) - erreur[1] for erreur in erreurs]
         assert all(d == 1 for d in differences)
