@@ -4,7 +4,8 @@ from mesures_utils import (
     generer_conversion_longueur,
     generer_conversion_masse,
     generer_conversion_capacite,
-    generer_probleme_duree
+    generer_probleme_duree,
+    expliquer_conversion
 )
 
 
@@ -233,3 +234,74 @@ class TestCoherenceGlobale:
         # Au moins quelques valeurs devraient être différentes
         valeurs_depart = [e['valeur_depart'] for e in exercices]
         assert len(set(valeurs_depart)) > 1  # Au moins 2 valeurs différentes
+
+
+class TestExpliquerConversion:
+    """Tests d'explication pour conversions d'unités."""
+
+    def test_explication_generee(self):
+        """expliquer_conversion() génère une explication."""
+        explication = expliquer_conversion(100, "cm", "m", 1.0)
+        assert isinstance(explication, str)
+        assert len(explication) > 0
+
+    def test_explication_contient_unites(self):
+        """L'explication contient les unités de départ et d'arrivée."""
+        explication = expliquer_conversion(500, "g", "kg", 0.5)
+        assert "g" in explication or "gramme" in explication.lower()
+        assert "kg" in explication or "kilogramme" in explication.lower()
+
+    def test_explication_longueur_cm_vers_m(self):
+        """Explication pour cm → m."""
+        explication = expliquer_conversion(250, "cm", "m", 2.5)
+        assert isinstance(explication, str)
+        assert len(explication) > 20
+        # Devrait mentionner division par 100
+        assert "100" in explication
+
+    def test_explication_longueur_m_vers_km(self):
+        """Explication pour m → km."""
+        explication = expliquer_conversion(3000, "m", "km", 3.0)
+        assert isinstance(explication, str)
+        assert "1000" in explication
+
+    def test_explication_masse_g_vers_kg(self):
+        """Explication pour g → kg."""
+        explication = expliquer_conversion(2500, "g", "kg", 2.5)
+        assert isinstance(explication, str)
+        assert "1000" in explication
+
+    def test_explication_capacite_ml_vers_l(self):
+        """Explication pour mL → L."""
+        explication = expliquer_conversion(1500, "mL", "L", 1.5)
+        assert isinstance(explication, str)
+        assert "1000" in explication
+
+    def test_explication_multiplication(self):
+        """Explication pour conversion avec multiplication (grande → petite unité)."""
+        # m → cm (multiplier par 100)
+        explication = expliquer_conversion(1.5, "m", "cm", 150.0)
+        assert isinstance(explication, str)
+        # Devrait mentionner multiplication ou ×
+        assert "multipli" in explication.lower() or "×" in explication
+
+    def test_explication_division(self):
+        """Explication pour conversion avec division (petite → grande unité)."""
+        # cm → m (diviser par 100)
+        explication = expliquer_conversion(300, "cm", "m", 3.0)
+        assert isinstance(explication, str)
+        # Devrait mentionner division ou ÷
+        assert "divis" in explication.lower() or "÷" in explication
+
+    def test_explication_contient_valeurs(self):
+        """L'explication contient les valeurs de la conversion."""
+        explication = expliquer_conversion(750, "g", "kg", 0.75)
+        # Devrait contenir au moins certaines valeurs
+        assert "750" in explication or "0.75" in explication or "0,75" in explication
+
+    def test_explication_resultat_correct(self):
+        """L'explication mentionne le résultat correct."""
+        explication = expliquer_conversion(2000, "g", "kg", 2.0)
+        assert isinstance(explication, str)
+        # Devrait mentionner le résultat
+        assert "2" in explication

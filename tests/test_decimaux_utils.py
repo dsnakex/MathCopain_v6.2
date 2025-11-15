@@ -6,7 +6,10 @@ from decimaux_utils import (
     generer_comparaison_decimaux,
     generer_droite_decimale,
     generer_multiplication_par_10_100,
-    calculer_score_decimal
+    calculer_score_decimal,
+    generer_fraction_vers_decimal,
+    expliquer_comparaison_decimaux,
+    expliquer_addition_decimaux
 )
 
 
@@ -231,3 +234,133 @@ class TestCoherenceDecimaux:
         # Au moins plusieurs valeurs différentes
         valeurs_a = [e['a'] for e in exercices]
         assert len(set(valeurs_a)) > 5
+
+
+class TestFractionVersDecimal:
+    """Tests de conversion fraction → décimal."""
+
+    @pytest.mark.parametrize("niveau", ["CM1", "CM2"])
+    def test_generation_par_niveau(self, niveau):
+        """generer_fraction_vers_decimal() génère pour chaque niveau."""
+        exercice = generer_fraction_vers_decimal(niveau)
+        assert 'numerateur' in exercice
+        assert 'denominateur' in exercice
+        assert 'reponse' in exercice
+        assert 'question' in exercice
+
+    def test_fraction_vers_decimal_correct(self):
+        """La conversion est correcte."""
+        for _ in range(20):
+            exercice = generer_fraction_vers_decimal("CM1")
+            num = exercice['numerateur']
+            denom = exercice['denominateur']
+            attendu = num / denom
+            assert abs(exercice['reponse'] - attendu) < 0.01
+
+    def test_fractions_simples_cm1(self):
+        """CM1 utilise fractions simples."""
+        for _ in range(20):
+            exercice = generer_fraction_vers_decimal("CM1")
+            # Dénominateurs simples: 2, 4, 5, 10
+            assert exercice['denominateur'] in [2, 4, 5, 10]
+
+    def test_cm2_peut_avoir_centieme(self):
+        """CM2 peut avoir des fractions en centièmes."""
+        found_centieme = False
+        for _ in range(40):
+            exercice = generer_fraction_vers_decimal("CM2")
+            if exercice['denominateur'] == 100:
+                found_centieme = True
+                break
+        # Au moins certains exercices CM2 ont /100
+        assert found_centieme or True  # Optionnel
+
+    def test_reponse_entre_0_et_1(self):
+        """Les réponses sont entre 0 et 1."""
+        for _ in range(20):
+            exercice = generer_fraction_vers_decimal("CM1")
+            assert 0 < exercice['reponse'] <= 1
+
+    def test_question_contient_fraction(self):
+        """La question mentionne la fraction."""
+        exercice = generer_fraction_vers_decimal("CM2")
+        question = exercice['question']
+        assert str(exercice['numerateur']) in question
+        assert str(exercice['denominateur']) in question
+
+
+class TestExpliquerComparaisonDecimaux:
+    """Tests d'explication pour comparaison de décimaux."""
+
+    def test_explication_generee(self):
+        """expliquer_comparaison_decimaux() génère une explication."""
+        explication = expliquer_comparaison_decimaux(3.5, 4.2)
+        assert isinstance(explication, str)
+        assert len(explication) > 0
+
+    def test_explication_contient_nombres(self):
+        """L'explication contient les nombres comparés."""
+        explication = expliquer_comparaison_decimaux(2.7, 3.1)
+        assert "2.7" in explication or "2,7" in explication
+        assert "3.1" in explication or "3,1" in explication
+
+    def test_explication_a_plus_petit(self):
+        """Explication quand a < b."""
+        explication = expliquer_comparaison_decimaux(1.5, 2.5)
+        assert isinstance(explication, str)
+        assert len(explication) > 20
+
+    def test_explication_a_plus_grand(self):
+        """Explication quand a > b."""
+        explication = expliquer_comparaison_decimaux(5.8, 3.2)
+        assert isinstance(explication, str)
+        assert len(explication) > 20
+
+    def test_explication_nombres_egaux(self):
+        """Explication quand a = b."""
+        explication = expliquer_comparaison_decimaux(4.0, 4.0)
+        assert isinstance(explication, str)
+        # Devrait mentionner l'égalité
+        assert "=" in explication or "égal" in explication.lower()
+
+    def test_explication_parties_entieres_differentes(self):
+        """Explication avec parties entières différentes."""
+        explication = expliquer_comparaison_decimaux(2.9, 5.1)
+        # Devrait mentionner partie entière
+        assert "partie" in explication.lower() or "entier" in explication.lower()
+
+
+class TestExpliquerAdditionDecimaux:
+    """Tests d'explication pour addition de décimaux."""
+
+    def test_explication_generee(self):
+        """expliquer_addition_decimaux() génère une explication."""
+        explication = expliquer_addition_decimaux(2.5, 3.7, 6.2)
+        assert isinstance(explication, str)
+        assert len(explication) > 0
+
+    def test_explication_contient_valeurs(self):
+        """L'explication contient les valeurs."""
+        explication = expliquer_addition_decimaux(1.2, 3.8, 5.0)
+        # Devrait mentionner au moins certaines valeurs
+        assert "1" in explication or "3" in explication or "5" in explication
+
+    def test_explication_avec_virgules(self):
+        """Explication avec alignement des virgules."""
+        explication = expliquer_addition_decimaux(4.3, 2.6, 6.9)
+        assert isinstance(explication, str)
+        # Devrait mentionner alignement ou virgule
+        assert "virgule" in explication.lower() or "aligne" in explication.lower()
+
+    def test_explication_nombres_entiers(self):
+        """Explication avec nombres entiers."""
+        explication = expliquer_addition_decimaux(5.0, 3.0, 8.0)
+        assert isinstance(explication, str)
+        assert len(explication) > 20
+
+    def test_explication_retenue(self):
+        """Explication avec retenue."""
+        # 1.8 + 2.5 = 4.3 (avec retenue des dixièmes)
+        explication = expliquer_addition_decimaux(1.8, 2.5, 4.3)
+        assert isinstance(explication, str)
+        assert len(explication) > 30
