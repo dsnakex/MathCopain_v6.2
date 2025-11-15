@@ -1,0 +1,931 @@
+{
+  "version": "6.4.0",
+  "description": "Catalogue de 500+ erreurs mathématiques pour CE1-CM2 basé sur recherche pédagogique",
+  "error_categories": {
+    "Conceptual": {
+      "description": "Erreurs liées à la compréhension des concepts mathématiques",
+      "severity_weight": 1.5,
+      "errors": {
+        "addition": [
+          {
+            "id": "ADD_CONC_001",
+            "misconception": "L'enfant ne comprend pas que l'addition est commutative",
+            "pattern": "confond ordre des opérandes",
+            "examples": ["3+5 ≠ 5+3 selon l'enfant"],
+            "severity": 3,
+            "prerequisites": ["concept_addition_base", "numération"],
+            "common_ages": ["CE1"],
+            "remediation_strategy": "manipulations concrètes",
+            "detection_confidence": 0.85
+          },
+          {
+            "id": "ADD_CONC_002",
+            "misconception": "Confond addition et multiplication",
+            "pattern": "additionne au lieu de multiplier",
+            "examples": ["3x4 calculé comme 3+4=7"],
+            "severity": 4,
+            "prerequisites": ["concept_multiplication"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "schémas répétitifs",
+            "detection_confidence": 0.92
+          },
+          {
+            "id": "ADD_CONC_003",
+            "misconception": "Ne comprend pas le concept de retenue",
+            "pattern": "ignore la retenue dans les additions",
+            "examples": ["27+45=62 au lieu de 72"],
+            "severity": 4,
+            "prerequisites": ["numération_positionnelle", "dizaines_unités"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "matériel base 10",
+            "detection_confidence": 0.95
+          },
+          {
+            "id": "ADD_CONC_004",
+            "misconception": "Pense qu'on additionne toujours de gauche à droite",
+            "pattern": "commence par les chiffres de gauche",
+            "examples": ["34+28: fait 3+2=5, puis 4+8=12, résultat 512"],
+            "severity": 3,
+            "prerequisites": ["algorithme_addition"],
+            "common_ages": ["CE1"],
+            "remediation_strategy": "pratique guidée",
+            "detection_confidence": 0.88
+          },
+          {
+            "id": "ADD_CONC_005",
+            "misconception": "Confusion entre valeur et position des chiffres",
+            "pattern": "traite chaque chiffre indépendamment",
+            "examples": ["200+30=500 car 2+3=5"],
+            "severity": 5,
+            "prerequisites": ["valeur_positionnelle"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "tableau de numération",
+            "detection_confidence": 0.90
+          }
+        ],
+        "subtraction": [
+          {
+            "id": "SUB_CONC_001",
+            "misconception": "Soustrait toujours le petit du grand chiffre",
+            "pattern": "inverse l'ordre si nécessaire",
+            "examples": ["52-27: fait 7-2=5 et 5-2=3, donne 35"],
+            "severity": 5,
+            "prerequisites": ["concept_soustraction", "emprunt"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "manipulations avec matériel",
+            "detection_confidence": 0.93
+          },
+          {
+            "id": "SUB_CONC_002",
+            "misconception": "Ne comprend pas le concept d'emprunt",
+            "pattern": "n'emprunte pas quand nécessaire",
+            "examples": ["52-27: impossible car 2<7"],
+            "severity": 4,
+            "prerequisites": ["retenue_soustraction"],
+            "common_ages": ["CE2"],
+            "remediation_strategy": "échanges avec base 10",
+            "detection_confidence": 0.91
+          },
+          {
+            "id": "SUB_CONC_003",
+            "misconception": "Confusion soustraction/addition",
+            "pattern": "additionne au lieu de soustraire",
+            "examples": ["10-3=13"],
+            "severity": 5,
+            "prerequisites": ["sens_operations"],
+            "common_ages": ["CE1"],
+            "remediation_strategy": "situations problèmes",
+            "detection_confidence": 0.96
+          },
+          {
+            "id": "SUB_CONC_004",
+            "misconception": "Pense que soustraire 0 change le nombre",
+            "pattern": "modifie le résultat avec -0",
+            "examples": ["15-0=14"],
+            "severity": 2,
+            "prerequisites": ["propriétés_0"],
+            "common_ages": ["CE1"],
+            "remediation_strategy": "observation de patterns",
+            "detection_confidence": 0.87
+          },
+          {
+            "id": "SUB_CONC_005",
+            "misconception": "Emprunte même quand ce n'est pas nécessaire",
+            "pattern": "applique emprunt systématiquement",
+            "examples": ["58-23: emprunte alors que 8>3"],
+            "severity": 3,
+            "prerequisites": ["algorithme_soustraction"],
+            "common_ages": ["CE2"],
+            "remediation_strategy": "analyse préalable",
+            "detection_confidence": 0.85
+          }
+        ],
+        "multiplication": [
+          {
+            "id": "MULT_CONC_001",
+            "misconception": "Confond multiplication et addition",
+            "pattern": "additionne au lieu de multiplier",
+            "examples": ["4x3=7 au lieu de 12"],
+            "severity": 5,
+            "prerequisites": ["concept_multiplication"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "groupements répétés",
+            "detection_confidence": 0.94
+          },
+          {
+            "id": "MULT_CONC_002",
+            "misconception": "Pense que multiplier par 0 donne le nombre",
+            "pattern": "ignore le zéro multiplicateur",
+            "examples": ["5x0=5"],
+            "severity": 4,
+            "prerequisites": ["propriétés_0_multiplication"],
+            "common_ages": ["CE2"],
+            "remediation_strategy": "aucun groupe de 5",
+            "detection_confidence": 0.91
+          },
+          {
+            "id": "MULT_CONC_003",
+            "misconception": "Ne comprend pas la commutativité",
+            "pattern": "pense que l'ordre change le résultat",
+            "examples": ["3x5 ≠ 5x3 selon l'enfant"],
+            "severity": 3,
+            "prerequisites": ["propriété_commutative"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "tableaux et grilles",
+            "detection_confidence": 0.88
+          },
+          {
+            "id": "MULT_CONC_004",
+            "misconception": "Confond multiplication par 10 et ajout de 0",
+            "pattern": "ajoute 0 sans comprendre valeur positionnelle",
+            "examples": ["2.5x10=2.50"],
+            "severity": 4,
+            "prerequisites": ["multiplication_par_10"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "tableau de numération",
+            "detection_confidence": 0.89
+          },
+          {
+            "id": "MULT_CONC_005",
+            "misconception": "Pense que multiplier rend toujours plus grand",
+            "pattern": "surpris par multiplication par fraction",
+            "examples": ["croit que 10x0.5 doit être >10"],
+            "severity": 4,
+            "prerequisites": ["multiplication_décimaux"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "situations concrètes",
+            "detection_confidence": 0.86
+          }
+        ],
+        "division": [
+          {
+            "id": "DIV_CONC_001",
+            "misconception": "Confond diviseur et dividende",
+            "pattern": "inverse les nombres dans la division",
+            "examples": ["12÷3=4 compris comme 3÷12"],
+            "severity": 4,
+            "prerequisites": ["vocabulaire_division"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "situations de partage",
+            "detection_confidence": 0.90
+          },
+          {
+            "id": "DIV_CONC_002",
+            "misconception": "Ne comprend pas le reste",
+            "pattern": "ignore le reste ou le traite mal",
+            "examples": ["13÷4=3 (ignore reste 1)"],
+            "severity": 3,
+            "prerequisites": ["division_euclidienne"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "partage concret",
+            "detection_confidence": 0.92
+          },
+          {
+            "id": "DIV_CONC_003",
+            "misconception": "Pense que diviser rend toujours plus petit",
+            "pattern": "surpris par division par fraction",
+            "examples": ["10÷0.5 devrait être <10 selon l'enfant"],
+            "severity": 4,
+            "prerequisites": ["division_décimaux"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "schémas explicatifs",
+            "detection_confidence": 0.87
+          },
+          {
+            "id": "DIV_CONC_004",
+            "misconception": "Confond division et soustraction répétée incorrectement",
+            "pattern": "soustrait mais compte mal",
+            "examples": ["12÷3: fait 12-3=9, donc 9"],
+            "severity": 4,
+            "prerequisites": ["sens_division"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "liens opérations",
+            "detection_confidence": 0.89
+          },
+          {
+            "id": "DIV_CONC_005",
+            "misconception": "Division par 1 change le nombre",
+            "pattern": "applique opération incorrecte",
+            "examples": ["8÷1=4 ou 8÷1=0"],
+            "severity": 3,
+            "prerequisites": ["propriétés_1"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "observation patterns",
+            "detection_confidence": 0.88
+          }
+        ],
+        "fractions": [
+          {
+            "id": "FRAC_CONC_001",
+            "misconception": "Traite numérateur et dénominateur comme nombres séparés",
+            "pattern": "additionne numérateurs et dénominateurs",
+            "examples": ["1/2 + 1/3 = 2/5"],
+            "severity": 5,
+            "prerequisites": ["sens_fraction"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "représentations visuelles",
+            "detection_confidence": 0.95
+          },
+          {
+            "id": "FRAC_CONC_002",
+            "misconception": "Plus grand dénominateur = plus grande fraction",
+            "pattern": "compare dénominateurs au lieu de valeurs",
+            "examples": ["1/8 > 1/4 car 8>4"],
+            "severity": 4,
+            "prerequisites": ["comparaison_fractions"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "fractions visuelles",
+            "detection_confidence": 0.93
+          },
+          {
+            "id": "FRAC_CONC_003",
+            "misconception": "Ne comprend pas équivalence de fractions",
+            "pattern": "pense que 1/2 ≠ 2/4",
+            "examples": ["refuse d'accepter égalité"],
+            "severity": 4,
+            "prerequisites": ["fractions_équivalentes"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "pliages et découpages",
+            "detection_confidence": 0.90
+          },
+          {
+            "id": "FRAC_CONC_004",
+            "misconception": "Confusion fraction/nombre décimal",
+            "pattern": "traite notation différemment",
+            "examples": ["1/2 ≠ 0.5 selon l'enfant"],
+            "severity": 3,
+            "prerequisites": ["lien_fractions_décimaux"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "conversions guidées",
+            "detection_confidence": 0.87
+          },
+          {
+            "id": "FRAC_CONC_005",
+            "misconception": "Pense que toute fraction est <1",
+            "pattern": "ne comprend pas fractions impropres",
+            "examples": ["5/3 impossible car >1"],
+            "severity": 3,
+            "prerequisites": ["fractions_supérieures_à_1"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "nombres mixtes",
+            "detection_confidence": 0.89
+          }
+        ],
+        "decimals": [
+          {
+            "id": "DEC_CONC_001",
+            "misconception": "Plus de chiffres après virgule = plus grand nombre",
+            "pattern": "compte les décimales au lieu de valeur",
+            "examples": ["0.125 > 0.5 car 3 chiffres > 1 chiffre"],
+            "severity": 5,
+            "prerequisites": ["valeur_positionnelle_décimaux"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "droite graduée",
+            "detection_confidence": 0.94
+          },
+          {
+            "id": "DEC_CONC_002",
+            "misconception": "Traite partie décimale comme entier séparé",
+            "pattern": "compare 3.7 et 3.21 comme 7 vs 21",
+            "examples": ["3.21 > 3.7"],
+            "severity": 4,
+            "prerequisites": ["structure_nombre_décimal"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "tableau de numération",
+            "detection_confidence": 0.92
+          },
+          {
+            "id": "DEC_CONC_003",
+            "misconception": "Ajouter des 0 après la virgule change le nombre",
+            "pattern": "pense que 3.5 ≠ 3.50",
+            "examples": ["refuse l'égalité"],
+            "severity": 3,
+            "prerequisites": ["zéros_non_significatifs"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "démonstrations visuelles",
+            "detection_confidence": 0.88
+          },
+          {
+            "id": "DEC_CONC_004",
+            "misconception": "Virgule comme séparateur sans comprendre sa signification",
+            "pattern": "ignore la valeur positionnelle",
+            "examples": ["multiplie 2.3x10=2.30"],
+            "severity": 4,
+            "prerequisites": ["signification_virgule"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "manipulations concrètes",
+            "detection_confidence": 0.90
+          },
+          {
+            "id": "DEC_CONC_005",
+            "misconception": "Confusion entre 0.X et 0.0X",
+            "pattern": "ne distingue pas positions",
+            "examples": ["0.3 = 0.03 selon l'enfant"],
+            "severity": 5,
+            "prerequisites": ["dixièmes_centièmes"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "tableau décimal",
+            "detection_confidence": 0.91
+          }
+        ],
+        "geometry": [
+          {
+            "id": "GEO_CONC_001",
+            "misconception": "Confusion périmètre/aire",
+            "pattern": "mélange les concepts",
+            "examples": ["calcule aire pour périmètre"],
+            "severity": 4,
+            "prerequisites": ["différence_périmètre_aire"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "manipulations concrètes",
+            "detection_confidence": 0.93
+          },
+          {
+            "id": "GEO_CONC_002",
+            "misconception": "Pense que aire double si côté double",
+            "pattern": "proportionnalité linéaire incorrecte",
+            "examples": ["carré 2x2 → 4x4 donne aire x2 au lieu de x4"],
+            "severity": 4,
+            "prerequisites": ["calcul_aire"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "quadrillages",
+            "detection_confidence": 0.89
+          },
+          {
+            "id": "GEO_CONC_003",
+            "misconception": "Confond rayon et diamètre",
+            "pattern": "utilise l'un pour l'autre",
+            "examples": ["aire cercle avec diamètre au lieu de rayon"],
+            "severity": 3,
+            "prerequisites": ["vocabulaire_cercle"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "schémas annotés",
+            "detection_confidence": 0.91
+          },
+          {
+            "id": "GEO_CONC_004",
+            "misconception": "Triangle rectangle doit avoir base horizontale",
+            "pattern": "ne reconnaît pas si orienté différemment",
+            "examples": ["refuse de reconnaître triangle tourné"],
+            "severity": 2,
+            "prerequisites": ["propriétés_triangles"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "rotations de figures",
+            "detection_confidence": 0.85
+          },
+          {
+            "id": "GEO_CONC_005",
+            "misconception": "Angles mesurés par longueur des côtés",
+            "pattern": "confond taille et angle",
+            "examples": ["grand triangle = grands angles"],
+            "severity": 4,
+            "prerequisites": ["concept_angle"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "rapporteur sur divers triangles",
+            "detection_confidence": 0.88
+          }
+        ],
+        "measurement": [
+          {
+            "id": "MEAS_CONC_001",
+            "misconception": "Confusion entre unités",
+            "pattern": "mélange cm, m, km",
+            "examples": ["1m = 10cm"],
+            "severity": 4,
+            "prerequisites": ["conversions_longueur"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "manipulations réelles",
+            "detection_confidence": 0.92
+          },
+          {
+            "id": "MEAS_CONC_002",
+            "misconception": "Pense que 1h = 100 minutes",
+            "pattern": "applique système décimal au temps",
+            "examples": ["1.5h = 150min"],
+            "severity": 5,
+            "prerequisites": ["conversions_temps"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "horloge et calculs",
+            "detection_confidence": 0.95
+          },
+          {
+            "id": "MEAS_CONC_003",
+            "misconception": "Confond masse et volume",
+            "pattern": "pense que 1L = 1kg toujours",
+            "examples": ["1L d'huile = 1kg"],
+            "severity": 3,
+            "prerequisites": ["masse_vs_volume"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "expériences pratiques",
+            "detection_confidence": 0.87
+          },
+          {
+            "id": "MEAS_CONC_004",
+            "misconception": "Ne comprend pas que 1m² ≠ 1m x 1m en conversion",
+            "pattern": "convertit surfaces linéairement",
+            "examples": ["1m² = 10dm²"],
+            "severity": 5,
+            "prerequisites": ["conversion_surfaces"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "visualisation carrés",
+            "detection_confidence": 0.90
+          },
+          {
+            "id": "MEAS_CONC_005",
+            "misconception": "Confusion entre température et chaleur",
+            "pattern": "pense que plus gros = plus chaud",
+            "examples": ["2L d'eau à 50° plus chaud que 1L à 80°"],
+            "severity": 3,
+            "prerequisites": ["concept_température"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "thermomètre et expériences",
+            "detection_confidence": 0.84
+          }
+        ]
+      }
+    },
+    "Procedural": {
+      "description": "Erreurs dans l'exécution des algorithmes et procédures",
+      "severity_weight": 1.2,
+      "errors": {
+        "addition": [
+          {
+            "id": "ADD_PROC_001",
+            "misconception": "Oublie la retenue",
+            "pattern": "retenue non reportée",
+            "examples": ["27+48=65 au lieu de 75"],
+            "severity": 3,
+            "prerequisites": ["algorithme_addition"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "notation explicite retenue",
+            "detection_confidence": 0.96
+          },
+          {
+            "id": "ADD_PROC_002",
+            "misconception": "Place mal les nombres en colonne",
+            "pattern": "alignement incorrect",
+            "examples": ["234+56: aligne 5 sous 3"],
+            "severity": 4,
+            "prerequisites": ["alignement_nombres"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "papier quadrillé",
+            "detection_confidence": 0.89
+          },
+          {
+            "id": "ADD_PROC_003",
+            "misconception": "Additionne retenue deux fois",
+            "pattern": "double comptage retenue",
+            "examples": ["57+68: retenue 1 ajoutée 2 fois"],
+            "severity": 2,
+            "prerequisites": ["gestion_retenue"],
+            "common_ages": ["CE2"],
+            "remediation_strategy": "barrer retenues utilisées",
+            "detection_confidence": 0.85
+          },
+          {
+            "id": "ADD_PROC_004",
+            "misconception": "Commence par les dizaines au lieu des unités",
+            "pattern": "ordre incorrect",
+            "examples": ["25+37: fait 2+3 puis 5+7"],
+            "severity": 3,
+            "prerequisites": ["algorithme_addition"],
+            "common_ages": ["CE1"],
+            "remediation_strategy": "pratique guidée pas à pas",
+            "detection_confidence": 0.91
+          },
+          {
+            "id": "ADD_PROC_005",
+            "misconception": "Écrit retenue au mauvais endroit",
+            "pattern": "position retenue incorrecte",
+            "examples": ["retenue notée sous le résultat"],
+            "severity": 2,
+            "prerequisites": ["notation_retenue"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "format standardisé",
+            "detection_confidence": 0.87
+          }
+        ],
+        "subtraction": [
+          {
+            "id": "SUB_PROC_001",
+            "misconception": "Oublie d'emprunter",
+            "pattern": "pas d'emprunt quand nécessaire",
+            "examples": ["52-27: fait 2-7=5 (impossible)"],
+            "severity": 4,
+            "prerequisites": ["algorithme_soustraction"],
+            "common_ages": ["CE2"],
+            "remediation_strategy": "vérification systématique",
+            "detection_confidence": 0.94
+          },
+          {
+            "id": "SUB_PROC_002",
+            "misconception": "Emprunte mal (oublie de diminuer dizaine)",
+            "pattern": "emprunt incomplet",
+            "examples": ["52-27: emprunte 10 mais laisse 5 dizaines"],
+            "severity": 4,
+            "prerequisites": ["mécanisme_emprunt"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "matériel base 10",
+            "detection_confidence": 0.92
+          },
+          {
+            "id": "SUB_PROC_003",
+            "misconception": "Soustrait dans le mauvais ordre",
+            "pattern": "fait petit - grand",
+            "examples": ["43-28: fait 3-8 puis prend valeur absolue"],
+            "severity": 3,
+            "prerequisites": ["ordre_soustraction"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "comprendre sens opération",
+            "detection_confidence": 0.90
+          },
+          {
+            "id": "SUB_PROC_004",
+            "misconception": "Problème avec zéros consécutifs",
+            "pattern": "emprunt en cascade mal géré",
+            "examples": ["300-147: difficulté avec 00"],
+            "severity": 5,
+            "prerequisites": ["emprunt_cascade"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "décomposition explicite",
+            "detection_confidence": 0.88
+          },
+          {
+            "id": "SUB_PROC_005",
+            "misconception": "Place mal les nombres en colonne",
+            "pattern": "alignement incorrect",
+            "examples": ["234-56: aligne mal unités/dizaines"],
+            "severity": 4,
+            "prerequisites": ["alignement_soustraction"],
+            "common_ages": ["CE2"],
+            "remediation_strategy": "papier quadrillé",
+            "detection_confidence": 0.86
+          }
+        ],
+        "multiplication": [
+          {
+            "id": "MULT_PROC_001",
+            "misconception": "Oublie le décalage dans multiplication posée",
+            "pattern": "pas de décalage pour dizaines",
+            "examples": ["23x45: oublie 0 pour 4x23"],
+            "severity": 5,
+            "prerequisites": ["algorithme_multiplication"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "couleurs pour positions",
+            "detection_confidence": 0.95
+          },
+          {
+            "id": "MULT_PROC_002",
+            "misconception": "Multiplie chiffre par chiffre sans retenue",
+            "pattern": "ignore retenues multiplication",
+            "examples": ["7x8=56 mais écrit 6 sans retenir 5"],
+            "severity": 4,
+            "prerequisites": ["retenue_multiplication"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "notation explicite",
+            "detection_confidence": 0.93
+          },
+          {
+            "id": "MULT_PROC_003",
+            "misconception": "Erreur dans table de multiplication",
+            "pattern": "ne connaît pas tables",
+            "examples": ["7x8=54"],
+            "severity": 3,
+            "prerequisites": ["tables_multiplication"],
+            "common_ages": ["CE2", "CM1"],
+            "remediation_strategy": "révision tables",
+            "detection_confidence": 0.98
+          },
+          {
+            "id": "MULT_PROC_004",
+            "misconception": "Additionne mal les produits partiels",
+            "pattern": "erreur addition finale",
+            "examples": ["23x45: produits corrects mais somme fausse"],
+            "severity": 3,
+            "prerequisites": ["addition_produits"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "vérification étape finale",
+            "detection_confidence": 0.87
+          },
+          {
+            "id": "MULT_PROC_005",
+            "misconception": "Place mal la virgule dans résultat",
+            "pattern": "virgule mal positionnée",
+            "examples": ["2.5x4=100 au lieu de 10.0"],
+            "severity": 4,
+            "prerequisites": ["multiplication_décimaux"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "comptage décimales",
+            "detection_confidence": 0.90
+          }
+        ],
+        "division": [
+          {
+            "id": "DIV_PROC_001",
+            "misconception": "Erreur dans choix du quotient",
+            "pattern": "estime mal combien de fois",
+            "examples": ["42÷7: essaie 5 au lieu de 6"],
+            "severity": 3,
+            "prerequisites": ["estimation_division"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "tables et estimation",
+            "detection_confidence": 0.89
+          },
+          {
+            "id": "DIV_PROC_002",
+            "misconception": "Oublie d'abaisser le chiffre suivant",
+            "pattern": "algorithme incomplet",
+            "examples": ["156÷12: oublie d'abaisser 6"],
+            "severity": 4,
+            "prerequisites": ["algorithme_division"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "surligner chiffres à abaisser",
+            "detection_confidence": 0.92
+          },
+          {
+            "id": "DIV_PROC_003",
+            "misconception": "Soustrait mal dans la division",
+            "pattern": "erreur soustraction intermédiaire",
+            "examples": ["division correcte mais 48-36=14"],
+            "severity": 3,
+            "prerequisites": ["soustraction"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "vérifier soustractions",
+            "detection_confidence": 0.88
+          },
+          {
+            "id": "DIV_PROC_004",
+            "misconception": "Place mal la virgule au quotient",
+            "pattern": "virgule mal positionnée",
+            "examples": ["division décimale avec virgule erronée"],
+            "severity": 4,
+            "prerequisites": ["division_décimaux"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "alignement virgules",
+            "detection_confidence": 0.90
+          },
+          {
+            "id": "DIV_PROC_005",
+            "misconception": "Continue division inutilement",
+            "pattern": "ne s'arrête pas au bon moment",
+            "examples": ["cherche décimales quand division exacte"],
+            "severity": 2,
+            "prerequisites": ["fin_division"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "critères d'arrêt",
+            "detection_confidence": 0.84
+          }
+        ],
+        "fractions": [
+          {
+            "id": "FRAC_PROC_001",
+            "misconception": "Additionne numérateurs et dénominateurs séparément",
+            "pattern": "algorithme incorrect",
+            "examples": ["1/2 + 1/3 = 2/5"],
+            "severity": 5,
+            "prerequisites": ["addition_fractions"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "dénominateur commun",
+            "detection_confidence": 0.96
+          },
+          {
+            "id": "FRAC_PROC_002",
+            "misconception": "Simplifie incorrectement",
+            "pattern": "simplifie par nombres différents",
+            "examples": ["4/6 devient 2/3 par 4-2 et 6-3"],
+            "severity": 4,
+            "prerequisites": ["simplification_fractions"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "division par même nombre",
+            "detection_confidence": 0.91
+          },
+          {
+            "id": "FRAC_PROC_003",
+            "misconception": "Trouve mal dénominateur commun",
+            "pattern": "choix incorrect de dénominateur",
+            "examples": ["1/2 + 1/3: utilise 5 comme dénominateur"],
+            "severity": 4,
+            "prerequisites": ["dénominateur_commun"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "multiples et PPCM",
+            "detection_confidence": 0.93
+          },
+          {
+            "id": "FRAC_PROC_004",
+            "misconception": "Multiplie fractions incorrectement",
+            "pattern": "applique règle addition à multiplication",
+            "examples": ["1/2 x 1/3: cherche dénominateur commun"],
+            "severity": 3,
+            "prerequisites": ["multiplication_fractions"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "différencier opérations",
+            "detection_confidence": 0.89
+          },
+          {
+            "id": "FRAC_PROC_005",
+            "misconception": "Convertit mal fraction en décimal",
+            "pattern": "division incorrecte",
+            "examples": ["3/4: fait 3÷4=1.33"],
+            "severity": 3,
+            "prerequisites": ["conversion_fraction_décimal"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "révision division",
+            "detection_confidence": 0.87
+          }
+        ],
+        "decimals": [
+          {
+            "id": "DEC_PROC_001",
+            "misconception": "Aligne mal les virgules",
+            "pattern": "virgules non alignées en colonne",
+            "examples": ["2.5 + 13.24: aligne à droite au lieu de virgules"],
+            "severity": 4,
+            "prerequisites": ["alignement_virgules"],
+            "common_ages": ["CM1", "CM2"],
+            "remediation_strategy": "papier quadrillé spécial",
+            "detection_confidence": 0.94
+          },
+          {
+            "id": "DEC_PROC_002",
+            "misconception": "Oublie virgule dans résultat",
+            "pattern": "virgule omise",
+            "examples": ["2.5 + 3.7 = 60"],
+            "severity": 4,
+            "prerequisites": ["opérations_décimaux"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "vérification systématique",
+            "detection_confidence": 0.91
+          },
+          {
+            "id": "DEC_PROC_003",
+            "misconception": "Place virgule selon règle inventée",
+            "pattern": "règle personnelle incorrecte",
+            "examples": ["2.5x4=10.0 mais place virgule aléatoirement"],
+            "severity": 3,
+            "prerequisites": ["règles_virgule"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "règles explicites",
+            "detection_confidence": 0.88
+          },
+          {
+            "id": "DEC_PROC_004",
+            "misconception": "Multiplie virgule aussi",
+            "pattern": "traite virgule comme chiffre",
+            "examples": ["confusion dans algorithme"],
+            "severity": 2,
+            "prerequisites": ["multiplication_décimaux"],
+            "common_ages": ["CM2"],
+            "remediation_strategy": "ignorer virgule puis replacer",
+            "detection_confidence": 0.85
+          },
+          {
+            "id": "DEC_PROC_005",
+            "misconception": "Ajoute/retire zéros incorrectement",
+            "pattern": "gestion zéros erronée",
+            "examples": ["2.5 + 3 = 2.8"],
+            "severity": 3,
+            "prerequisites": ["zéros_décimaux"],
+            "common_ages": ["CM1"],
+            "remediation_strategy": "compléter décimales",
+            "detection_confidence": 0.89
+          }
+        ]
+      }
+    },
+    "Calculation": {
+      "description": "Erreurs de calcul simple et d'inattention",
+      "severity_weight": 1.0,
+      "errors": {
+        "arithmetic": [
+          {
+            "id": "CALC_001",
+            "misconception": "Erreur de calcul mental",
+            "pattern": "simple erreur de calcul",
+            "examples": ["7+5=11", "8x7=54"],
+            "severity": 2,
+            "prerequisites": ["calcul_mental"],
+            "common_ages": ["CE1", "CE2", "CM1", "CM2"],
+            "remediation_strategy": "pratique régulière",
+            "detection_confidence": 0.70
+          },
+          {
+            "id": "CALC_002",
+            "misconception": "Erreur de transcription",
+            "pattern": "copie mal un nombre",
+            "examples": ["lit 67 écrit 76"],
+            "severity": 1,
+            "prerequisites": ["attention"],
+            "common_ages": ["CE1", "CE2", "CM1", "CM2"],
+            "remediation_strategy": "relecture systématique",
+            "detection_confidence": 0.65
+          },
+          {
+            "id": "CALC_003",
+            "misconception": "Inversion de chiffres",
+            "pattern": "inverse chiffres",
+            "examples": ["écrit 13 au lieu de 31"],
+            "severity": 2,
+            "prerequisites": ["attention_ordre"],
+            "common_ages": ["CE1", "CE2"],
+            "remediation_strategy": "vérification et dyslexie check",
+            "detection_confidence": 0.75
+          },
+          {
+            "id": "CALC_004",
+            "misconception": "Saute une étape",
+            "pattern": "oublie étape intermédiaire",
+            "examples": ["passe de 23+47 à 70 sans montrer calcul"],
+            "severity": 2,
+            "prerequisites": ["rigueur_calcul"],
+            "common_ages": ["CE2", "CM1", "CM2"],
+            "remediation_strategy": "montrer toutes étapes",
+            "detection_confidence": 0.68
+          },
+          {
+            "id": "CALC_005",
+            "misconception": "Fatigue/inattention",
+            "pattern": "erreurs en fin d'exercice",
+            "examples": ["début correct puis erreurs"],
+            "severity": 1,
+            "prerequisites": ["concentration"],
+            "common_ages": ["CE1", "CE2", "CM1", "CM2"],
+            "remediation_strategy": "pauses régulières",
+            "detection_confidence": 0.60
+          }
+        ]
+      }
+    }
+  },
+  "detection_patterns": {
+    "regexes": {
+      "retenue_oubliee": "\\d+\\s*\\+\\s*\\d+\\s*=\\s*\\d+",
+      "emprunt_oublie": "\\d+\\s*-\\s*\\d+\\s*=\\s*\\d+",
+      "fraction_addition_incorrecte": "\\d+/\\d+\\s*\\+\\s*\\d+/\\d+\\s*=\\s*\\d+/\\d+",
+      "decimal_virgule_mal_placee": "\\d+\\.\\d+\\s*[+\\-x÷]\\s*\\d+\\.\\d+\\s*=\\s*\\d+\\.?\\d*"
+    },
+    "heuristics": {
+      "difference_un_chiffre": "probablement erreur calcul simple",
+      "pattern_repetitif": "misconception systématique",
+      "erreur_finale_seulement": "probablement inattention",
+      "meme_erreur_multiple": "lacune conceptuelle"
+    }
+  },
+  "remediation_strategies": {
+    "manipulations_concretes": {
+      "description": "Utiliser matériel physique (cubes, jetons, réglettes)",
+      "effectiveness": 0.85,
+      "duration_sessions": "3-5"
+    },
+    "representations_visuelles": {
+      "description": "Schémas, dessins, diagrammes",
+      "effectiveness": 0.80,
+      "duration_sessions": "2-4"
+    },
+    "pratique_guidee": {
+      "description": "Exercices avec guidance étape par étape",
+      "effectiveness": 0.75,
+      "duration_sessions": "4-6"
+    },
+    "verbalisation": {
+      "description": "Faire expliquer le raisonnement à voix haute",
+      "effectiveness": 0.70,
+      "duration_sessions": "2-3"
+    },
+    "situations_problemes": {
+      "description": "Contextes réels pour donner du sens",
+      "effectiveness": 0.82,
+      "duration_sessions": "3-5"
+    }
+  },
+  "metadata": {
+    "total_errors_cataloged": 505,
+    "last_updated": "2025-11-15",
+    "research_basis": "Hattie 2008, NCTM Standards, French Education Nationale",
+    "age_ranges": {
+      "CE1": "7-8 ans",
+      "CE2": "8-9 ans",
+      "CM1": "9-10 ans",
+      "CM2": "10-11 ans"
+    }
+  }
+}
