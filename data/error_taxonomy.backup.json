@@ -23,13 +23,7 @@
               "CE1"
             ],
             "remediation_strategy": "manipulations concrètes",
-            "detection_confidence": 0.85,
-            "feedback_templates": [
-              "Super observation! En addition, l'ordre ne change pas le résultat: {a} + {b} = {b} + {a} = {result}.",
-              "Tu peux vérifier: que tu fasses {a} + {b} ou {b} + {a}, tu trouveras toujours {result}!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_concepts_fundamentals"
+            "detection_confidence": 0.85
           },
           {
             "id": "ADD_CONC_002",
@@ -47,14 +41,7 @@
               "CM1"
             ],
             "remediation_strategy": "schémas répétitifs",
-            "detection_confidence": 0.92,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_concepts_fundamentals"
+            "detection_confidence": 0.92
           },
           {
             "id": "ADD_CONC_003",
@@ -73,14 +60,7 @@
               "CE2"
             ],
             "remediation_strategy": "matériel base 10",
-            "detection_confidence": 0.95,
-            "feedback_templates": [
-              "Attention à la retenue! Quand {a} + {b} = {sum}, et que {sum} ≥ 10, on doit reporter {carry} dizaine(s).",
-              "Tu as oublié de reporter la retenue. Regarde: {a} + {b} = {correct}, pas {wrong}.",
-              "Bravo pour le calcul, mais n'oublie pas: quand la somme des unités dépasse 10, on reporte une dizaine!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_concepts_fundamentals"
+            "detection_confidence": 0.95
           },
           {
             "id": "ADD_CONC_004",
@@ -97,15 +77,7 @@
               "CE1"
             ],
             "remediation_strategy": "pratique guidée",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "L'addition, c'est comme rassembler des objets. Si tu as {a} billes et qu'on t'en donne {b}, combien en as-tu?",
-              "Essaie avec des cubes: prends {a} cubes, puis ajoutes-en {b}. Compte le total!",
-              "Tu as fait une erreur liée à: pense qu'on additionne toujours de gauche à droite. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_concepts_fundamentals"
+            "detection_confidence": 0.88
           },
           {
             "id": "ADD_CONC_005",
@@ -123,15 +95,7 @@
               "CE2"
             ],
             "remediation_strategy": "tableau de numération",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "L'addition, c'est comme rassembler des objets. Si tu as {a} billes et qu'on t'en donne {b}, combien en as-tu?",
-              "Essaie avec des cubes: prends {a} cubes, puis ajoutes-en {b}. Compte le total!",
-              "Tu as fait une erreur liée à: confusion entre valeur et position des chiffres. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_concepts_fundamentals"
+            "detection_confidence": 0.9
           }
         ],
         "subtraction": [
@@ -152,13 +116,7 @@
               "CE2"
             ],
             "remediation_strategy": "manipulations avec matériel",
-            "detection_confidence": 0.93,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: soustrait toujours le petit du grand chiffre. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_concepts_fundamentals"
+            "detection_confidence": 0.93
           },
           {
             "id": "SUB_CONC_002",
@@ -175,14 +133,7 @@
               "CE2"
             ],
             "remediation_strategy": "échanges avec base 10",
-            "detection_confidence": 0.91,
-            "feedback_templates": [
-              "Pour soustraire {b} de {a}, tu dois emprunter une dizaine. {a} devient {a_transformed}, puis tu fais {calc}.",
-              "Tu ne peux pas faire {digit_a} - {digit_b} ? Pas de problème! Emprunte 10 à la dizaine suivante.",
-              "L'emprunt, c'est comme échanger un billet de 10€ contre 10 pièces de 1€. Essaie!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_concepts_fundamentals"
+            "detection_confidence": 0.91
           },
           {
             "id": "SUB_CONC_003",
@@ -199,13 +150,7 @@
               "CE1"
             ],
             "remediation_strategy": "situations problèmes",
-            "detection_confidence": 0.96,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: confusion soustraction/addition. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_concepts_fundamentals"
+            "detection_confidence": 0.96
           },
           {
             "id": "SUB_CONC_004",
@@ -222,14 +167,7 @@
               "CE1"
             ],
             "remediation_strategy": "observation de patterns",
-            "detection_confidence": 0.87,
-            "feedback_templates": [
-              "Le périmètre mesure le TOUR de la figure, l'aire mesure la SURFACE.",
-              "Périmètre de rectangle: {formula_p}. Aire: {formula_a}. Ce sont deux choses différentes!",
-              "Tu confonds? Le périmètre c'est en {unit}, l'aire en {unit}².",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_concepts_fundamentals"
+            "detection_confidence": 0.87
           },
           {
             "id": "SUB_CONC_005",
@@ -246,14 +184,7 @@
               "CE2"
             ],
             "remediation_strategy": "analyse préalable",
-            "detection_confidence": 0.85,
-            "feedback_templates": [
-              "Pour soustraire {b} de {a}, tu dois emprunter une dizaine. {a} devient {a_transformed}, puis tu fais {calc}.",
-              "Tu ne peux pas faire {digit_a} - {digit_b} ? Pas de problème! Emprunte 10 à la dizaine suivante.",
-              "L'emprunt, c'est comme échanger un billet de 10€ contre 10 pièces de 1€. Essaie!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_concepts_fundamentals"
+            "detection_confidence": 0.85
           }
         ],
         "multiplication": [
@@ -273,14 +204,7 @@
               "CM1"
             ],
             "remediation_strategy": "groupements répétés",
-            "detection_confidence": 0.94,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "multiplication_concepts_fundamentals"
+            "detection_confidence": 0.94
           },
           {
             "id": "MULT_CONC_002",
@@ -297,15 +221,7 @@
               "CE2"
             ],
             "remediation_strategy": "aucun groupe de 5",
-            "detection_confidence": 0.91,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Tu as fait une erreur liée à: pense que multiplier par 0 donne le nombre. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble."
-            ],
-            "remediation_path": "multiplication_concepts_fundamentals"
+            "detection_confidence": 0.91
           },
           {
             "id": "MULT_CONC_003",
@@ -323,13 +239,7 @@
               "CM1"
             ],
             "remediation_strategy": "tableaux et grilles",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "Super observation! En addition, l'ordre ne change pas le résultat: {a} + {b} = {b} + {a} = {result}.",
-              "Tu peux vérifier: que tu fasses {a} + {b} ou {b} + {a}, tu trouveras toujours {result}!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "multiplication_concepts_fundamentals"
+            "detection_confidence": 0.88
           },
           {
             "id": "MULT_CONC_004",
@@ -347,15 +257,7 @@
               "CM2"
             ],
             "remediation_strategy": "tableau de numération",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Tu as fait une erreur liée à: confond multiplication par 10 et ajout de 0. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble."
-            ],
-            "remediation_path": "multiplication_concepts_fundamentals"
+            "detection_confidence": 0.89
           },
           {
             "id": "MULT_CONC_005",
@@ -372,15 +274,7 @@
               "CM2"
             ],
             "remediation_strategy": "situations concrètes",
-            "detection_confidence": 0.86,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Tu as fait une erreur liée à: pense que multiplier rend toujours plus grand. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble."
-            ],
-            "remediation_path": "multiplication_concepts_fundamentals"
+            "detection_confidence": 0.86
           }
         ],
         "division": [
@@ -400,13 +294,7 @@
               "CM1"
             ],
             "remediation_strategy": "situations de partage",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: confond diviseur et dividende. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_concepts_fundamentals"
+            "detection_confidence": 0.9
           },
           {
             "id": "DIV_CONC_002",
@@ -423,13 +311,7 @@
               "CM1"
             ],
             "remediation_strategy": "partage concret",
-            "detection_confidence": 0.92,
-            "feedback_templates": [
-              "Quand {a} ÷ {b}, il reste {r}. C'est normal! {b} × {q} = {product}, et {product} + {r} = {a}.",
-              "Le reste ({r}) doit toujours être plus petit que le diviseur ({b}).",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_concepts_fundamentals"
+            "detection_confidence": 0.92
           },
           {
             "id": "DIV_CONC_003",
@@ -446,13 +328,7 @@
               "CM2"
             ],
             "remediation_strategy": "schémas explicatifs",
-            "detection_confidence": 0.87,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: pense que diviser rend toujours plus petit. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_concepts_fundamentals"
+            "detection_confidence": 0.87
           },
           {
             "id": "DIV_CONC_004",
@@ -470,13 +346,7 @@
               "CM1"
             ],
             "remediation_strategy": "liens opérations",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "La division, c'est partager équitablement. {a} ÷ {b} = combien chacun reçoit si on partage {a} entre {b}?",
-              "Pense à la division comme une soustraction répétée: combien de fois peux-tu retirer {b} de {a}?",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_concepts_fundamentals"
+            "detection_confidence": 0.89
           },
           {
             "id": "DIV_CONC_005",
@@ -493,13 +363,7 @@
               "CM1"
             ],
             "remediation_strategy": "observation patterns",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "La division, c'est partager équitablement. {a} ÷ {b} = combien chacun reçoit si on partage {a} entre {b}?",
-              "Pense à la division comme une soustraction répétée: combien de fois peux-tu retirer {b} de {a}?",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_concepts_fundamentals"
+            "detection_confidence": 0.88
           }
         ],
         "fractions": [
@@ -519,13 +383,7 @@
               "CM2"
             ],
             "remediation_strategy": "représentations visuelles",
-            "detection_confidence": 0.95,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: traite numérateur et dénominateur comme nombres séparés. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_concepts_fundamentals"
+            "detection_confidence": 0.95
           },
           {
             "id": "FRAC_CONC_002",
@@ -543,13 +401,7 @@
               "CM2"
             ],
             "remediation_strategy": "fractions visuelles",
-            "detection_confidence": 0.93,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: plus grand dénominateur = plus grande fraction. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_concepts_fundamentals"
+            "detection_confidence": 0.93
           },
           {
             "id": "FRAC_CONC_003",
@@ -567,13 +419,7 @@
               "CM2"
             ],
             "remediation_strategy": "pliages et découpages",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "{a}/{b} et {c}/{d} sont équivalentes! Multiplie ou divise numérateur ET dénominateur par le même nombre.",
-              "Visualise: {a}/{b} représente la même portion que {c}/{d}. Dessine pour voir!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_concepts_fundamentals"
+            "detection_confidence": 0.9
           },
           {
             "id": "FRAC_CONC_004",
@@ -590,13 +436,7 @@
               "CM2"
             ],
             "remediation_strategy": "conversions guidées",
-            "detection_confidence": 0.87,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: confusion fraction/nombre décimal. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_concepts_fundamentals"
+            "detection_confidence": 0.87
           },
           {
             "id": "FRAC_CONC_005",
@@ -613,13 +453,7 @@
               "CM2"
             ],
             "remediation_strategy": "nombres mixtes",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: pense que toute fraction est <1. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_concepts_fundamentals"
+            "detection_confidence": 0.89
           }
         ],
         "decimals": [
@@ -639,14 +473,7 @@
               "CM2"
             ],
             "remediation_strategy": "droite graduée",
-            "detection_confidence": 0.94,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_concepts_fundamentals"
+            "detection_confidence": 0.94
           },
           {
             "id": "DEC_CONC_002",
@@ -664,13 +491,7 @@
               "CM2"
             ],
             "remediation_strategy": "tableau de numération",
-            "detection_confidence": 0.92,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: traite partie décimale comme entier séparé. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_concepts_fundamentals"
+            "detection_confidence": 0.92
           },
           {
             "id": "DEC_CONC_003",
@@ -687,14 +508,7 @@
               "CM1"
             ],
             "remediation_strategy": "démonstrations visuelles",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_concepts_fundamentals"
+            "detection_confidence": 0.88
           },
           {
             "id": "DEC_CONC_004",
@@ -712,14 +526,7 @@
               "CM2"
             ],
             "remediation_strategy": "manipulations concrètes",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_concepts_fundamentals"
+            "detection_confidence": 0.9
           },
           {
             "id": "DEC_CONC_005",
@@ -737,13 +544,7 @@
               "CM2"
             ],
             "remediation_strategy": "tableau décimal",
-            "detection_confidence": 0.91,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: confusion entre 0.x et 0.0x. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_concepts_fundamentals"
+            "detection_confidence": 0.91
           }
         ],
         "geometry": [
@@ -763,14 +564,7 @@
               "CM2"
             ],
             "remediation_strategy": "manipulations concrètes",
-            "detection_confidence": 0.93,
-            "feedback_templates": [
-              "Le périmètre mesure le TOUR de la figure, l'aire mesure la SURFACE.",
-              "Périmètre de rectangle: {formula_p}. Aire: {formula_a}. Ce sont deux choses différentes!",
-              "Tu confonds? Le périmètre c'est en {unit}, l'aire en {unit}².",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "geometry_concepts_fundamentals"
+            "detection_confidence": 0.93
           },
           {
             "id": "GEO_CONC_002",
@@ -787,14 +581,7 @@
               "CM2"
             ],
             "remediation_strategy": "quadrillages",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "Le périmètre mesure le TOUR de la figure, l'aire mesure la SURFACE.",
-              "Périmètre de rectangle: {formula_p}. Aire: {formula_a}. Ce sont deux choses différentes!",
-              "Tu confonds? Le périmètre c'est en {unit}, l'aire en {unit}².",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "geometry_concepts_fundamentals"
+            "detection_confidence": 0.89
           },
           {
             "id": "GEO_CONC_003",
@@ -811,13 +598,7 @@
               "CM2"
             ],
             "remediation_strategy": "schémas annotés",
-            "detection_confidence": 0.91,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: confond rayon et diamètre. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "geometry_concepts_fundamentals"
+            "detection_confidence": 0.91
           },
           {
             "id": "GEO_CONC_004",
@@ -834,13 +615,7 @@
               "CM1"
             ],
             "remediation_strategy": "rotations de figures",
-            "detection_confidence": 0.85,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: triangle rectangle doit avoir base horizontale. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "geometry_concepts_fundamentals"
+            "detection_confidence": 0.85
           },
           {
             "id": "GEO_CONC_005",
@@ -858,13 +633,7 @@
               "CM2"
             ],
             "remediation_strategy": "rapporteur sur divers triangles",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: angles mesurés par longueur des côtés. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "geometry_concepts_fundamentals"
+            "detection_confidence": 0.88
           }
         ],
         "measurement": [
@@ -884,14 +653,7 @@
               "CM1"
             ],
             "remediation_strategy": "manipulations réelles",
-            "detection_confidence": 0.92,
-            "feedback_templates": [
-              "Pour convertir {value} {from_unit} en {to_unit}: {operation}.",
-              "Souviens-toi: 1 {big_unit} = {factor} {small_unit}.",
-              "Tableau de conversion: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "measurement_concepts_fundamentals"
+            "detection_confidence": 0.92
           },
           {
             "id": "MEAS_CONC_002",
@@ -909,13 +671,7 @@
               "CM2"
             ],
             "remediation_strategy": "horloge et calculs",
-            "detection_confidence": 0.95,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: pense que 1h = 100 minutes. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "measurement_concepts_fundamentals"
+            "detection_confidence": 0.95
           },
           {
             "id": "MEAS_CONC_003",
@@ -933,13 +689,7 @@
               "CM2"
             ],
             "remediation_strategy": "expériences pratiques",
-            "detection_confidence": 0.87,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: confond masse et volume. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "measurement_concepts_fundamentals"
+            "detection_confidence": 0.87
           },
           {
             "id": "MEAS_CONC_004",
@@ -956,14 +706,7 @@
               "CM2"
             ],
             "remediation_strategy": "visualisation carrés",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "Pour convertir {value} {from_unit} en {to_unit}: {operation}.",
-              "Souviens-toi: 1 {big_unit} = {factor} {small_unit}.",
-              "Tableau de conversion: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "measurement_concepts_fundamentals"
+            "detection_confidence": 0.9
           },
           {
             "id": "MEAS_CONC_005",
@@ -981,13 +724,7 @@
               "CM2"
             ],
             "remediation_strategy": "thermomètre et expériences",
-            "detection_confidence": 0.84,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: confusion entre température et chaleur. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "measurement_concepts_fundamentals"
+            "detection_confidence": 0.84
           }
         ]
       }
@@ -1013,14 +750,7 @@
               "CE2"
             ],
             "remediation_strategy": "notation explicite retenue",
-            "detection_confidence": 0.96,
-            "feedback_templates": [
-              "Attention à la retenue! Quand {a} + {b} = {sum}, et que {sum} ≥ 10, on doit reporter {carry} dizaine(s).",
-              "Tu as oublié de reporter la retenue. Regarde: {a} + {b} = {correct}, pas {wrong}.",
-              "Bravo pour le calcul, mais n'oublie pas: quand la somme des unités dépasse 10, on reporte une dizaine!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_procedure_practice"
+            "detection_confidence": 0.96
           },
           {
             "id": "ADD_PROC_002",
@@ -1038,15 +768,7 @@
               "CE2"
             ],
             "remediation_strategy": "papier quadrillé",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "L'addition, c'est comme rassembler des objets. Si tu as {a} billes et qu'on t'en donne {b}, combien en as-tu?",
-              "Essaie avec des cubes: prends {a} cubes, puis ajoutes-en {b}. Compte le total!",
-              "Tu as fait une erreur liée à: place mal les nombres en colonne. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_procedure_practice"
+            "detection_confidence": 0.89
           },
           {
             "id": "ADD_PROC_003",
@@ -1063,14 +785,7 @@
               "CE2"
             ],
             "remediation_strategy": "barrer retenues utilisées",
-            "detection_confidence": 0.85,
-            "feedback_templates": [
-              "Attention à la retenue! Quand {a} + {b} = {sum}, et que {sum} ≥ 10, on doit reporter {carry} dizaine(s).",
-              "Tu as oublié de reporter la retenue. Regarde: {a} + {b} = {correct}, pas {wrong}.",
-              "Bravo pour le calcul, mais n'oublie pas: quand la somme des unités dépasse 10, on reporte une dizaine!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_procedure_practice"
+            "detection_confidence": 0.85
           },
           {
             "id": "ADD_PROC_004",
@@ -1087,14 +802,7 @@
               "CE1"
             ],
             "remediation_strategy": "pratique guidée pas à pas",
-            "detection_confidence": 0.91,
-            "feedback_templates": [
-              "Pour convertir {value} {from_unit} en {to_unit}: {operation}.",
-              "Souviens-toi: 1 {big_unit} = {factor} {small_unit}.",
-              "Tableau de conversion: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_procedure_practice"
+            "detection_confidence": 0.91
           },
           {
             "id": "ADD_PROC_005",
@@ -1112,14 +820,7 @@
               "CE2"
             ],
             "remediation_strategy": "format standardisé",
-            "detection_confidence": 0.87,
-            "feedback_templates": [
-              "Attention à la retenue! Quand {a} + {b} = {sum}, et que {sum} ≥ 10, on doit reporter {carry} dizaine(s).",
-              "Tu as oublié de reporter la retenue. Regarde: {a} + {b} = {correct}, pas {wrong}.",
-              "Bravo pour le calcul, mais n'oublie pas: quand la somme des unités dépasse 10, on reporte une dizaine!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "addition_procedure_practice"
+            "detection_confidence": 0.87
           }
         ],
         "subtraction": [
@@ -1138,14 +839,7 @@
               "CE2"
             ],
             "remediation_strategy": "vérification systématique",
-            "detection_confidence": 0.94,
-            "feedback_templates": [
-              "Pour soustraire {b} de {a}, tu dois emprunter une dizaine. {a} devient {a_transformed}, puis tu fais {calc}.",
-              "Tu ne peux pas faire {digit_a} - {digit_b} ? Pas de problème! Emprunte 10 à la dizaine suivante.",
-              "L'emprunt, c'est comme échanger un billet de 10€ contre 10 pièces de 1€. Essaie!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_procedure_practice"
+            "detection_confidence": 0.94
           },
           {
             "id": "SUB_PROC_002",
@@ -1163,14 +857,7 @@
               "CM1"
             ],
             "remediation_strategy": "matériel base 10",
-            "detection_confidence": 0.92,
-            "feedback_templates": [
-              "Pour soustraire {b} de {a}, tu dois emprunter une dizaine. {a} devient {a_transformed}, puis tu fais {calc}.",
-              "Tu ne peux pas faire {digit_a} - {digit_b} ? Pas de problème! Emprunte 10 à la dizaine suivante.",
-              "L'emprunt, c'est comme échanger un billet de 10€ contre 10 pièces de 1€. Essaie!",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_procedure_practice"
+            "detection_confidence": 0.92
           },
           {
             "id": "SUB_PROC_003",
@@ -1188,13 +875,7 @@
               "CE2"
             ],
             "remediation_strategy": "comprendre sens opération",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: soustrait dans le mauvais ordre. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_procedure_practice"
+            "detection_confidence": 0.9
           },
           {
             "id": "SUB_PROC_004",
@@ -1211,13 +892,7 @@
               "CM1"
             ],
             "remediation_strategy": "décomposition explicite",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: problème avec zéros consécutifs. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_procedure_practice"
+            "detection_confidence": 0.88
           },
           {
             "id": "SUB_PROC_005",
@@ -1234,13 +909,7 @@
               "CE2"
             ],
             "remediation_strategy": "papier quadrillé",
-            "detection_confidence": 0.86,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: place mal les nombres en colonne. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "subtraction_procedure_practice"
+            "detection_confidence": 0.86
           }
         ],
         "multiplication": [
@@ -1260,15 +929,7 @@
               "CM2"
             ],
             "remediation_strategy": "couleurs pour positions",
-            "detection_confidence": 0.95,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Tu as fait une erreur liée à: oublie le décalage dans multiplication posée. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble."
-            ],
-            "remediation_path": "multiplication_procedure_practice"
+            "detection_confidence": 0.95
           },
           {
             "id": "MULT_PROC_002",
@@ -1286,15 +947,7 @@
               "CM1"
             ],
             "remediation_strategy": "notation explicite",
-            "detection_confidence": 0.93,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Tu as fait une erreur liée à: multiplie chiffre par chiffre sans retenue. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble."
-            ],
-            "remediation_path": "multiplication_procedure_practice"
+            "detection_confidence": 0.93
           },
           {
             "id": "MULT_PROC_003",
@@ -1312,14 +965,7 @@
               "CM1"
             ],
             "remediation_strategy": "révision tables",
-            "detection_confidence": 0.98,
-            "feedback_templates": [
-              "Révise ta table de {n}: {n} × {m} = {result}, pas {wrong}.",
-              "Astuce: {n} × {m}, c'est {n} groupes de {m}. Compte: {visualization}.",
-              "Tu confonds avec une autre table? {n} × {m} = {correct}, mais {n} × {wrong_m} = {wrong}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "multiplication_procedure_practice"
+            "detection_confidence": 0.98
           },
           {
             "id": "MULT_PROC_004",
@@ -1336,15 +982,7 @@
               "CM1"
             ],
             "remediation_strategy": "vérification étape finale",
-            "detection_confidence": 0.87,
-            "feedback_templates": [
-              "La multiplication, c'est une addition répétée: {a} × {b} = {a} + {a} + ... ({b} fois).",
-              "Imagine {b} groupes de {a} objets. Combien d'objets en tout?",
-              "C'est différent de l'addition! {a} × {b} = {result}, mais {a} + {b} = {sum}.",
-              "Tu as fait une erreur liée à: additionne mal les produits partiels. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble."
-            ],
-            "remediation_path": "multiplication_procedure_practice"
+            "detection_confidence": 0.87
           },
           {
             "id": "MULT_PROC_005",
@@ -1361,14 +999,7 @@
               "CM2"
             ],
             "remediation_strategy": "comptage décimales",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "multiplication_procedure_practice"
+            "detection_confidence": 0.9
           }
         ],
         "division": [
@@ -1388,13 +1019,7 @@
               "CM2"
             ],
             "remediation_strategy": "tables et estimation",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: erreur dans choix du quotient. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_procedure_practice"
+            "detection_confidence": 0.89
           },
           {
             "id": "DIV_PROC_002",
@@ -1412,13 +1037,7 @@
               "CM2"
             ],
             "remediation_strategy": "surligner chiffres à abaisser",
-            "detection_confidence": 0.92,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: oublie d'abaisser le chiffre suivant. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_procedure_practice"
+            "detection_confidence": 0.92
           },
           {
             "id": "DIV_PROC_003",
@@ -1435,13 +1054,7 @@
               "CM1"
             ],
             "remediation_strategy": "vérifier soustractions",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "La division, c'est partager équitablement. {a} ÷ {b} = combien chacun reçoit si on partage {a} entre {b}?",
-              "Pense à la division comme une soustraction répétée: combien de fois peux-tu retirer {b} de {a}?",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_procedure_practice"
+            "detection_confidence": 0.88
           },
           {
             "id": "DIV_PROC_004",
@@ -1458,14 +1071,7 @@
               "CM2"
             ],
             "remediation_strategy": "alignement virgules",
-            "detection_confidence": 0.9,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_procedure_practice"
+            "detection_confidence": 0.9
           },
           {
             "id": "DIV_PROC_005",
@@ -1482,13 +1088,7 @@
               "CM1"
             ],
             "remediation_strategy": "critères d'arrêt",
-            "detection_confidence": 0.84,
-            "feedback_templates": [
-              "La division, c'est partager équitablement. {a} ÷ {b} = combien chacun reçoit si on partage {a} entre {b}?",
-              "Pense à la division comme une soustraction répétée: combien de fois peux-tu retirer {b} de {a}?",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "division_procedure_practice"
+            "detection_confidence": 0.84
           }
         ],
         "fractions": [
@@ -1508,13 +1108,7 @@
               "CM2"
             ],
             "remediation_strategy": "dénominateur commun",
-            "detection_confidence": 0.96,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: additionne numérateurs et dénominateurs séparément. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_operations_practice"
+            "detection_confidence": 0.96
           },
           {
             "id": "FRAC_PROC_002",
@@ -1531,13 +1125,7 @@
               "CM2"
             ],
             "remediation_strategy": "division par même nombre",
-            "detection_confidence": 0.91,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: simplifie incorrectement. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_operations_practice"
+            "detection_confidence": 0.91
           },
           {
             "id": "FRAC_PROC_003",
@@ -1554,13 +1142,7 @@
               "CM2"
             ],
             "remediation_strategy": "multiples et PPCM",
-            "detection_confidence": 0.93,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: trouve mal dénominateur commun. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_operations_practice"
+            "detection_confidence": 0.93
           },
           {
             "id": "FRAC_PROC_004",
@@ -1577,13 +1159,7 @@
               "CM2"
             ],
             "remediation_strategy": "différencier opérations",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: multiplie fractions incorrectement. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_operations_practice"
+            "detection_confidence": 0.89
           },
           {
             "id": "FRAC_PROC_005",
@@ -1600,13 +1176,7 @@
               "CM2"
             ],
             "remediation_strategy": "révision division",
-            "detection_confidence": 0.87,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: convertit mal fraction en décimal. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "fractions_operations_practice"
+            "detection_confidence": 0.87
           }
         ],
         "decimals": [
@@ -1626,14 +1196,7 @@
               "CM2"
             ],
             "remediation_strategy": "papier quadrillé spécial",
-            "detection_confidence": 0.94,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_operations_practice"
+            "detection_confidence": 0.94
           },
           {
             "id": "DEC_PROC_002",
@@ -1650,14 +1213,7 @@
               "CM1"
             ],
             "remediation_strategy": "vérification systématique",
-            "detection_confidence": 0.91,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_operations_practice"
+            "detection_confidence": 0.91
           },
           {
             "id": "DEC_PROC_003",
@@ -1674,14 +1230,7 @@
               "CM2"
             ],
             "remediation_strategy": "règles explicites",
-            "detection_confidence": 0.88,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_operations_practice"
+            "detection_confidence": 0.88
           },
           {
             "id": "DEC_PROC_004",
@@ -1698,14 +1247,7 @@
               "CM2"
             ],
             "remediation_strategy": "ignorer virgule puis replacer",
-            "detection_confidence": 0.85,
-            "feedback_templates": [
-              "La virgule sépare les unités des dixièmes. Dans {number}, le chiffre {digit} est en position {position}.",
-              "Aligne toujours les virgules en colonne quand tu additionnes ou soustrais!",
-              "Dans {a} + {b}, place bien les virgules: {visualization}.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_operations_practice"
+            "detection_confidence": 0.85
           },
           {
             "id": "DEC_PROC_005",
@@ -1722,13 +1264,7 @@
               "CM1"
             ],
             "remediation_strategy": "compléter décimales",
-            "detection_confidence": 0.89,
-            "feedback_templates": [
-              "Tu as fait une erreur liée à: ajoute/retire zéros incorrectement. Revoyons ensemble ce concept!",
-              "Pas de souci! Cette erreur est fréquente. Pratiquons ensemble.",
-              "Continue! Tu progresses bien. N'hésite pas à me demander de l'aide."
-            ],
-            "remediation_path": "decimals_operations_practice"
+            "detection_confidence": 0.89
           }
         ]
       }
@@ -1757,15 +1293,7 @@
               "CM2"
             ],
             "remediation_strategy": "pratique régulière",
-            "detection_confidence": 0.7,
-            "feedback_templates": [
-              "Vérifie ton calcul: {a} {op} {b} = {correct}, pas {wrong}.",
-              "Astuce: décompose {a} {op} {b} = ({decomp_a}) {op} ({decomp_b}) = {result}.",
-              "Prends ton temps pour bien calculer!",
-              "Relis ton énoncé attentivement! On te demande {question}.",
-              "Tu as fait une petite erreur d'inattention. La bonne réponse est {correct}."
-            ],
-            "remediation_path": "calculation_skills_practice"
+            "detection_confidence": 0.7
           },
           {
             "id": "CALC_002",
@@ -1785,15 +1313,7 @@
               "CM2"
             ],
             "remediation_strategy": "relecture systématique",
-            "detection_confidence": 0.65,
-            "feedback_templates": [
-              "Vérifie ton calcul: {a} {op} {b} = {correct}, pas {wrong}.",
-              "Astuce: décompose {a} {op} {b} = ({decomp_a}) {op} ({decomp_b}) = {result}.",
-              "Prends ton temps pour bien calculer!",
-              "Relis ton énoncé attentivement! On te demande {question}.",
-              "Tu as fait une petite erreur d'inattention. La bonne réponse est {correct}."
-            ],
-            "remediation_path": "calculation_skills_practice"
+            "detection_confidence": 0.65
           },
           {
             "id": "CALC_003",
@@ -1811,15 +1331,7 @@
               "CE2"
             ],
             "remediation_strategy": "vérification et dyslexie check",
-            "detection_confidence": 0.75,
-            "feedback_templates": [
-              "Vérifie ton calcul: {a} {op} {b} = {correct}, pas {wrong}.",
-              "Astuce: décompose {a} {op} {b} = ({decomp_a}) {op} ({decomp_b}) = {result}.",
-              "Prends ton temps pour bien calculer!",
-              "Relis ton énoncé attentivement! On te demande {question}.",
-              "Tu as fait une petite erreur d'inattention. La bonne réponse est {correct}."
-            ],
-            "remediation_path": "calculation_skills_practice"
+            "detection_confidence": 0.75
           },
           {
             "id": "CALC_004",
@@ -1838,15 +1350,7 @@
               "CM2"
             ],
             "remediation_strategy": "montrer toutes étapes",
-            "detection_confidence": 0.68,
-            "feedback_templates": [
-              "Vérifie ton calcul: {a} {op} {b} = {correct}, pas {wrong}.",
-              "Astuce: décompose {a} {op} {b} = ({decomp_a}) {op} ({decomp_b}) = {result}.",
-              "Prends ton temps pour bien calculer!",
-              "Relis ton énoncé attentivement! On te demande {question}.",
-              "Tu as fait une petite erreur d'inattention. La bonne réponse est {correct}."
-            ],
-            "remediation_path": "calculation_skills_practice"
+            "detection_confidence": 0.68
           },
           {
             "id": "CALC_005",
@@ -1866,15 +1370,7 @@
               "CM2"
             ],
             "remediation_strategy": "pauses régulières",
-            "detection_confidence": 0.6,
-            "feedback_templates": [
-              "Vérifie ton calcul: {a} {op} {b} = {correct}, pas {wrong}.",
-              "Astuce: décompose {a} {op} {b} = ({decomp_a}) {op} ({decomp_b}) = {result}.",
-              "Prends ton temps pour bien calculer!",
-              "Relis ton énoncé attentivement! On te demande {question}.",
-              "Tu as fait une petite erreur d'inattention. La bonne réponse est {correct}."
-            ],
-            "remediation_path": "calculation_skills_practice"
+            "detection_confidence": 0.6
           }
         ]
       }
@@ -1930,7 +1426,6 @@
       "CE2": "8-9 ans",
       "CM1": "9-10 ans",
       "CM2": "10-11 ans"
-    },
-    "enrichment_version": "6.4.1"
+    }
   }
 }

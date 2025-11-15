@@ -28,6 +28,8 @@ class ErrorAnalysisResult:
     common_ages: List[str]
     error_id: Optional[str] = None
     root_cause: Optional[str] = None
+    feedback_templates: Optional[List[str]] = None
+    remediation_path: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Convertit en dictionnaire pour sérialisation"""
@@ -367,7 +369,9 @@ class ErrorAnalyzer:
             remediation_strategy=error_def.get("remediation_strategy", "pratique_guidee"),
             common_ages=error_def.get("common_ages", [difficulty]),
             error_id=error_def.get("id"),
-            root_cause=None  # Sera rempli par root_cause_analysis
+            root_cause=None,  # Sera rempli par root_cause_analysis
+            feedback_templates=error_def.get("feedback_templates", []),
+            remediation_path=error_def.get("remediation_path", "")
         )
 
     def _create_generic_calculation_error(
@@ -377,6 +381,13 @@ class ErrorAnalyzer:
         difficulty: str
     ) -> ErrorAnalysisResult:
         """Crée un résultat générique pour erreur de calcul"""
+        generic_templates = [
+            f"Tu as répondu {response}, mais la bonne réponse est {expected}. Vérifie ton calcul!",
+            "Petite erreur de calcul. Reprends étape par étape.",
+            "Prends ton temps pour bien calculer. Tu y es presque!",
+            "Pas de souci! Cette erreur arrive souvent. Continue à pratiquer."
+        ]
+
         return ErrorAnalysisResult(
             error_type="Calculation",
             misconception="Erreur de calcul ou d'inattention",
@@ -387,7 +398,9 @@ class ErrorAnalyzer:
             remediation_strategy="pratique_reguliere",
             common_ages=[difficulty],
             error_id="CALC_001",
-            root_cause="Erreur de calcul mental ou manque d'attention"
+            root_cause="Erreur de calcul mental ou manque d'attention",
+            feedback_templates=generic_templates,
+            remediation_path="calculation_skills_practice"
         )
 
     def _find_error_by_id(self, error_id: str) -> Optional[Dict[str, Any]]:
@@ -473,6 +486,80 @@ class ErrorAnalyzer:
             5: "Très élevée"
         }
         return labels.get(severity, "Modérée")
+
+    def generate_personalized_feedback(
+        self,
+        error_analysis: ErrorAnalysisResult,
+        student_name: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None
+    ) -> str:
+        """
+        Génère un feedback personnalisé basé sur l'analyse d'erreur
+
+        Args:
+            error_analysis: Résultat de l'analyse d'erreur
+            student_name: Nom de l'élève (optionnel)
+            context: Contexte additionnel (exercice, réponse, etc.)
+
+        Returns:
+            Message de feedback personnalisé et pédagogique
+        """
+        # Récupérer templates
+        templates = error_analysis.feedback_templates or []
+
+        if not templates:
+            # Fallback si pas de templates
+            return self._generate_generic_feedback(error_analysis, student_name)
+
+        # Choisir un template (premier par défaut, ou aléatoire pour variété)
+        import random
+        template = random.choice(templates) if len(templates) > 1 else templates[0]
+
+        # Personnaliser avec nom si fourni
+        if student_name:
+            greeting = f"{student_name}, "
+        else:
+            greeting = ""
+
+        # Remplacer variables dans template si contexte fourni
+        feedback = template
+        if context:
+            try:
+                # Tentative de formatage avec contexte
+                feedback = template.format(**context)
+            except (KeyError, ValueError):
+                # Si formatage échoue, garder template original
+                pass
+
+        # Ajouter encouragement selon sévérité
+        encouragement = self._get_encouragement(error_analysis.severity)
+
+        return f"{greeting}{feedback}\n\n{encouragement}"
+
+    def _generate_generic_feedback(
+        self,
+        error_analysis: ErrorAnalysisResult,
+        student_name: Optional[str] = None
+    ) -> str:
+        """Génère feedback générique si pas de templates"""
+        name = f"{student_name}, " if student_name else ""
+
+        feedback_parts = [
+            f"{name}tu as fait une erreur de type {error_analysis.error_type.lower()}.",
+            f"Misconception identifiée: {error_analysis.misconception}",
+            f"Pour progresser: {error_analysis.remediation_strategy}"
+        ]
+
+        return "\n".join(feedback_parts)
+
+    def _get_encouragement(self, severity: int) -> str:
+        """Retourne un message d'encouragement selon la sévérité"""
+        if severity >= 4:
+            return "💪 Cette notion est importante. Prenons le temps de bien la comprendre ensemble!"
+        elif severity >= 3:
+            return "👍 Pas de souci! Avec un peu de pratique, tu vas y arriver."
+        else:
+            return "✨ Bravo pour ton effort! Continue comme ça."
 
     def get_statistics(self) -> Dict[str, Any]:
         """Retourne statistiques sur le catalogue d'erreurs"""
