@@ -12,7 +12,7 @@
 
 - [x] **Phase 1**: Tests Unitaires (Jour 1-5) - ✅ **COMPLÉTÉ - 100%**
 - [x] **Phase 2**: Refactoring Critique (Jour 2-10) - ✅ **COMPLÉTÉ - 100%**
-- [ ] **Phase 3**: CI/CD & Coverage (Jour 6-10)
+- [🔄] **Phase 3**: CI/CD & Coverage (Jour 6-10) - **EN COURS - 40%**
 - [ ] **Phase 4**: Sécurité (Jour 11-12)
 - [ ] **Phase 5**: Release & Documentation (Jour 13-15)
 
@@ -151,20 +151,68 @@ ui/ → ui/           # Cross-module imports
 
 ---
 
-## Phase 3: CI/CD & Coverage (Jour 6-10)
+## Phase 3: CI/CD & Coverage 🔄 (Jour 6-10)
 
 ### Objectif
 Atteindre 80%+ coverage + pipeline automatisé
 
-### Tâches
-- [ ] Créer `.github/workflows/tests.yml`
-- [ ] Configurer `flake8` et `pylint`
-- [ ] Créer `pyproject.toml` pour pytest
-- [ ] Coverage report automatique
-- [ ] Tests parallélisés (pytest-xdist)
-- [ ] Atteindre 80%+ coverage global
+### Status Actuel: **EN COURS - 40%**
 
-### Status: **À VENIR**
+### Tâches Complétées ✅
+- [x] Créer `.github/workflows/tests.yml`
+  - Tests automatiques sur push/PR
+  - Python 3.11 matrix
+  - Coverage reporting (XML + HTML)
+  - Codecov integration
+  - PR comments avec coverage
+  - Artifact upload (30 days retention)
+- [x] Configurer `flake8` pour code quality
+  - Checks syntax errors
+  - Max line length: 120
+  - Complexity checks
+- [x] Créer `.coveragerc` pour configuration coverage
+  - Exclut UI files (Streamlit)
+  - Focus sur business logic
+  - 32.33% coverage actuel
+- [x] Créer `.gitignore` complet
+  - Ignore coverage reports
+  - Ignore cache/venv
+  - Ignore user data
+
+### Tâches En Cours 🔄
+- [ ] Améliorer coverage de 32% → 80%
+- [ ] Ajouter tests pour core modules
+
+### Tâches Restantes
+- [ ] Tests pour `core/session_manager.py` (25% → 80%)
+- [ ] Tests pour `core/data_manager.py` (15% → 80%)
+- [ ] Tests pour `core/exercise_generator.py` (10% → 60%)
+- [ ] Tests pour utils manquants (fractions, geometrie, proportionnalite)
+- [ ] Augmenter seuil coverage progressivement (30% → 50% → 65% → 80%)
+
+### Coverage Actuel (32.33%)
+
+**✅ Excellent (100%)**
+- core/__init__.py
+- core/skill_tracker.py
+- division_utils.py
+
+**🟡 Bon (>50%)**
+- core/adaptive_system.py (81%)
+- decimaux_utils.py (59%)
+
+**🟠 Moyen (30-50%)**
+- mesures_utils.py (48%)
+- monnaie_utils.py (49%)
+- utilisateur.py (47%)
+
+**❌ Faible (<30%)**
+- core/session_manager.py (25%)
+- core/data_manager.py (15%)
+- core/exercise_generator.py (10%)
+- fractions_utils.py (0%)
+- geometrie_utils.py (0%)
+- proportionnalite_utils.py (0%)
 
 ---
 
@@ -207,8 +255,9 @@ Préparer release v6.3.0 production
 ### Tests
 - **Total tests**: 161
 - **Tests passent**: 161 (100%) ✅
-- **Coverage actuel**: ~65-70% (estimation)
+- **Coverage actuel**: 32.33% (business logic only)
 - **Coverage cible**: 80%+
+- **CI/CD**: ✅ GitHub Actions configuré
 
 ### Code
 - **app.py avant**: 4615 lignes
@@ -265,6 +314,18 @@ Préparer release v6.3.0 production
 - ✅ 161/161 tests passent
 - ✅ Objectif <300 lignes atteint!
 - 🎉 **PHASE 2 COMPLÉTÉE À 100%**
+
+### 2025-11-15 - Phase 3 Partie 1 Commencée 🔄
+- ✅ GitHub Actions workflow configuré
+  - Tests automatiques sur push/PR
+  - Coverage reporting (XML + HTML)
+  - Codecov integration
+  - PR comments
+  - Flake8 code quality
+- ✅ .coveragerc créé - Focus business logic
+- ✅ .gitignore complet
+- 📊 Coverage baseline: 32.33%
+- 🎯 Prochain: Améliorer coverage → 80%+
 
 ---
 
