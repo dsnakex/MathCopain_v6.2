@@ -156,7 +156,7 @@ ui/ → ui/           # Cross-module imports
 ### Objectif
 Atteindre 80%+ coverage + pipeline automatisé
 
-### Status Actuel: **EN COURS - 65%**
+### Status Actuel: **EN COURS - 80%**
 
 ### Tâches Complétées ✅
 - [x] Créer `.github/workflows/tests.yml`
@@ -179,43 +179,45 @@ Atteindre 80%+ coverage + pipeline automatisé
   - Ignore user data
 - [x] Tests pour `core/session_manager.py` - 49 tests, 97% coverage
 - [x] Tests pour `core/data_manager.py` - 23 tests, 57% coverage
-- [x] Tests pour `core/exercise_generator.py` - 48 tests, 81% coverage
-- [x] Seuil coverage dépassé: 32% → 52% ✅
+- [x] Tests pour `core/exercise_generator.py` - 48 tests, 82% coverage
+- [x] Tests pour `proportionnalite_utils.py` - 43 tests, 97% coverage
+- [x] Tests pour `geometrie_utils.py` - 38 tests, 46% coverage
+- [x] Seuils coverage dépassés: 32% → 52% → 66% ✅
 
 ### Tâches En Cours 🔄
-- [ ] Améliorer coverage de 52% → 80%
-- [ ] Ajouter tests pour utils manquants
+- [ ] Améliorer coverage de 66% → 80%
+- [ ] Ajouter tests pour derniers utils
 
 ### Tâches Restantes
-- [ ] Tests pour utils 0% coverage (fractions, geometrie, proportionnalite)
-- [ ] Améliorer utils existants (decimaux 59%, mesures 51%, monnaie 49%, utilisateur 47%)
-- [ ] Augmenter seuil coverage: 50% → 65% → 80%
+- [ ] Tests pour `fractions_utils.py` (0% → 40%+)
+- [ ] Améliorer utils existants (monnaie 49%, utilisateur 47%)
+- [ ] Augmenter seuil coverage: 66% → 75% → 80%
 
-### Coverage Actuel (52.35%)
+### Coverage Actuel (65.67%)
 
 **✅ Excellent (>90%)**
 - core/__init__.py (100%)
 - core/skill_tracker.py (100%)
 - division_utils.py (100%)
-- **core/session_manager.py (97%)** ⬆️ NEW
-- **core/exercise_generator.py (81%)** ⬆️ NEW
+- **core/session_manager.py (97%)** ⬆️
+- **proportionnalite_utils.py (97%)** ⬆️ NEW
+- **core/exercise_generator.py (82%)** ⬆️
 
 **🟢 Très Bon (>70%)**
-- core/adaptive_system.py (79%)
+- core/adaptive_system.py (81%)
 
 **🟡 Bon (>50%)**
-- **core/data_manager.py (57%)** ⬆️ NEW
 - decimaux_utils.py (59%)
+- **core/data_manager.py (57%)** ⬆️
 - mesures_utils.py (51%)
 
 **🟠 Moyen (30-50%)**
 - monnaie_utils.py (49%)
 - utilisateur.py (47%)
+- **geometrie_utils.py (46%)** ⬆️ NEW
 
 **❌ Faible (<30%)**
 - fractions_utils.py (0%)
-- geometrie_utils.py (0%)
-- proportionnalite_utils.py (0%)
 
 ---
 
