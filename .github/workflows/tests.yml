@@ -1,0 +1,111 @@
+name: Tests & Coverage
+
+on:
+  push:
+    branches: [ main, master, develop, "claude/**" ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  test:
+    name: Run Tests with Coverage
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest pytest-cov
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: Run tests with coverage
+      run: |
+        pytest tests/ -v --cov=. --cov-report=term-missing --cov-report=xml --cov-report=html
+
+    - name: Check coverage threshold
+      run: |
+        # Extract coverage percentage from pytest-cov output
+        COVERAGE=$(python -c "import xml.etree.ElementTree as ET; tree = ET.parse('coverage.xml'); print(tree.getroot().attrib['line-rate'])")
+        COVERAGE_PERCENT=$(python -c "print(int(float($COVERAGE) * 100))")
+        echo "Coverage: ${COVERAGE_PERCENT}%"
+
+        # Fail if coverage is below 30% (current baseline)
+        # Target: Gradually increase to 80%+
+        if [ $COVERAGE_PERCENT -lt 30 ]; then
+          echo "❌ Coverage ${COVERAGE_PERCENT}% is below minimum threshold of 30%"
+          exit 1
+        fi
+
+        echo "✅ Coverage ${COVERAGE_PERCENT}% meets minimum threshold"
+
+        # Warn if below target
+        if [ $COVERAGE_PERCENT -lt 80 ]; then
+          echo "⚠️  Coverage is below target of 80% - consider adding more tests"
+        fi
+
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      if: always()
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-mathcopain
+        fail_ci_if_error: false
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Archive coverage HTML report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: coverage-report-html
+        path: htmlcov/
+        retention-days: 30
+
+    - name: Comment PR with coverage
+      if: github.event_name == 'pull_request'
+      uses: py-cov-action/python-coverage-comment-action@v3
+      with:
+        GITHUB_TOKEN: ${{ github.token }}
+        MINIMUM_GREEN: 80
+        MINIMUM_ORANGE: 30
+
+  lint:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install flake8
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8
+
+    - name: Lint with flake8
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+
+        # Exit-zero treats all errors as warnings
+        # Max line length set to 120 (more modern than 79)
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics

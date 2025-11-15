@@ -4,44 +4,41 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 
-# Backups
-*.backup
-*.bak
-*~
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
 
-# Virtual Environment
+# Virtual environments
 venv/
 env/
 ENV/
+.venv
 
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+
+# Streamlit
+.streamlit/
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Streamlit
-.streamlit/secrets.toml
+# Backups
+*.backup
+*.bak
 
-# Data files (optionnel, décommenter si nécessaire)
-# utilisateurs.json
+# Data files (user-specific)
+utilisateurs/
+backups/
+*.json.bak

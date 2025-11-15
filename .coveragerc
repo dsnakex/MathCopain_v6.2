@@ -1,0 +1,48 @@
+# Coverage configuration for pytest-cov
+[run]
+source = .
+omit =
+    */tests/*
+    */test_*
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */.venv/*
+    setup.py
+    */site-packages/*
+    */dist-packages/*
+    */migrations/*
+    */conftest.py
+    app.py.backup
+    */.disabled
+    # Exclude UI files (Streamlit code is hard to unit test)
+    app.py
+    ui/*.py
+    ui_authentification.py
+    authentification.py
+    # Exclude module wrappers
+    modules/ui/*.py
+    modules/sections/*.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    def __str__
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    @abstractmethod
+    @abc.abstractmethod
+    if 0:
+    if False:
+
+precision = 2
+show_missing = True
+
+[html]
+directory = htmlcov
+
+[xml]
+output = coverage.xml
