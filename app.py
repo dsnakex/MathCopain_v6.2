@@ -2,6 +2,7 @@
 import streamlit as st
 import random
 from datetime import date, datetime
+from __version__ import __version__, __title__
 from authentification import init_fichier_securise
 from ui_authentification import verifier_authentification
 from utilisateur import charger_utilisateur, sauvegarder_utilisateur, obtenir_tous_eleves, profil_par_defaut  # ← AJOUTER
@@ -227,8 +228,9 @@ def main():
         st.caption("💚 Fait avec passion pour les enfants")
     
     # MAIN CONTENT
-    st.title("🎓 MathCopain - Le Calcul Mental sans Pression")
-    
+    st.title(f"🎓 {__title__} - Le Calcul Mental sans Pression")
+    st.caption(f"Version {__version__}")
+
     # Daily challenge
     exercise_generator.generer_daily_challenge()
     if st.session_state.daily_challenge['challenge']:
