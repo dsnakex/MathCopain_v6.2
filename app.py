@@ -209,7 +209,7 @@ def main():
         st.markdown("---")
         st.markdown("### 📞 À Propos")
         st.markdown("""
-        **MathCopain v5.2**
+        **MathCopain v6.3**
         
         Application gratuite pour apprendre 
         le calcul mental par le jeu.
@@ -220,8 +220,8 @@ def main():
         - 📧 Email: mathcopain.contact@gmail.com
         - 💬 Formulaire: https://forms.gle/3MieMDCxG47ooNbn9
               
-        **Version:** v5.2
-        **Mise à jour:** 6 Nov 2025
+        **Version:** v6.3
+        **Mise à jour:** 15 Nov 2025
         """)
         
         st.markdown("---")
