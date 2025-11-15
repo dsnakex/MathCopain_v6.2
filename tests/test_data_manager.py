@@ -298,3 +298,344 @@ class TestErrorHandling:
 
         result = data_manager.save_json("bad.json", {'obj': NonSerializable()})
         assert result is False
+
+    def test_load_recovers_from_backup_on_corrupt_file(self, data_manager, temp_data_dir):
+        """load_json() récupère depuis backup si fichier corrompu."""
+        # Créer fichier initial
+        initial_data = {'version': 1}
+        data_manager.save_json("recover.json", initial_data)
+
+        # Mettre à jour (ceci crée un backup de initial_data)
+        updated_data = {'version': 2, 'important': 'data'}
+        data_manager.save_json("recover.json", updated_data)
+
+        # Corrompre fichier principal
+        filepath = os.path.join(temp_data_dir, "recover.json")
+        with open(filepath, 'w') as f:
+            f.write("{ corrupted json }")
+
+        # Charger devrait récupérer depuis backup (qui contient initial_data)
+        result = data_manager.load_json("recover.json")
+        # Le backup contient la version initiale (version 1)
+        assert result == initial_data
+
+    def test_load_io_error_returns_default(self, data_manager, temp_data_dir):
+        """load_json() retourne default lors d'IOError."""
+        # Créer fichier qui sera supprimé pendant lecture (simulation IOError)
+        # En pratique, on teste déjà avec le permission test, mais ajoutons un cas simple
+        result = data_manager.load_json("/dev/null/impossible.json", default={'io_error': True})
+        assert result == {'io_error': True}
+
+
+class TestValidateUserProfile:
+    """Tests de validation du profil utilisateur."""
+
+    def test_validate_user_profile_valid(self):
+        """validate_user_profile() accepte profil valide."""
+        valid_profile = {
+            'niveau': 'CM1',
+            'points': 150,
+            'badges': ['badge1', 'badge2'],
+            'exercices_reussis': 10,
+            'exercices_totaux': 15
+        }
+        assert DataManager.validate_user_profile(valid_profile) is True
+
+    def test_validate_user_profile_minimal_valid(self):
+        """validate_user_profile() accepte profil minimal valide."""
+        minimal_profile = {
+            'niveau': 'CE1',
+            'points': 0,
+            'badges': [],
+            'exercices_reussis': 0,
+            'exercices_totaux': 0
+        }
+        assert DataManager.validate_user_profile(minimal_profile) is True
+
+    def test_validate_missing_niveau(self):
+        """validate_user_profile() rejette si niveau manquant."""
+        invalid_profile = {
+            'points': 100,
+            'badges': [],
+            'exercices_reussis': 5,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_missing_points(self):
+        """validate_user_profile() rejette si points manquant."""
+        invalid_profile = {
+            'niveau': 'CM2',
+            'badges': [],
+            'exercices_reussis': 5,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_missing_badges(self):
+        """validate_user_profile() rejette si badges manquant."""
+        invalid_profile = {
+            'niveau': 'CE2',
+            'points': 50,
+            'exercices_reussis': 3,
+            'exercices_totaux': 5
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_missing_exercices_reussis(self):
+        """validate_user_profile() rejette si exercices_reussis manquant."""
+        invalid_profile = {
+            'niveau': 'CM1',
+            'points': 100,
+            'badges': [],
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_missing_exercices_totaux(self):
+        """validate_user_profile() rejette si exercices_totaux manquant."""
+        invalid_profile = {
+            'niveau': 'CM2',
+            'points': 200,
+            'badges': [],
+            'exercices_reussis': 8
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_invalid_niveau(self):
+        """validate_user_profile() rejette niveau invalide."""
+        invalid_profile = {
+            'niveau': 'INVALID',
+            'points': 100,
+            'badges': [],
+            'exercices_reussis': 5,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    @pytest.mark.parametrize("niveau", ['CE1', 'CE2', 'CM1', 'CM2'])
+    def test_validate_all_valid_niveaux(self, niveau):
+        """validate_user_profile() accepte tous les niveaux valides."""
+        profile = {
+            'niveau': niveau,
+            'points': 50,
+            'badges': [],
+            'exercices_reussis': 2,
+            'exercices_totaux': 5
+        }
+        assert DataManager.validate_user_profile(profile) is True
+
+    def test_validate_negative_points(self):
+        """validate_user_profile() rejette points négatifs."""
+        invalid_profile = {
+            'niveau': 'CM1',
+            'points': -10,
+            'badges': [],
+            'exercices_reussis': 5,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_points_not_integer(self):
+        """validate_user_profile() rejette points non-entier."""
+        invalid_profile = {
+            'niveau': 'CM2',
+            'points': "100",
+            'badges': [],
+            'exercices_reussis': 5,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_badges_not_list(self):
+        """validate_user_profile() rejette badges non-liste."""
+        invalid_profile = {
+            'niveau': 'CE1',
+            'points': 50,
+            'badges': "not a list",
+            'exercices_reussis': 3,
+            'exercices_totaux': 5
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_negative_exercices_reussis(self):
+        """validate_user_profile() rejette exercices_reussis négatif."""
+        invalid_profile = {
+            'niveau': 'CM1',
+            'points': 100,
+            'badges': [],
+            'exercices_reussis': -5,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_exercices_reussis_not_integer(self):
+        """validate_user_profile() rejette exercices_reussis non-entier."""
+        invalid_profile = {
+            'niveau': 'CM2',
+            'points': 100,
+            'badges': [],
+            'exercices_reussis': 5.5,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_negative_exercices_totaux(self):
+        """validate_user_profile() rejette exercices_totaux négatif."""
+        invalid_profile = {
+            'niveau': 'CE2',
+            'points': 50,
+            'badges': [],
+            'exercices_reussis': 5,
+            'exercices_totaux': -10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_exercices_totaux_not_integer(self):
+        """validate_user_profile() rejette exercices_totaux non-entier."""
+        invalid_profile = {
+            'niveau': 'CM1',
+            'points': 100,
+            'badges': [],
+            'exercices_reussis': 5,
+            'exercices_totaux': "10"
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_exercices_reussis_greater_than_totaux(self):
+        """validate_user_profile() rejette si reussis > totaux."""
+        invalid_profile = {
+            'niveau': 'CM2',
+            'points': 200,
+            'badges': [],
+            'exercices_reussis': 15,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(invalid_profile) is False
+
+    def test_validate_exercices_equal_is_valid(self):
+        """validate_user_profile() accepte reussis == totaux."""
+        valid_profile = {
+            'niveau': 'CE1',
+            'points': 100,
+            'badges': [],
+            'exercices_reussis': 10,
+            'exercices_totaux': 10
+        }
+        assert DataManager.validate_user_profile(valid_profile) is True
+
+
+class TestValidateUsersData:
+    """Tests de validation du fichier utilisateurs complet."""
+
+    def test_validate_users_data_valid(self):
+        """validate_users_data() accepte données valides."""
+        valid_data = {
+            'alice': {
+                'niveau': 'CM1',
+                'points': 150,
+                'badges': [],
+                'exercices_reussis': 10,
+                'exercices_totaux': 15
+            },
+            'bob': {
+                'niveau': 'CE2',
+                'points': 50,
+                'badges': ['badge1'],
+                'exercices_reussis': 5,
+                'exercices_totaux': 8
+            }
+        }
+        assert DataManager.validate_users_data(valid_data) is True
+
+    def test_validate_users_data_empty_dict(self):
+        """validate_users_data() accepte dict vide."""
+        assert DataManager.validate_users_data({}) is True
+
+    def test_validate_users_data_not_dict(self):
+        """validate_users_data() rejette si pas un dict."""
+        assert DataManager.validate_users_data([]) is False
+        assert DataManager.validate_users_data("not a dict") is False
+        assert DataManager.validate_users_data(None) is False
+
+    def test_validate_users_data_empty_username(self):
+        """validate_users_data() rejette username vide."""
+        invalid_data = {
+            '': {
+                'niveau': 'CM1',
+                'points': 100,
+                'badges': [],
+                'exercices_reussis': 5,
+                'exercices_totaux': 10
+            }
+        }
+        assert DataManager.validate_users_data(invalid_data) is False
+
+    def test_validate_users_data_non_string_username(self):
+        """validate_users_data() rejette username non-string."""
+        invalid_data = {
+            123: {
+                'niveau': 'CM1',
+                'points': 100,
+                'badges': [],
+                'exercices_reussis': 5,
+                'exercices_totaux': 10
+            }
+        }
+        assert DataManager.validate_users_data(invalid_data) is False
+
+    def test_validate_users_data_invalid_profile(self):
+        """validate_users_data() rejette si un profil est invalide."""
+        invalid_data = {
+            'alice': {
+                'niveau': 'CM1',
+                'points': 100,
+                'badges': [],
+                'exercices_reussis': 5,
+                'exercices_totaux': 10
+            },
+            'bob': {
+                'niveau': 'INVALID',  # Niveau invalide
+                'points': 50,
+                'badges': [],
+                'exercices_reussis': 3,
+                'exercices_totaux': 5
+            }
+        }
+        assert DataManager.validate_users_data(invalid_data) is False
+
+
+class TestBackupRecovery:
+    """Tests de récupération depuis backup."""
+
+    def test_try_load_latest_backup_no_backups(self, data_manager):
+        """_try_load_latest_backup() retourne None si aucun backup."""
+        result = data_manager._try_load_latest_backup("nonexistent.json")
+        assert result is None
+
+    def test_try_load_latest_backup_returns_latest(self, data_manager):
+        """_try_load_latest_backup() retourne le backup le plus récent."""
+        # Créer plusieurs backups
+        backups_data = [
+            ("test.json.20240101_120000.bak", {'version': 1}),
+            ("test.json.20240102_120000.bak", {'version': 2}),
+            ("test.json.20240103_120000.bak", {'version': 3})
+        ]
+
+        for filename, data in backups_data:
+            backup_path = os.path.join(data_manager.backup_dir, filename)
+            with open(backup_path, 'w') as f:
+                json.dump(data, f)
+
+        # Devrait retourner le plus récent (version 3)
+        result = data_manager._try_load_latest_backup("test.json")
+        assert result == {'version': 3}
+
+    def test_create_backup_nonexistent_file(self, data_manager):
+        """_create_backup() ne fait rien si fichier n'existe pas."""
+        # Ne devrait pas lever d'exception
+        data_manager._create_backup("nonexistent.json")
+
+        # Aucun backup ne devrait être créé
+        backups = os.listdir(data_manager.backup_dir)
+        assert len(backups) == 0
