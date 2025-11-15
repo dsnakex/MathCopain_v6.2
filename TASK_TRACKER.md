@@ -193,18 +193,17 @@ Atteindre 80%+ coverage + pipeline automatisé
 - [ ] Améliorer utils existants (monnaie 49%, utilisateur 47%)
 - [ ] Augmenter seuil coverage: 66% → 75% → 80%
 
-### Coverage Actuel (65.67%)
+### Coverage Actuel (70.13%)
 
 **✅ Excellent (>90%)**
 - core/__init__.py (100%)
 - core/skill_tracker.py (100%)
 - division_utils.py (100%)
 - **core/session_manager.py (97%)** ⬆️
-- **proportionnalite_utils.py (97%)** ⬆️ NEW
+- **proportionnalite_utils.py (97%)** ⬆️
+- **monnaie_utils.py (91%)** ⬆️ NEW
 - **core/exercise_generator.py (82%)** ⬆️
-
-**🟢 Très Bon (>70%)**
-- core/adaptive_system.py (81%)
+- **core/adaptive_system.py (81%)** ⬆️
 
 **🟡 Bon (>50%)**
 - decimaux_utils.py (59%)
@@ -212,9 +211,8 @@ Atteindre 80%+ coverage + pipeline automatisé
 - mesures_utils.py (51%)
 
 **🟠 Moyen (30-50%)**
-- monnaie_utils.py (49%)
 - utilisateur.py (47%)
-- **geometrie_utils.py (46%)** ⬆️ NEW
+- **geometrie_utils.py (46%)** ⬆️
 
 **❌ Faible (<30%)**
 - fractions_utils.py (0%)

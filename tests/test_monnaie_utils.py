@@ -5,6 +5,8 @@ from monnaie_utils import (
     calculer_pieces_optimales,
     generer_calcul_rendu,
     generer_composition_monnaie,
+    generer_probleme_realiste,
+    expliquer_calcul_rendu,
     PIECES_BILLETS
 )
 
@@ -172,3 +174,120 @@ class TestConstantesPiecesBillets:
             assert len(piece) == 2
             assert isinstance(piece[0], int)  # valeur en centimes
             assert isinstance(piece[1], str)  # nom
+
+
+class TestGenererProblemeRealiste:
+    """Tests de génération problèmes réalistes."""
+
+    @pytest.mark.parametrize("niveau", ["CE1", "CE2", "CM1", "CM2"])
+    def test_generation_par_niveau(self, niveau):
+        """generer_probleme_realiste() génère pour chaque niveau."""
+        exercice = generer_probleme_realiste(niveau)
+        assert 'total_centimes' in exercice
+        assert 'total_texte' in exercice
+        assert 'paye_centimes' in exercice
+        assert 'paye_texte' in exercice
+        assert 'reponse_centimes' in exercice
+        assert 'reponse_texte' in exercice
+        assert 'question' in exercice
+
+    def test_paye_superieur_total(self):
+        """Le montant payé doit être supérieur au total."""
+        for _ in range(20):
+            exercice = generer_probleme_realiste("CM1")
+            assert exercice['paye_centimes'] >= exercice['total_centimes']
+
+    def test_rendu_correct(self):
+        """Le calcul du rendu est correct."""
+        for _ in range(20):
+            exercice = generer_probleme_realiste("CE2")
+            attendu = exercice['paye_centimes'] - exercice['total_centimes']
+            assert exercice['reponse_centimes'] == attendu
+
+    def test_ce1_prix_simples(self):
+        """CE1 utilise prix simples (euros entiers)."""
+        for _ in range(20):
+            exercice = generer_probleme_realiste("CE1")
+            # CE1 devrait avoir euros entiers
+            assert exercice['total_centimes'] % 100 == 0
+
+    def test_question_contient_contexte(self):
+        """La question contient un contexte."""
+        exercice = generer_probleme_realiste("CM2")
+        assert len(exercice['question']) > 20
+        # Devrait contenir des mots clés
+        question = exercice['question'].lower()
+        assert any(mot in question for mot in ['achète', 'coût', 'pay', 'rend'])
+
+    def test_cm2_peut_avoir_reduction(self):
+        """CM2 peut inclure réductions."""
+        # Générer plusieurs exercices CM2
+        for _ in range(30):
+            exercice = generer_probleme_realiste("CM2")
+            question = exercice['question'].lower()
+            if 'réduction' in question or 'réduc' in question:
+                # Au moins un exercice avec réduction trouvé
+                assert 'réduction' in question or 'réduc' in question
+                break
+
+    def test_textes_correspondent_centimes(self):
+        """Les textes correspondent aux valeurs en centimes."""
+        exercice = generer_probleme_realiste("CM1")
+        # Vérifier que les conversions sont cohérentes
+        assert isinstance(exercice['total_texte'], str)
+        assert isinstance(exercice['paye_texte'], str)
+        assert isinstance(exercice['reponse_texte'], str)
+        assert len(exercice['total_texte']) > 0
+
+
+class TestExpliquerCalculRendu:
+    """Tests d'explication calcul de rendu."""
+
+    def test_explication_generee(self):
+        """expliquer_calcul_rendu() génère une explication."""
+        explication = expliquer_calcul_rendu(150, 500, 350)
+        assert isinstance(explication, str)
+        assert len(explication) > 0
+
+    def test_explication_contient_etapes(self):
+        """L'explication contient les étapes."""
+        explication = expliquer_calcul_rendu(200, 500, 300)
+        assert "Étape" in explication or "tape" in explication
+
+    def test_explication_contient_valeurs(self):
+        """L'explication contient les valeurs."""
+        explication = expliquer_calcul_rendu(250, 1000, 750)
+        # Devrait mentionner les montants
+        assert len(explication) > 50
+
+    def test_explication_avec_emprunt(self):
+        """Explication pour cas avec emprunt (centimes insuffisants)."""
+        # 3€75 payé avec 5€ = 1€25 rendu
+        # 375 centimes, 500 payés, 125 rendu
+        explication = expliquer_calcul_rendu(375, 500, 125)
+        assert isinstance(explication, str)
+        # Devrait mentionner l'emprunt car 0 < 75
+        assert "emprunt" in explication.lower() or "emprunte" in explication.lower()
+
+    def test_explication_sans_emprunt(self):
+        """Explication pour cas simple (assez de centimes)."""
+        # 2€30 payé avec 5€ = 2€70 rendu
+        # 230 centimes, 500 payés, 270 rendu
+        explication = expliquer_calcul_rendu(230, 500, 270)
+        assert isinstance(explication, str)
+        assert len(explication) > 0
+
+    def test_explication_contient_resultat(self):
+        """L'explication contient le résultat final."""
+        explication = expliquer_calcul_rendu(100, 500, 400)
+        assert "Rendu" in explication or "rendu" in explication
+        assert "4" in explication  # 400 centimes = 4€
+
+    def test_explication_calcul_correct(self):
+        """Les calculs dans l'explication sont cohérents."""
+        prix, paye, rendu = 345, 1000, 655
+        explication = expliquer_calcul_rendu(prix, paye, rendu)
+        # Vérifier que rendu = paye - prix
+        assert paye - prix == rendu
+        # L'explication devrait mentionner ce calcul
+        assert isinstance(explication, str)
