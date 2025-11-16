@@ -71,21 +71,27 @@ def auto_save_profil(succes):
 def _callback_exercice_addition():
     st.session_state.exercice_courant = exercise_generator.generer_addition(st.session_state.niveau)
     st.session_state.show_feedback = False
+    st.session_state.exercise_start_time = __import__('time').time()  # Track start time
 
 def _callback_exercice_soustraction():
     st.session_state.exercice_courant = exercise_generator.generer_soustraction(st.session_state.niveau)
     st.session_state.show_feedback = False
+    st.session_state.exercise_start_time = __import__('time').time()
 
 def _callback_exercice_tables():
     st.session_state.exercice_courant = exercise_generator.generer_tables(st.session_state.niveau)
     st.session_state.show_feedback = False
+    st.session_state.exercise_start_time = __import__('time').time()
 
 def _callback_exercice_division():
     st.session_state.exercice_courant = exercise_generator.generer_division(st.session_state.niveau)
     st.session_state.show_feedback = False
+    st.session_state.exercise_start_time = __import__('time').time()
 
 def _callback_validation_exercice():
-    """Callback pour valider un exercice"""
+    """Callback pour valider un exercice avec TransformativeFeedback"""
+    import time
+
     ex = st.session_state.exercice_courant
     reponse = st.session_state.input_ex
 
@@ -93,7 +99,7 @@ def _callback_validation_exercice():
     if "+" in ex['question']:
         exercice_type = "addition"
     elif "-" in ex['question']:
-        exercice_type = "soustraction"
+        exercice_type = "subtraction"
     elif "×" in ex['question']:
         exercice_type = "multiplication"
     elif "÷" in ex['question']:
@@ -107,6 +113,55 @@ def _callback_validation_exercice():
         correct = (reponse == quotient_correct)
     else:
         correct = (reponse == ex['reponse'])
+
+    # ✅ Phase 6.1.4: Calculate time taken
+    time_taken = None
+    if st.session_state.exercise_start_time:
+        time_taken = int(time.time() - st.session_state.exercise_start_time)
+
+    # ✅ Phase 6.1.4: Generate TransformativeFeedback
+    # Build user history from session state
+    user_history = None
+    if "profil" in st.session_state:
+        profil = st.session_state.profil
+        total = profil.get("exercices_totaux", 0)
+        reussis = profil.get("exercices_reussis", 0)
+        success_rate = reussis / total if total > 0 else 0.5
+        user_history = {
+            "success_rate": success_rate,
+            "exercises_completed": total,
+            "current_streak": st.session_state.streak.get('current', 0)
+        }
+
+    # Build exercise dictionary for FeedbackEngine
+    exercise_dict = {
+        "type": exercice_type,
+        "operation": ex['question'],
+        "difficulty": st.session_state.niveau,
+        "expected_answer": ex['reponse']
+    }
+
+    # Extract operands from question if possible
+    question_parts = ex['question'].replace('×', ' ').replace('+', ' ').replace('-', ' ').replace('÷', ' ').split()
+    if len(question_parts) >= 2:
+        try:
+            exercise_dict["operand1"] = int(question_parts[0])
+            exercise_dict["operand2"] = int(question_parts[1])
+        except:
+            pass
+
+    # Generate transformative feedback
+    feedback_engine = st.session_state.feedback_engine
+    user_id = st.session_state.get('utilisateur', 'student_default')
+
+    transformative_feedback = feedback_engine.process_exercise_response(
+        exercise=exercise_dict,
+        response=reponse,
+        expected=ex['reponse'],
+        user_id=user_id,
+        user_history=user_history,
+        time_taken_seconds=time_taken
+    )
 
     # Enregistrer dans système adaptatif
     if "profil" in st.session_state:
@@ -127,6 +182,7 @@ def _callback_validation_exercice():
     st.session_state.feedback_reponse = reponse
     st.session_state.dernier_exercice = ex
     st.session_state.dernier_exercice_type = exercice_type
+    st.session_state.transformative_feedback = transformative_feedback  # ✅ Store feedback
     st.session_state.show_feedback = True
     st.session_state.scores_history.append({
         'type': 'Calcul Mental',
@@ -161,6 +217,107 @@ def _callback_exercice_suivant():
     else:
         st.session_state.exercice_courant = exercise_generator.generer_tables(st.session_state.niveau)
     st.session_state.show_feedback = False
+
+def render_transformative_feedback():
+    """
+    ✅ Phase 6.1.4: Render 6-layer TransformativeFeedback UI
+
+    Displays:
+    - Layer 1: Immediate (5 words emotional response)
+    - Layer 2: Explanation (50 words pedagogical)
+    - Layer 3: Strategy (alternative approach) - Expander
+    - Layer 4: Remediation (exercises) - Info box
+    - Layer 5: Encouragement (motivation)
+    - Layer 6: Next Action (buttons)
+    """
+    if not st.session_state.get('transformative_feedback'):
+        return
+
+    feedback = st.session_state.transformative_feedback
+
+    # Layer 1: Immediate Response
+    st.markdown("---")
+    if feedback.is_correct:
+        bonus = calculer_bonus_streak(st.session_state.streak['current'])
+        bonus_text = f" +{bonus} pts bonus!" if bonus > 0 else ""
+        st.markdown(
+            f'<div class="feedback-success">🎉 {feedback.immediate}{bonus_text}</div>',
+            unsafe_allow_html=True
+        )
+        st.balloons()
+    else:
+        st.markdown(
+            f'<div class="feedback-error">❌ {feedback.immediate}</div>',
+            unsafe_allow_html=True
+        )
+
+    st.markdown("---")
+
+    # Container for feedback layers
+    with st.container(border=True):
+        # Layer 2: Explanation
+        st.markdown("### 📖 Explication")
+        st.write(feedback.explanation)
+
+        st.markdown("---")
+
+        # Layer 3: Strategy (Expander)
+        if feedback.strategy:
+            with st.expander("💡 **Stratégie Alternative** - Clique pour voir", expanded=False):
+                st.write(feedback.strategy)
+
+        # Layer 4: Remediation (if error)
+        if feedback.remediation:
+            st.markdown("---")
+            st.info("📚 **Recommandations pour progresser**")
+            rem = feedback.remediation
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.write(f"**Type:** {rem.get('exercise_type', 'Pratique')}")
+                st.write(f"**Niveau:** {rem.get('difficulty', st.session_state.niveau)}")
+            with col2:
+                st.write(f"**Exercices:** {rem.get('practice_count', 3)}")
+                st.write(f"**Temps estimé:** ~{rem.get('estimated_time_minutes', 10)} min")
+
+            if rem.get('focus_prerequisites'):
+                st.write(f"**Points à réviser:** {', '.join(rem.get('focus_prerequisites', []))}")
+
+        st.markdown("---")
+
+        # Layer 5: Encouragement
+        st.caption(f"✨ {feedback.encouragement}")
+
+    # Layer 6: Next Action Buttons
+    st.markdown("---")
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button(
+            "🔄 Refaire un similaire",
+            key="btn_retry_trans",
+            use_container_width=True,
+            on_click=_callback_reessayer_exercice,
+            help="Pratique un exercice similaire pour renforcer"
+        ):
+            pass
+
+    with col2:
+        if feedback.is_correct and st.session_state.get("profil", {}).get("exercices_reussis", 0) > 10:
+            action_text = "⏭️ Niveau suivant"
+        elif feedback.is_correct:
+            action_text = "➡️ Continuer"
+        else:
+            action_text = "➡️ Suivant"
+
+        if st.button(
+            action_text,
+            key="btn_next_trans",
+            use_container_width=True,
+            on_click=_callback_exercice_suivant,
+            help=feedback.next_action
+        ):
+            pass
 
 def exercice_rapide_section():
     st.markdown('<div class="categorie-header">📚 Exercice Rapide - Calcul Mental</div>', unsafe_allow_html=True)
@@ -200,39 +357,9 @@ def exercice_rapide_section():
                 st.write("")
                 st.write("")
                 st.button("✅ Valider", use_container_width=True, key="btn_val_ex", on_click=_callback_validation_exercice)
+        # ✅ Phase 6.1.4: Use TransformativeFeedback UI
         if st.session_state.show_feedback and st.session_state.dernier_exercice:
-            st.markdown("---")
-            if st.session_state.feedback_correct:
-                bonus = calculer_bonus_streak(st.session_state.streak['current'])
-                bonus_text = f" +{bonus} bonus!" if bonus > 0 else ""
-                st.markdown(f'<div class="feedback-success">🎉 BRAVO !{bonus_text}</div>', unsafe_allow_html=True)
-                st.balloons()
-            else:
-                st.markdown(f'<div class="feedback-error">❌ Mauvais ! La réponse était {st.session_state.dernier_exercice["reponse"]}</div>', unsafe_allow_html=True)
-                
-                # 🆕 EXPLICATION DÉTAILLÉE
-                st.markdown("---")
-                st.markdown("### 📚 Comprendre l'erreur")
-
-                # ✅ Récupérer le type d'exercice depuis session_state
-                exercice_type = st.session_state.get('dernier_exercice_type', 'autre')
-
-                # Générer explication
-                explication = exercise_generator.generer_explication(
-                    exercice_type,
-                    st.session_state.dernier_exercice['question'],
-                    st.session_state.feedback_reponse,
-                    st.session_state.dernier_exercice['reponse']
-                )
-                st.markdown(explication)
-
-
-
-                # Bouton "Réessayer même type"
-                st.button("🔄 Réessayer un similaire", key="btn_retry", on_click=_callback_reessayer_exercice)
-
-            # Bouton "SUIVANT" (commun à juste/faux)
-            st.button("➡️ SUIVANT", use_container_width=True, key="btn_next", on_click=_callback_exercice_suivant)
+            render_transformative_feedback()
 
 # ================= SECTION JEUX ===================
 # Callbacks pour jeux

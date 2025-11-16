@@ -12,6 +12,9 @@ from division_utils import generer_division_simple, generer_division_reste  # �
 # ✅ REFACTORED Phase 2: Import from core package
 from core import AdaptiveSystem, SkillTracker, SessionManager, DataManager, exercise_generator
 
+# ✅ Phase 6.1.4: Import TransformativeFeedback for pedagogical feedback
+from core.pedagogy.feedback_engine import TransformativeFeedback
+
 from monnaie_utils import (  # ← NOUVEAU MODULE
     generer_calcul_rendu,
     generer_composition_monnaie,
@@ -50,11 +53,17 @@ def init_session_state():
         'memory_first_flip': None,
         'memory_second_flip': None,
         'memory_incorrect_pair': None,
-        'active_category': "Exercice"
+        'active_category': "Exercice",
+        'transformative_feedback': None,  # ✅ Phase 6.1.4: Store detailed feedback
+        'exercise_start_time': None  # ✅ Track exercise time
     }
     for k, v in cles.items():
         if k not in st.session_state:
             st.session_state[k] = v
+
+    # ✅ Phase 6.1.4: Initialize FeedbackEngine (singleton)
+    if 'feedback_engine' not in st.session_state:
+        st.session_state.feedback_engine = TransformativeFeedback()
 
 # =============== PROFIL: Auto-save ===============
 def calculer_progression(stats_par_niveau):
