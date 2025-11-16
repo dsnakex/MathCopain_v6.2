@@ -376,6 +376,11 @@ class LearningStyleAnalyzer:
         Returns:
             LearningStyleResult combiné
         """
+        # Valider les poids
+        if quiz_weight < 0 or performance_weight < 0:
+            raise ValueError("Weights must be non-negative")
+        if quiz_weight == 0 and performance_weight == 0:
+            raise ValueError("Weights cannot both be zero")
         if abs((quiz_weight + performance_weight) - 1.0) > 0.01:
             raise ValueError("Weights must sum to 1.0")
 
