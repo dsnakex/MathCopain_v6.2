@@ -16,11 +16,11 @@ Tests:
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 
-from core.exercise_generator.exercise_adapter import (
+from core.exercise_adapters.exercise_adapter import (
     ExercisePresenterAdapter,
     create_adapter
 )
-from core.exercise_generator.adapters import (
+from core.exercise_adapters.adapters import (
     VisualAdapter,
     AuditoryAdapter,
     KinestheticAdapter,
