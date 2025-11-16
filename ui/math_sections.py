@@ -12,6 +12,7 @@ from utilisateur import sauvegarder_utilisateur
 # Import specific utilities as needed by each section
 
 from fractions_utils import pizza_interactive, afficher_fraction_droite, dessiner_pizza
+from monnaie_utils import generer_calcul_rendu, generer_composition_monnaie, generer_probleme_realiste
 
 def fractions_section():
     """
