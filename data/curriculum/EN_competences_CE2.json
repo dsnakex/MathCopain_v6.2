@@ -1,0 +1,210 @@
+[
+  {
+    "code": "CE2.N.1.1",
+    "title": "Nombres jusqu'à 1000",
+    "description": "Connaître, savoir écrire et nommer les nombres entiers jusqu'à 1000",
+    "domain": "addition",
+    "difficulty_range": [2, 3],
+    "prerequisites": []
+  },
+  {
+    "code": "CE2.N.1.2",
+    "title": "Comparer et ranger les nombres jusqu'à 1000",
+    "description": "Comparer, ranger, encadrer des nombres entiers jusqu'à 1000",
+    "domain": "addition",
+    "difficulty_range": [2, 3],
+    "prerequisites": ["CE2.N.1.1"]
+  },
+  {
+    "code": "CE2.C.1.1",
+    "title": "Addition à 3 chiffres",
+    "description": "Calculer des additions de nombres à 3 chiffres avec retenue",
+    "domain": "addition",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.N.1.1"]
+  },
+  {
+    "code": "CE2.C.1.2",
+    "title": "Addition de plusieurs nombres",
+    "description": "Additionner plusieurs nombres en ligne et en colonne",
+    "domain": "addition",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.C.1.1"]
+  },
+  {
+    "code": "CE2.C.2.1",
+    "title": "Soustraction à 3 chiffres",
+    "description": "Calculer des soustractions de nombres à 3 chiffres avec retenue",
+    "domain": "soustraction",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.N.1.1"]
+  },
+  {
+    "code": "CE2.C.2.2",
+    "title": "Soustractions successives",
+    "description": "Effectuer des soustractions successives",
+    "domain": "soustraction",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.C.2.1"]
+  },
+  {
+    "code": "CE2.C.3.1",
+    "title": "Tables de multiplication jusqu'à 5",
+    "description": "Connaître toutes les tables de multiplication de 2 à 5",
+    "domain": "multiplication",
+    "difficulty_range": [2, 3],
+    "prerequisites": []
+  },
+  {
+    "code": "CE2.C.3.2",
+    "title": "Tables de multiplication jusqu'à 9",
+    "description": "Connaître toutes les tables de multiplication de 2 à 9",
+    "domain": "multiplication",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.C.3.1"]
+  },
+  {
+    "code": "CE2.C.3.3",
+    "title": "Multiplication à 1 chiffre",
+    "description": "Multiplier un nombre à 2 ou 3 chiffres par un nombre à 1 chiffre",
+    "domain": "multiplication",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.C.3.2"]
+  },
+  {
+    "code": "CE2.C.3.4",
+    "title": "Multiplication à 2 chiffres",
+    "description": "Multiplier un nombre à 2 chiffres par un nombre à 2 chiffres",
+    "domain": "multiplication",
+    "difficulty_range": [4, 5],
+    "prerequisites": ["CE2.C.3.3"]
+  },
+  {
+    "code": "CE2.C.4.1",
+    "title": "Division euclidienne simple",
+    "description": "Comprendre et effectuer des divisions euclidiennes simples",
+    "domain": "division",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.C.3.1"]
+  },
+  {
+    "code": "CE2.C.4.2",
+    "title": "Division avec reste",
+    "description": "Effectuer des divisions avec reste",
+    "domain": "division",
+    "difficulty_range": [4, 5],
+    "prerequisites": ["CE2.C.4.1"]
+  },
+  {
+    "code": "CE2.F.1.1",
+    "title": "Fractions simples (1/2, 1/4, 1/3)",
+    "description": "Comprendre et utiliser les fractions simples 1/2, 1/4, 1/3",
+    "domain": "fractions",
+    "difficulty_range": [2, 3],
+    "prerequisites": []
+  },
+  {
+    "code": "CE2.F.1.2",
+    "title": "Comparaison de fractions simples",
+    "description": "Comparer des fractions simples",
+    "domain": "fractions",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.F.1.1"]
+  },
+  {
+    "code": "CE2.D.1.1",
+    "title": "Nombres décimaux (dixièmes)",
+    "description": "Comprendre et utiliser les nombres décimaux (dixièmes)",
+    "domain": "decimaux",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.N.1.1"]
+  },
+  {
+    "code": "CE2.D.1.2",
+    "title": "Comparer des décimaux",
+    "description": "Comparer et ranger des nombres décimaux simples",
+    "domain": "decimaux",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.D.1.1"]
+  },
+  {
+    "code": "CE2.G.1.1",
+    "title": "Polygones",
+    "description": "Reconnaître et décrire des polygones (triangle, quadrilatère, pentagone)",
+    "domain": "geometrie",
+    "difficulty_range": [2, 3],
+    "prerequisites": []
+  },
+  {
+    "code": "CE2.G.1.2",
+    "title": "Symétrie axiale",
+    "description": "Reconnaître et tracer des figures symétriques",
+    "domain": "geometrie",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.G.1.1"]
+  },
+  {
+    "code": "CE2.G.1.3",
+    "title": "Périmètre",
+    "description": "Calculer le périmètre de figures simples",
+    "domain": "geometrie",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.G.1.1"]
+  },
+  {
+    "code": "CE2.M.1.1",
+    "title": "Unités de longueur (cm, m, km)",
+    "description": "Connaître et utiliser les unités de longueur (cm, m, km)",
+    "domain": "mesures",
+    "difficulty_range": [2, 3],
+    "prerequisites": []
+  },
+  {
+    "code": "CE2.M.1.2",
+    "title": "Unités de masse (g, kg)",
+    "description": "Connaître et utiliser les unités de masse (g, kg)",
+    "domain": "mesures",
+    "difficulty_range": [2, 3],
+    "prerequisites": []
+  },
+  {
+    "code": "CE2.M.1.3",
+    "title": "Lire l'heure (minutes)",
+    "description": "Lire l'heure avec les minutes sur une horloge",
+    "domain": "mesures",
+    "difficulty_range": [3, 4],
+    "prerequisites": []
+  },
+  {
+    "code": "CE2.M.1.4",
+    "title": "Durées",
+    "description": "Calculer des durées simples",
+    "domain": "mesures",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.M.1.3"]
+  },
+  {
+    "code": "CE2.P.1.1",
+    "title": "Problèmes à une opération",
+    "description": "Résoudre des problèmes nécessitant une seule opération",
+    "domain": "addition",
+    "difficulty_range": [3, 4],
+    "prerequisites": ["CE2.C.1.1"]
+  },
+  {
+    "code": "CE2.P.1.2",
+    "title": "Problèmes à deux opérations",
+    "description": "Résoudre des problèmes nécessitant deux opérations",
+    "domain": "multiplication",
+    "difficulty_range": [4, 5],
+    "prerequisites": ["CE2.P.1.1"]
+  },
+  {
+    "code": "CE2.PR.1.1",
+    "title": "Proportionnalité simple",
+    "description": "Résoudre des problèmes simples de proportionnalité",
+    "domain": "proportionnalite",
+    "difficulty_range": [4, 5],
+    "prerequisites": ["CE2.C.3.3"]
+  }
+]

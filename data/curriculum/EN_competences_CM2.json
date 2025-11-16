@@ -1,0 +1,258 @@
+[
+  {
+    "code": "CM2.N.1.1",
+    "title": "Grands nombres (milliards)",
+    "description": "Connaître, savoir écrire et nommer les nombres entiers jusqu'au milliard",
+    "domain": "addition",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.N.1.2",
+    "title": "Nombres romains",
+    "description": "Connaître et utiliser les nombres romains",
+    "domain": "addition",
+    "difficulty_range": [3, 4],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.C.1.1",
+    "title": "Calcul mental automatisé",
+    "description": "Effectuer des calculs mentaux complexes rapidement",
+    "domain": "addition",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.C.1.2",
+    "title": "Ordres de grandeur",
+    "description": "Estimer des ordres de grandeur",
+    "domain": "addition",
+    "difficulty_range": [4, 5],
+    "prerequisites": ["CM2.N.1.1"]
+  },
+  {
+    "code": "CM2.C.3.1",
+    "title": "Multiplication de décimaux",
+    "description": "Multiplier des nombres décimaux",
+    "domain": "multiplication",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.C.3.2",
+    "title": "Nombres premiers",
+    "description": "Reconnaître les nombres premiers",
+    "domain": "multiplication",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.C.3.3",
+    "title": "Critères de divisibilité",
+    "description": "Utiliser les critères de divisibilité (2, 3, 5, 9, 10)",
+    "domain": "division",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.C.4.1",
+    "title": "Division décimale",
+    "description": "Effectuer des divisions avec quotient décimal",
+    "domain": "division",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.C.4.2",
+    "title": "Division de décimaux",
+    "description": "Diviser un nombre décimal par un nombre entier",
+    "domain": "division",
+    "difficulty_range": [5, 5],
+    "prerequisites": ["CM2.C.4.1"]
+  },
+  {
+    "code": "CM2.F.1.1",
+    "title": "Fractions - opérations",
+    "description": "Additionner et soustraire des fractions de dénominateurs différents",
+    "domain": "fractions",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.F.1.2",
+    "title": "Multiplication de fractions",
+    "description": "Multiplier une fraction par un nombre entier",
+    "domain": "fractions",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.F.1.3",
+    "title": "Fractions et décimaux",
+    "description": "Passer des fractions décimales aux nombres décimaux et inversement",
+    "domain": "fractions",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.D.1.1",
+    "title": "Décimaux - millièmes",
+    "description": "Comprendre et utiliser les nombres décimaux (millièmes)",
+    "domain": "decimaux",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.D.1.2",
+    "title": "Opérations sur décimaux",
+    "description": "Maîtriser toutes les opérations sur les nombres décimaux",
+    "domain": "decimaux",
+    "difficulty_range": [5, 5],
+    "prerequisites": ["CM2.D.1.1"]
+  },
+  {
+    "code": "CM2.D.1.3",
+    "title": "Encadrement de décimaux",
+    "description": "Encadrer un nombre décimal par deux entiers, deux décimaux",
+    "domain": "decimaux",
+    "difficulty_range": [4, 5],
+    "prerequisites": ["CM2.D.1.1"]
+  },
+  {
+    "code": "CM2.G.1.1",
+    "title": "Solides (cube, pavé)",
+    "description": "Reconnaître et décrire des solides (cube, pavé droit, cylindre, sphère)",
+    "domain": "geometrie",
+    "difficulty_range": [3, 4],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.G.1.2",
+    "title": "Patrons de solides",
+    "description": "Reconnaître et construire des patrons de solides",
+    "domain": "geometrie",
+    "difficulty_range": [4, 5],
+    "prerequisites": ["CM2.G.1.1"]
+  },
+  {
+    "code": "CM2.G.1.3",
+    "title": "Aire du triangle",
+    "description": "Calculer l'aire d'un triangle",
+    "domain": "geometrie",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.G.1.4",
+    "title": "Aire du disque",
+    "description": "Calculer l'aire d'un disque",
+    "domain": "geometrie",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.G.1.5",
+    "title": "Volume du pavé droit",
+    "description": "Calculer le volume d'un pavé droit",
+    "domain": "geometrie",
+    "difficulty_range": [5, 5],
+    "prerequisites": ["CM2.G.1.1"]
+  },
+  {
+    "code": "CM2.G.1.6",
+    "title": "Cercle et circonférence",
+    "description": "Calculer la circonférence d'un cercle",
+    "domain": "geometrie",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.G.1.7",
+    "title": "Symétrie et rotation",
+    "description": "Effectuer des symétries axiales et des rotations",
+    "domain": "geometrie",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.M.1.1",
+    "title": "Unités d'aire",
+    "description": "Connaître et utiliser les unités d'aire (cm², m², km²)",
+    "domain": "mesures",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.M.1.2",
+    "title": "Unités de volume",
+    "description": "Connaître et utiliser les unités de volume (cm³, m³)",
+    "domain": "mesures",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.M.1.3",
+    "title": "Relation contenance-volume",
+    "description": "Établir la relation entre contenance et volume (1L = 1dm³)",
+    "domain": "mesures",
+    "difficulty_range": [5, 5],
+    "prerequisites": ["CM2.M.1.2"]
+  },
+  {
+    "code": "CM2.M.1.4",
+    "title": "Vitesse moyenne",
+    "description": "Calculer une vitesse moyenne",
+    "domain": "mesures",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.P.1.1",
+    "title": "Problèmes multi-étapes complexes",
+    "description": "Résoudre des problèmes complexes nécessitant plusieurs étapes de raisonnement",
+    "domain": "multiplication",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.P.1.2",
+    "title": "Problèmes avec données inutiles",
+    "description": "Résoudre des problèmes avec données inutiles ou manquantes",
+    "domain": "addition",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.PR.1.1",
+    "title": "Proportionnalité - produit en croix",
+    "description": "Utiliser le produit en croix pour résoudre des problèmes de proportionnalité",
+    "domain": "proportionnalite",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.PR.1.2",
+    "title": "Pourcentages",
+    "description": "Calculer et appliquer des pourcentages",
+    "domain": "proportionnalite",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.PR.1.3",
+    "title": "Échelles et plans",
+    "description": "Utiliser des échelles pour lire et créer des plans",
+    "domain": "proportionnalite",
+    "difficulty_range": [5, 5],
+    "prerequisites": []
+  },
+  {
+    "code": "CM2.PR.1.4",
+    "title": "Graphiques et tableaux",
+    "description": "Lire, interpréter et construire des graphiques et tableaux",
+    "domain": "proportionnalite",
+    "difficulty_range": [4, 5],
+    "prerequisites": []
+  }
+]
