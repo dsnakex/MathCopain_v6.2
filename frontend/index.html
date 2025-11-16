@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathCopain - Dashboard Enseignant</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3.3.4/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Loading State -->
+        <div v-if="loading" class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Chargement...</p>
+        </div>
+
+        <!-- Main App Container -->
+        <div v-else class="app-container">
+            <!-- Header -->
+            <header class="app-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h1>MathCopain</h1>
+                        <span class="version">Dashboard Enseignant</span>
+                    </div>
+                    <div class="header-actions">
+                        <span class="teacher-name">
+                            <i class="fas fa-user-tie"></i>
+                            Enseignant
+                        </span>
+                        <button class="btn-logout" @click="logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Déconnexion
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navigation -->
+            <nav class="main-nav">
+                <button
+                    v-for="tab in tabs"
+                    :key="tab.id"
+                    :class="['nav-btn', {active: currentTab === tab.id}]"
+                    @click="currentTab = tab.id"
+                >
+                    <i :class="tab.icon"></i>
+                    <span>{{ tab.label }}</span>
+                    <span v-if="tab.badge" class="badge">{{ tab.badge }}</span>
+                </button>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Dashboard Tab -->
+                <dashboard-view
+                    v-show="currentTab === 'dashboard'"
+                    :classrooms="classrooms"
+                    :at-risk-count="atRiskCount"
+                    @select-classroom="selectClassroom"
+                    @refresh="loadDashboard"
+                ></dashboard-view>
+
+                <!-- Classrooms Tab -->
+                <classrooms-view
+                    v-show="currentTab === 'classrooms'"
+                    :classrooms="classrooms"
+                    @select-classroom="selectClassroom"
+                    @create-classroom="showCreateClassroomModal"
+                    @edit-classroom="editClassroom"
+                    @delete-classroom="deleteClassroom"
+                ></classrooms-view>
+
+                <!-- Assignments Tab -->
+                <assignments-view
+                    v-show="currentTab === 'assignments'"
+                    :assignments="assignments"
+                    :classrooms="classrooms"
+                    @create-assignment="showCreateAssignmentModal"
+                    @view-assignment="viewAssignment"
+                    @publish-assignment="publishAssignment"
+                ></assignments-view>
+
+                <!-- Analytics Tab -->
+                <analytics-view
+                    v-show="currentTab === 'analytics'"
+                    :selected-classroom="selectedClassroom"
+                    :classrooms="classrooms"
+                    @classroom-change="selectClassroom"
+                ></analytics-view>
+
+                <!-- Reports Tab -->
+                <reports-view
+                    v-show="currentTab === 'reports'"
+                    :classrooms="classrooms"
+                    @generate-report="generateReport"
+                ></reports-view>
+
+                <!-- Curriculum Tab -->
+                <curriculum-view
+                    v-show="currentTab === 'curriculum'"
+                    :classrooms="classrooms"
+                    :selected-classroom="selectedClassroom"
+                    @classroom-change="selectClassroom"
+                ></curriculum-view>
+            </main>
+        </div>
+
+        <!-- Modals -->
+        <modal v-if="showModal" :title="modalTitle" @close="closeModal">
+            <component
+                :is="modalComponent"
+                v-bind="modalProps"
+                @submit="handleModalSubmit"
+                @cancel="closeModal"
+            ></component>
+        </modal>
+
+        <!-- Notifications -->
+        <div class="notifications">
+            <div
+                v-for="notif in notifications"
+                :key="notif.id"
+                :class="['notification', notif.type]"
+            >
+                <i :class="getNotificationIcon(notif.type)"></i>
+                <span>{{ notif.message }}</span>
+                <button @click="removeNotification(notif.id)">×</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/components/dashboard-view.js"></script>
+    <script src="js/components/classrooms-view.js"></script>
+    <script src="js/components/assignments-view.js"></script>
+    <script src="js/components/analytics-view.js"></script>
+    <script src="js/components/reports-view.js"></script>
+    <script src="js/components/curriculum-view.js"></script>
+    <script src="js/components/modal.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
