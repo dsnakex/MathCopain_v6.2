@@ -11,7 +11,7 @@ Engagement improvement: +25-35% when adapted to student's learning style
 """
 
 from typing import Dict, Any, Optional
-from core.exercise_generator.adapters import (
+from core.exercise_adapters.adapters import (
     VisualAdapter,
     AuditoryAdapter,
     KinestheticAdapter,
