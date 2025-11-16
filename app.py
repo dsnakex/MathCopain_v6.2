@@ -15,6 +15,15 @@ from core import AdaptiveSystem, SkillTracker, SessionManager, DataManager, exer
 # ✅ Phase 6.1.4: Import TransformativeFeedback for pedagogical feedback
 from core.pedagogy.feedback_engine import TransformativeFeedback
 
+# ✅ Phase 6.3.3: Import Learning Style Assessment
+from ui.learning_style_assessment import (
+    check_needs_quiz,
+    render_learning_style_quiz,
+    render_style_badge,
+    get_user_learning_style
+)
+from core.exercise_adapters.exercise_adapter import ExercisePresenterAdapter, create_adapter
+
 from monnaie_utils import (  # ← NOUVEAU MODULE
     generer_calcul_rendu,
     generer_composition_monnaie,
@@ -64,6 +73,13 @@ def init_session_state():
     # ✅ Phase 6.1.4: Initialize FeedbackEngine (singleton)
     if 'feedback_engine' not in st.session_state:
         st.session_state.feedback_engine = TransformativeFeedback()
+
+    # ✅ Phase 6.3.3: Initialize Exercise Adapter based on learning style
+    if 'exercise_adapter' not in st.session_state:
+        # Default to visual if no learning style detected yet
+        user_id = st.session_state.get('utilisateur')
+        learning_style = get_user_learning_style(user_id) if user_id else 'visual'
+        st.session_state.exercise_adapter = create_adapter(learning_style or 'visual')
 
 # =============== PROFIL: Auto-save ===============
 def calculer_progression(stats_par_niveau):
@@ -235,7 +251,25 @@ def main():
         
         st.markdown("---")
         st.caption("💚 Fait avec passion pour les enfants")
-    
+
+        # ✅ Phase 6.3.3: Afficher le badge de style d'apprentissage
+        render_style_badge(st.session_state.utilisateur)
+
+    # ✅ Phase 6.3.3: Vérifier si le quiz de style doit être fait
+    user_id = st.session_state.get('utilisateur')
+    if user_id and check_needs_quiz(user_id):
+        # Afficher le quiz au lieu du contenu normal
+        profile = render_learning_style_quiz(user_id)
+
+        # Si le quiz vient d'être complété, on affiche un message et on continue
+        if profile:
+            st.success("✅ Parfait ! Tu peux maintenant commencer les exercices adaptés à ton style !")
+            if st.button("🚀 Commencer les exercices", type="primary"):
+                st.rerun()
+
+        # Arrêter ici, ne pas afficher le reste de l'app
+        st.stop()
+
     # MAIN CONTENT
     st.title(f"🎓 {__title__} - Le Calcul Mental sans Pression")
     st.caption(f"Version {__version__}")
