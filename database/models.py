@@ -17,8 +17,9 @@ from typing import Optional
 
 from sqlalchemy import (
     Boolean, Column, DateTime, Float, ForeignKey,
-    Integer, String, Text, CheckConstraint, Index, JSONB
+    Integer, String, Text, CheckConstraint, Index
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.sql import func
 
