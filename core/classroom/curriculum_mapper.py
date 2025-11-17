@@ -71,7 +71,7 @@ class CurriculumMapper:
                 for comp_data in competencies:
                     # Check if competency exists
                     existing = session.query(CurriculumCompetency).filter(
-                        CurriculumCompetency.competency_code == comp_data['code']
+                        CurriculumCompetency.code == comp_data['code']
                     ).first()
 
                     if existing:

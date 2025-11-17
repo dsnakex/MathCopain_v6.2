@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from datetime import datetime, timedelta
 import random
-from database.connection import DatabaseSession, create_tables
+from database.connection import DatabaseSession, init_database
 from database.models import (
     User, TeacherAccount, Classroom, ClassroomEnrollment,
     ExerciseResponse, SkillProfile, Assignment, AssignmentCompletion
@@ -62,6 +62,7 @@ def create_teacher_account():
             return teacher.id
 
         teacher = TeacherAccount(
+            username="prof.dupont",
             email=TEACHER_EMAIL,
             password_hash="$2b$12$dummy_hash_for_testing",  # Dummy hash
             first_name="Jean",
@@ -91,7 +92,7 @@ def create_students(grade_level: str, usernames: list):
 
             student = User(
                 username=username,
-                password_hash="$2b$12$dummy_hash_for_testing",
+                pin_hash="$2b$12$dummy_hash_for_testing",
                 grade_level=grade_level,
                 learning_style=random.choice(["visual", "auditif", "kinesthésique"])
             )
@@ -134,13 +135,12 @@ def create_exercise_history(student_id: int, days_back: int = 30):
 
                 response = ExerciseResponse(
                     user_id=student_id,
+                    exercise_id=f"{domain}_{difficulty}_{date.timestamp()}",
                     skill_domain=domain,
-                    difficulty=difficulty,
-                    exercise_type="calculation",
+                    difficulty_level=difficulty,
                     is_correct=is_correct,
                     time_taken_seconds=random.randint(20, 180),
-                    hint_used=random.random() < 0.2,
-                    error_type="calcul" if not is_correct else None,
+                    error_type="calculation" if not is_correct else None,
                     created_at=date
                 )
                 session.add(response)
@@ -240,14 +240,12 @@ def create_sample_assignments(teacher_id: int, classroom_ids: list):
                 "skill_domains": ["multiplication"],
                 "classroom_idx": 0,
                 "is_published": True,
-                "is_adaptive": True
             },
             {
                 "title": "Addition et soustraction",
                 "skill_domains": ["addition", "soustraction"],
                 "classroom_idx": 0,
                 "is_published": True,
-                "is_adaptive": False,
                 "difficulty_levels": [2, 3]
             },
             {
@@ -255,14 +253,12 @@ def create_sample_assignments(teacher_id: int, classroom_ids: list):
                 "skill_domains": ["fractions"],
                 "classroom_idx": 0,
                 "is_published": False,
-                "is_adaptive": True
             },
             {
                 "title": "Division euclidienne",
                 "skill_domains": ["division"],
                 "classroom_idx": 1,
-                "is_published": True,
-                "is_adaptive": True
+                "is_published": True
             }
         ]
 
@@ -271,14 +267,14 @@ def create_sample_assignments(teacher_id: int, classroom_ids: list):
 
             assignment = Assignment(
                 classroom_id=classroom_id,
+                teacher_id=teacher_id,
                 title=assign_data["title"],
                 description=f"Devoir de test : {assign_data['title']}",
                 skill_domains=assign_data["skill_domains"],
                 difficulty_levels=assign_data.get("difficulty_levels"),
                 exercise_count=10,
                 due_date=datetime.now() + timedelta(days=7),
-                is_published=assign_data["is_published"],
-                is_adaptive=assign_data["is_adaptive"]
+                is_published=assign_data["is_published"]
             )
             session.add(assignment)
             session.flush()
@@ -295,16 +291,17 @@ def create_sample_assignments(teacher_id: int, classroom_ids: list):
                 for enrollment in enrollments:
                     exercises_total = 10
                     exercises_completed = random.randint(0, exercises_total)
-                    exercises_correct = int(exercises_completed * random.uniform(0.5, 0.95))
+                    success_rate = random.uniform(0.5, 0.95) if exercises_completed > 0 else None
 
                     completion = AssignmentCompletion(
                         assignment_id=assignment.id,
                         student_id=enrollment.student_id,
                         exercises_completed=exercises_completed,
                         exercises_total=exercises_total,
-                        exercises_correct=exercises_correct,
-                        started_at=datetime.now() - timedelta(days=random.randint(1, 5)),
-                        completed_at=datetime.now() - timedelta(days=random.randint(0, 3)) if exercises_completed == exercises_total else None
+                        success_rate=success_rate,
+                        time_spent_seconds=random.randint(600, 3600) if exercises_completed > 0 else None,
+                        completed_at=datetime.now() - timedelta(days=random.randint(0, 3)) if exercises_completed == exercises_total else None,
+                        status='completed' if exercises_completed == exercises_total else 'in_progress'
                     )
                     session.add(completion)
 
@@ -327,7 +324,7 @@ def main():
 
     # Ensure tables exist
     print("\n🗄️  Creating database tables...")
-    create_tables()
+    init_database()
     print("✓ Tables created")
 
     # Create teacher
@@ -343,7 +340,9 @@ def main():
     create_sample_assignments(teacher_id, classroom_ids)
 
     # Sync curriculum
-    sync_curriculum()
+    # TODO: Fix CurriculumMapper model incompatibilities
+    # sync_curriculum()
+    print("\n📚 Skipping curriculum sync (needs model fixes)")
 
     print("\n" + "=" * 60)
     print("✅ SEED DATA COMPLETE")
