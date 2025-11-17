@@ -167,6 +167,9 @@ from ui.math_sections import (
     lancer_exercice_recommande
 )
 
+# ✅ Phase 7: ML Integration
+from ui.ml_section import ml_adaptive_section
+
 def main():
     init_fichier_securise()
     verifier_authentification()
@@ -259,11 +262,11 @@ def main():
     st.markdown("---")
     
     # NAVIGATION PRINCIPALE
-    categories = ["Exercice", "Jeu", "Fractions", "Géométrie", "Décimaux", "Proportionnalité", "Mesures", "Monnaie", "Entraîneur", "Défi", "Statistiques"]
+    categories = ["Exercice", "Jeu", "Fractions", "Géométrie", "Décimaux", "Proportionnalité", "Mesures", "Monnaie", "Entraîneur", "Défi", "Intelligence IA", "Statistiques"]
     categorie_selectionnee = st.radio(
-        "Choisis ce que tu veux faire :", 
-        categories, 
-        horizontal=True, 
+        "Choisis ce que tu veux faire :",
+        categories,
+        horizontal=True,
         key="main_radio"
     )
     
@@ -308,8 +311,12 @@ def main():
     
     elif categorie_selectionnee == "Défi":
         defi_section()
+
+    elif categorie_selectionnee == "Intelligence IA":
+        ml_adaptive_section()
+
     elif categorie_selectionnee == "Statistiques":
-        dashboard_statistiques()  # ✅ AJOUTER CET APPELtiques()
+        dashboard_statistiques()
 
 
 if __name__ == "__main__":
