@@ -255,3 +255,68 @@ class MLModel(Base):
     def __repr__(self):
         active = "✓" if self.is_active else "✗"
         return f"<MLModel({active} {self.model_name} {self.model_version})>"
+
+
+class CurriculumCompetency(Base):
+    """
+    French National Curriculum competencies
+
+    Maps official Education Nationale competencies to our skill domains
+    """
+    __tablename__ = 'curriculum_competencies'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    code = Column(String(50), unique=True, nullable=False, index=True)  # "NUM.CE2.01"
+    title = Column(String(200), nullable=False)
+    description = Column(Text)
+    grade_level = Column(String(10), nullable=False, index=True)  # "CE2"
+    domain = Column(String(50), nullable=False, index=True)  # "Nombres et calculs"
+    subdomain = Column(String(100))  # "Addition et soustraction"
+    skill_domains = Column(JSONB)  # Mapping to our domains ["addition", "soustraction"]
+    difficulty_range = Column(JSONB)  # [1, 3] difficulty levels
+    prerequisites = Column(JSONB)  # List of prerequisite competency codes
+    examples = Column(Text)
+
+    # Relationships
+    student_progress = relationship(
+        "StudentCompetencyProgress",
+        back_populates="competency",
+        cascade="all, delete-orphan"
+    )
+
+    def __repr__(self):
+        return f"<CurriculumCompetency({self.code}: {self.title})>"
+
+
+class StudentCompetencyProgress(Base):
+    """
+    Tracks student progress on curriculum competencies
+
+    Records mastery level and exercises completed for each competency
+    """
+    __tablename__ = 'student_competency_progress'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    student_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    competency_id = Column(Integer, ForeignKey('curriculum_competencies.id', ondelete='CASCADE'), nullable=False)
+    mastery_level = Column(
+        Float,
+        CheckConstraint('mastery_level BETWEEN 0 AND 1'),
+        default=0.0
+    )
+    exercises_completed = Column(Integer, default=0)
+    exercises_correct = Column(Integer, default=0)
+    last_practiced = Column(DateTime)
+    mastery_date = Column(DateTime)  # When mastery_level reached 0.8+
+
+    # Relationships
+    student = relationship("User")
+    competency = relationship("CurriculumCompetency", back_populates="student_progress")
+
+    # Indexes
+    __table_args__ = (
+        Index('idx_student_competency', 'student_id', 'competency_id'),
+    )
+
+    def __repr__(self):
+        return f"<StudentCompetencyProgress(student={self.student_id}, competency={self.competency_id}, mastery={self.mastery_level:.0%})>"
