@@ -170,9 +170,17 @@ from ui.math_sections import (
 # ✅ Phase 7: ML Integration
 from ui.ml_section import ml_adaptive_section
 
+# ✅ Keep-alive: Prevent Streamlit Cloud from putting the app to sleep
+from core.keep_alive import inject_keep_alive
+
 def main():
     init_fichier_securise()
     verifier_authentification()
+
+    # ✅ Keep-alive: Inject JavaScript to prevent Streamlit Cloud sleep
+    # Sends activity signals every 5 minutes to maintain the WebSocket connection
+    inject_keep_alive(interval_seconds=300)
+
     # ✅ FORCER LE CHARGEMENT DU PROFIL SI ABSENT
     if st.session_state.get('authentifie', False) and 'profil' not in st.session_state:
         nom = st.session_state.get('utilisateur')
