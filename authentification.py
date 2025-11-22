@@ -1,6 +1,6 @@
 # authentification.py
-# 🔐 Module authentification sécurisé avec bcrypt et rate limiting
-# ✅ Ajout système de récupération de PIN (question secrète + code de récupération)
+# Module authentification sécurisé avec bcrypt et rate limiting
+# Supporte Supabase (persistant) et JSON (fallback)
 
 import json
 import os
@@ -15,7 +15,29 @@ from core.security import (
 )
 import bcrypt
 
+# Import Supabase client
+from core.supabase_client import (
+    is_supabase_configured,
+    supabase_get_user_credentials,
+    supabase_save_user_credentials,
+    supabase_get_all_credentials,
+    supabase_delete_user_credentials,
+    supabase_user_exists
+)
+
 FICHIER_USERS = 'utilisateurs_securises.json'
+
+
+# ============================================================================
+# STORAGE MODE DETECTION
+# ============================================================================
+
+def get_storage_mode() -> str:
+    """Determine which storage backend to use."""
+    if is_supabase_configured():
+        return 'supabase'
+    return 'json'
+
 
 # ============================================================================
 # QUESTIONS SECRÈTES pour récupération PIN
@@ -32,25 +54,12 @@ QUESTIONS_SECRETES = [
 
 
 def generer_code_recuperation() -> str:
-    """
-    Générer code de récupération aléatoire (6 chiffres)
-
-    Returns:
-        Code à 6 chiffres (ex: "482756")
-    """
+    """Générer code de récupération aléatoire (6 chiffres)"""
     return ''.join(random.choices(string.digits, k=6))
 
 
 def hasher_reponse_secrete(reponse: str) -> str:
-    """
-    Hasher réponse à la question secrète (comme PIN)
-
-    Args:
-        reponse: Réponse en clair (normalisée: lowercase, strip)
-
-    Returns:
-        Hash bcrypt de la réponse
-    """
+    """Hasher réponse à la question secrète (comme PIN)"""
     reponse_normalisee = reponse.lower().strip()
     salt = bcrypt.gensalt(rounds=12)
     hashed = bcrypt.hashpw(reponse_normalisee.encode('utf-8'), salt)
@@ -58,16 +67,7 @@ def hasher_reponse_secrete(reponse: str) -> str:
 
 
 def verifier_reponse_secrete(reponse: str, hashed_reponse: str) -> bool:
-    """
-    Vérifier réponse secrète contre son hash
-
-    Args:
-        reponse: Réponse en clair
-        hashed_reponse: Hash stocké
-
-    Returns:
-        True si match, False sinon
-    """
+    """Vérifier réponse secrète contre son hash"""
     try:
         reponse_normalisee = reponse.lower().strip()
         return bcrypt.checkpw(
@@ -79,18 +79,19 @@ def verifier_reponse_secrete(reponse: str, hashed_reponse: str) -> bool:
 
 
 # ============================================================================
-# FICHIER MANAGEMENT
+# JSON FILE MANAGEMENT (Fallback)
 # ============================================================================
 
 def init_fichier_securise():
-    """Créer fichier sécurisé s'il existe pas"""
-    if not os.path.exists(FICHIER_USERS):
-        with open(FICHIER_USERS, 'w') as f:
-            json.dump({}, f)
+    """Créer fichier sécurisé s'il existe pas (JSON mode only)"""
+    if get_storage_mode() == 'json':
+        if not os.path.exists(FICHIER_USERS):
+            with open(FICHIER_USERS, 'w') as f:
+                json.dump({}, f)
 
 
-def charger_utilisateurs_securises():
-    """Charger tous utilisateurs depuis fichier sécurisé"""
+def _charger_json():
+    """Charger tous utilisateurs depuis fichier JSON"""
     try:
         with open(FICHIER_USERS, 'r', encoding='utf-8') as f:
             return json.load(f)
@@ -98,8 +99,8 @@ def charger_utilisateurs_securises():
         return {}
 
 
-def sauvegarder_utilisateurs_securises(data):
-    """Sauvegarder tous utilisateurs"""
+def _sauvegarder_json(data):
+    """Sauvegarder tous utilisateurs vers JSON"""
     try:
         with open(FICHIER_USERS, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
@@ -110,6 +111,62 @@ def sauvegarder_utilisateurs_securises(data):
 
 
 # ============================================================================
+# UNIFIED STORAGE API
+# ============================================================================
+
+def charger_utilisateurs_securises():
+    """Charger tous utilisateurs depuis le storage actif"""
+    if get_storage_mode() == 'supabase':
+        return supabase_get_all_credentials()
+    return _charger_json()
+
+
+def sauvegarder_utilisateurs_securises(data):
+    """Sauvegarder tous utilisateurs (JSON mode only, Supabase saves individually)"""
+    if get_storage_mode() == 'supabase':
+        # In Supabase mode, we save individually, so this is a no-op
+        # The data should already be saved
+        return True
+    return _sauvegarder_json(data)
+
+
+def _get_user(cle: str):
+    """Get single user credentials"""
+    if get_storage_mode() == 'supabase':
+        return supabase_get_user_credentials(cle)
+    tous = _charger_json()
+    return tous.get(cle)
+
+
+def _save_user(cle: str, user_data: dict):
+    """Save single user credentials"""
+    if get_storage_mode() == 'supabase':
+        return supabase_save_user_credentials(cle, user_data)
+    tous = _charger_json()
+    tous[cle] = user_data
+    return _sauvegarder_json(tous)
+
+
+def _delete_user(cle: str):
+    """Delete single user"""
+    if get_storage_mode() == 'supabase':
+        return supabase_delete_user_credentials(cle)
+    tous = _charger_json()
+    if cle in tous:
+        del tous[cle]
+        return _sauvegarder_json(tous)
+    return False
+
+
+def _user_exists(cle: str) -> bool:
+    """Check if user exists"""
+    if get_storage_mode() == 'supabase':
+        return supabase_user_exists(cle)
+    tous = _charger_json()
+    return cle in tous
+
+
+# ============================================================================
 # CRÉATION COMPTE (avec question secrète + code récupération)
 # ============================================================================
 
@@ -117,22 +174,15 @@ def creer_nouveau_compte(prenom, pin, question_index, reponse_secrete):
     """
     Créer compte nouvel enfant avec PIN + système de récupération.
 
-    Args:
-        prenom: Prénom de l'enfant
-        pin: PIN à 4 chiffres
-        question_index: Index de la question secrète choisie (0-5)
-        reponse_secrete: Réponse à la question secrète
-
     Returns:
         (success, message, code_recuperation)
-        code_recuperation est retourné seulement si success=True
     """
-    # ✅ Valider username avec pydantic
+    # Valider username avec pydantic
     is_valid_username, error_username = validate_username_format(prenom)
     if not is_valid_username:
         return False, f"Prénom invalide: {error_username}", None
 
-    # ✅ Valider PIN avec pydantic
+    # Valider PIN avec pydantic
     is_valid_pin, error_pin = validate_pin_format(pin)
     if not is_valid_pin:
         return False, f"PIN invalide: {error_pin}", None
@@ -145,26 +195,23 @@ def creer_nouveau_compte(prenom, pin, question_index, reponse_secrete):
     if not reponse_secrete or len(reponse_secrete.strip()) < 2:
         return False, "Réponse secrète trop courte (min 2 caractères)", None
 
-    # Charger tous
-    tous = charger_utilisateurs_securises()
-
-    # Clé = prénom minuscule (pour éviter doublons "Pierre" vs "pierre")
+    # Clé = prénom minuscule
     cle = prenom.lower().strip()
 
     # Vérifier pas déjà existe
-    if cle in tous:
+    if _user_exists(cle):
         return False, f"Compte {prenom} existe déjà", None
 
-    # ✅ Hasher PIN avec bcrypt
+    # Hasher PIN avec bcrypt
     try:
         hashed_pin = hash_pin(pin)
     except Exception as e:
         return False, f"Erreur hashing PIN: {e}", None
 
-    # ✅ Hasher réponse secrète
+    # Hasher réponse secrète
     hashed_reponse = hasher_reponse_secrete(reponse_secrete)
 
-    # ✅ Générer code de récupération
+    # Générer code de récupération
     code_recuperation = generer_code_recuperation()
 
     # Créer structure profil
@@ -180,22 +227,21 @@ def creer_nouveau_compte(prenom, pin, question_index, reponse_secrete):
         "progression": {"CE1": 0, "CE2": 0, "CM1": 0, "CM2": 0}
     }
 
-    # ✅ Ajouter avec PIN hashé + système récupération
-    tous[cle] = {
-        "pin": hashed_pin,  # ✅ Stocké hashé, plus en clair !
-        "prenom_affichage": prenom,  # Garder affichage original
+    # Créer structure utilisateur
+    user_data = {
+        "pin": hashed_pin,
+        "prenom_affichage": prenom,
         "profil": profil_initial,
-        # ✅ NOUVEAU: Système de récupération
         "question_secrete": {
             "question_index": question_index,
             "question_text": QUESTIONS_SECRETES[question_index],
             "reponse_hashed": hashed_reponse
         },
-        "code_recuperation": code_recuperation  # Stocké en clair (usage unique)
+        "code_recuperation": code_recuperation
     }
 
     # Sauvegarder
-    success = sauvegarder_utilisateurs_securises(tous)
+    success = _save_user(cle, user_data)
 
     if success:
         return True, f"Compte {prenom} créé avec succès!", code_recuperation
@@ -210,28 +256,22 @@ def creer_nouveau_compte(prenom, pin, question_index, reponse_secrete):
 def verifier_pin(prenom, pin):
     """
     Vérifier PIN = authentifier utilisateur.
-    ✅ Utilise bcrypt + rate limiting
-
-    Args:
-        prenom: Prénom de l'utilisateur
-        pin: PIN à vérifier
 
     Returns:
         (success, message)
     """
-    tous = charger_utilisateurs_securises()
     cle = prenom.lower().strip()
+    compte = _get_user(cle)
 
-    if cle not in tous:
+    if not compte:
         return False, f"Compte {prenom} introuvable"
 
-    compte = tous[cle]
     hashed_pin = compte.get('pin')
 
     if not hashed_pin:
         return False, "Compte corrompu (PIN manquant)"
 
-    # ✅ Authentification sécurisée avec bcrypt + rate limiting
+    # Authentification sécurisée avec bcrypt + rate limiting
     return authenticate_user(prenom, pin, hashed_pin)
 
 
@@ -243,19 +283,15 @@ def obtenir_question_secrete(prenom):
     """
     Obtenir question secrète pour un utilisateur
 
-    Args:
-        prenom: Prénom de l'utilisateur
-
     Returns:
         (success, question_text or error_message)
     """
-    tous = charger_utilisateurs_securises()
     cle = prenom.lower().strip()
+    compte = _get_user(cle)
 
-    if cle not in tous:
+    if not compte:
         return False, f"Compte {prenom} introuvable"
 
-    compte = tous[cle]
     question_data = compte.get('question_secrete')
 
     if not question_data:
@@ -268,11 +304,6 @@ def recuperer_pin_avec_question(prenom, reponse_secrete, nouveau_pin):
     """
     Réinitialiser PIN avec réponse à la question secrète
 
-    Args:
-        prenom: Prénom de l'utilisateur
-        reponse_secrete: Réponse à la question secrète
-        nouveau_pin: Nouveau PIN à 4 chiffres
-
     Returns:
         (success, message)
     """
@@ -281,13 +312,12 @@ def recuperer_pin_avec_question(prenom, reponse_secrete, nouveau_pin):
     if not is_valid_pin:
         return False, f"Nouveau PIN invalide: {error_pin}"
 
-    tous = charger_utilisateurs_securises()
     cle = prenom.lower().strip()
+    compte = _get_user(cle)
 
-    if cle not in tous:
+    if not compte:
         return False, f"Compte {prenom} introuvable"
 
-    compte = tous[cle]
     question_data = compte.get('question_secrete')
 
     if not question_data:
@@ -300,9 +330,9 @@ def recuperer_pin_avec_question(prenom, reponse_secrete, nouveau_pin):
     # Réponse correcte → Réinitialiser PIN
     try:
         nouveau_hashed_pin = hash_pin(nouveau_pin)
-        tous[cle]['pin'] = nouveau_hashed_pin
+        compte['pin'] = nouveau_hashed_pin
 
-        if sauvegarder_utilisateurs_securises(tous):
+        if _save_user(cle, compte):
             return True, f"PIN réinitialisé avec succès pour {prenom}!"
         else:
             return False, "Erreur lors de la sauvegarde"
@@ -314,11 +344,6 @@ def recuperer_pin_avec_code(prenom, code_recuperation, nouveau_pin):
     """
     Réinitialiser PIN avec code de récupération
 
-    Args:
-        prenom: Prénom de l'utilisateur
-        code_recuperation: Code de récupération à 6 chiffres
-        nouveau_pin: Nouveau PIN à 4 chiffres
-
     Returns:
         (success, message)
     """
@@ -327,13 +352,12 @@ def recuperer_pin_avec_code(prenom, code_recuperation, nouveau_pin):
     if not is_valid_pin:
         return False, f"Nouveau PIN invalide: {error_pin}"
 
-    tous = charger_utilisateurs_securises()
     cle = prenom.lower().strip()
+    compte = _get_user(cle)
 
-    if cle not in tous:
+    if not compte:
         return False, f"Compte {prenom} introuvable"
 
-    compte = tous[cle]
     code_stocke = compte.get('code_recuperation')
 
     if not code_stocke:
@@ -346,9 +370,9 @@ def recuperer_pin_avec_code(prenom, code_recuperation, nouveau_pin):
     # Code correct → Réinitialiser PIN
     try:
         nouveau_hashed_pin = hash_pin(nouveau_pin)
-        tous[cle]['pin'] = nouveau_hashed_pin
+        compte['pin'] = nouveau_hashed_pin
 
-        if sauvegarder_utilisateurs_securises(tous):
+        if _save_user(cle, compte):
             return True, f"PIN réinitialisé avec succès pour {prenom}!"
         else:
             return False, "Erreur lors de la sauvegarde"
@@ -362,57 +386,51 @@ def recuperer_pin_avec_code(prenom, code_recuperation, nouveau_pin):
 
 def charger_profil_utilisateur(prenom):
     """Charger profil utilisateur SEULEMENT après auth"""
-    tous = charger_utilisateurs_securises()
     cle = prenom.lower().strip()
+    compte = _get_user(cle)
 
-    if cle not in tous:
+    if not compte:
         return None
 
-    return tous[cle]['profil']
+    return compte.get('profil')
 
 
 def sauvegarder_profil_utilisateur(prenom, profil):
     """Sauvegarder profil utilisateur après exercice"""
-    tous = charger_utilisateurs_securises()
     cle = prenom.lower().strip()
+    compte = _get_user(cle)
 
-    if cle not in tous:
+    if not compte:
         return False
 
     # Mettre à jour juste profil (PIN reste inchangé!)
-    tous[cle]['profil'] = profil
-    tous[cle]['profil']['date_derniere_session'] = str(datetime.now())
+    compte['profil'] = profil
+    compte['profil']['date_derniere_session'] = str(datetime.now())
 
-    return sauvegarder_utilisateurs_securises(tous)
+    return _save_user(cle, compte)
 
 
 def lister_comptes_disponibles():
     """Lister SEULEMENT prénoms affichage (pas PINs!)"""
     tous = charger_utilisateurs_securises()
-    # Retourner juste prénoms, PAS les clés
-    return [compte['prenom_affichage'] for compte in tous.values()]
+    return [compte.get('prenom_affichage', cle) for cle, compte in tous.items()]
 
 
 def supprimer_compte(prenom, pin):
     """
     Supprimer compte (protection: besoin PIN).
-    ✅ Vérification bcrypt avant suppression
-
-    Args:
-        prenom: Prénom de l'utilisateur
-        pin: PIN de confirmation
 
     Returns:
         success (bool)
     """
-    tous = charger_utilisateurs_securises()
     cle = prenom.lower().strip()
+    compte = _get_user(cle)
 
-    if cle not in tous:
+    if not compte:
         return False
 
-    # ✅ Vérifier PIN avec bcrypt (double protection)
-    hashed_pin = tous[cle].get('pin')
+    # Vérifier PIN avec bcrypt (double protection)
+    hashed_pin = compte.get('pin')
     if not hashed_pin:
         return False
 
@@ -421,5 +439,4 @@ def supprimer_compte(prenom, pin):
         return False
 
     # Supprimer
-    del tous[cle]
-    return sauvegarder_utilisateurs_securises(tous)
+    return _delete_user(cle)
