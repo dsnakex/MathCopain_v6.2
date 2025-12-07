@@ -1,7 +1,7 @@
 import streamlit as st
 
-def metric_card(title: str, value: str, delta: str = None, icon: str = "= "):
-    """Carte mÈtrique stylisÈe"""
+def metric_card(title: str, value: str, delta: str = None, icon: str = "üìä"):
+    """Carte m√©trique stylis√©e"""
     html = f"""
     <div class="metric-card">
         <div style="font-size: 24px; margin-bottom: 10px;">{icon}</div>
@@ -14,7 +14,7 @@ def metric_card(title: str, value: str, delta: str = None, icon: str = "= "):
     st.markdown(html, unsafe_allow_html=True)
 
 def progress_bar(title: str, current: int, total: int):
-    """Barre de progression stylisÈe"""
+    """Barre de progression stylis√©e"""
     percentage = (current / total) * 100
     html = f"""
     <div style="margin: 20px 0;">
@@ -34,12 +34,12 @@ def progress_bar(title: str, current: int, total: int):
     st.markdown(html, unsafe_allow_html=True)
 
 def info_box(message: str, type: str = "info"):
-    """BoÓte d'information stylisÈe"""
+    """Bo√Æte d'information stylis√©e"""
     config = {
-        "info": ("9", "#5DADE2", "rgba(93, 173, 226, 0.1)"),
-        "success": ("", "#2ECC71", "rgba(34, 177, 76, 0.1)"),
-        "warning": ("†", "#FF9900", "rgba(255, 153, 0, 0.1)"),
-        "error": ("L", "#E74C3C", "rgba(231, 76, 60, 0.1)"),
+        "info": ("‚ÑπÔ∏è", "#5DADE2", "rgba(93, 173, 226, 0.1)"),
+        "success": ("‚úÖ", "#2ECC71", "rgba(34, 177, 76, 0.1)"),
+        "warning": ("‚ö†Ô∏è", "#FF9900", "rgba(255, 153, 0, 0.1)"),
+        "error": ("‚ùå", "#E74C3C", "rgba(231, 76, 60, 0.1)"),
     }
 
     icon, color, bg = config[type]
@@ -55,7 +55,7 @@ def info_box(message: str, type: str = "info"):
     st.markdown(html, unsafe_allow_html=True)
 
 def badge(emoji: str, text: str, color: str = "success"):
-    """Badge stylisÈ"""
+    """Badge stylis√©"""
     class_name = f"badge badge-{color}"
     html = f'<span class="{class_name}">{emoji} {text}</span>'
     st.markdown(html, unsafe_allow_html=True)
