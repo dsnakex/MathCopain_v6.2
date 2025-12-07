@@ -7,6 +7,7 @@ Extracted from app.py during Phase 2 refactoring
 import streamlit as st
 from datetime import date
 from core import SkillTracker, exercise_generator
+from utilisateur import auto_save_profil
 
 # Helper functions needed by callbacks
 def maj_streak(correct):

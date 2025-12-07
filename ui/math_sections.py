@@ -8,7 +8,7 @@ import streamlit as st
 import random
 from datetime import date
 from core import SkillTracker, AdaptiveSystem
-from utilisateur import sauvegarder_utilisateur
+from utilisateur import sauvegarder_utilisateur, auto_save_profil
 # Import specific utilities as needed by each section
 
 from fractions_utils import pizza_interactive, afficher_fraction_droite, dessiner_pizza
