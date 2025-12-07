@@ -1,46 +1,160 @@
-"""
-Styles CSS MathCopain
-Styles visuels pour l'interface utilisateur
-"""
-
 import streamlit as st
 
-@st.cache_data
-def local_css():
-    """CSS caché pour améliorer les performances de chargement"""
-    return """
+def load_custom_css():
+    """Charge le CSS personnalisé global"""
+    css = """
     <style>
-    .categorie-header {
-        font-size: 24px; font-weight: bold; margin: 20px 0 10px 0;
-        padding: 10px; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        color: white; border-radius: 10px;
+    /* ========== VARIABLES CSS (DE FIGMA) ========== */
+    :root {
+        --primary: #5DADE2;
+        --secondary: #F39C12;
+        --accent: #9B59B6;
+        --success: #2ECC71;
+        --error: #E74C3C;
+        --gray-100: #F5F5F5;
+        --gray-300: #E0E0E0;
+        --gray-700: #616161;
+        --gray-900: #212121;
     }
-    .exercice-box {
-        padding: 30px; border-radius: 10px; background-color: #f0f2f6; margin: 20px 0;
-        border-left: 5px solid #667eea; font-size: 32px; font-weight: bold; text-align: center;
+
+    /* ========== BOUTONS ========== */
+    .stButton > button {
+        width: 100%;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(33, 128, 163, 0.15);
     }
+
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(33, 128, 163, 0.25);
+        background-color: #1A6B86 !important;
+    }
+
+    .stButton > button:active {
+        transform: translateY(0);
+    }
+
+    /* ========== INPUTS ========== */
+    .stTextInput > div > div > input,
+    .stSelectbox > div > div > select,
+    .stNumberInput > div > div > input {
+        border: 2px solid #E0E0E0 !important;
+        border-radius: 8px !important;
+        padding: 10px 12px !important;
+        font-size: 14px !important;
+        transition: all 0.3s ease;
+    }
+
+    .stTextInput > div > div > input:focus,
+    .stSelectbox > div > div > select:focus,
+    .stNumberInput > div > div > input:focus {
+        border-color: var(--primary) !important;
+        box-shadow: 0 0 0 3px rgba(33, 128, 163, 0.1) !important;
+        outline: none !important;
+    }
+
+    /* ========== TITRES ========== */
+    h1 {
+        color: var(--gray-900);
+        font-weight: 700;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        color: var(--gray-900);
+        font-weight: 600;
+        font-size: 24px;
+        border-bottom: 3px solid var(--primary);
+        padding-bottom: 10px;
+        margin-top: 20px;
+    }
+
+    /* ========== CARTES ========== */
+    .metric-card {
+        background: linear-gradient(135deg, #FFFBF9 0%, #F5F5F5 100%);
+        border-radius: 8px;
+        border: 1px solid #E0E0E0;
+        padding: 20px;
+        margin: 10px 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .metric-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+    }
+
+    /* ========== BARRES PROGRESSION ========== */
+    .stProgress > div > div > div {
+        background: linear-gradient(90deg, var(--primary) 0%, #32b8c6 100%);
+        border-radius: 10px;
+    }
+
+    /* ========== ANIMATIONS ========== */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+
+    .animate-fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .animate-pulse {
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* ========== BADGES ========== */
     .badge {
-        display: inline-block; padding: 8px 12px; margin: 5px;
-        border-radius: 15px; background-color: #FFD700;
-        font-weight: bold; font-size: 14px;
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin: 2px 4px;
     }
-    .feedback-success {
-        padding: 15px; border-radius: 10px; background-color: #d4edda; border: 2px solid #28a745; color: #155724; margin: 15px 0; font-weight: bold; font-size: 18px;
+
+    .badge-success {
+        background-color: rgba(34, 177, 76, 0.15);
+        color: #22B14C;
     }
-    .feedback-error {
-        padding: 15px; border-radius: 10px; background-color: #f8d7da; border: 2px solid #dc3545; color: #721c24; margin: 15px 0; font-weight: bold; font-size: 18px;
+
+    .badge-warning {
+        background-color: rgba(255, 153, 0, 0.15);
+        color: #FF9900;
     }
-    .streak-box {
-        padding: 15px; background-color: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; text-align: center; font-size: 20px; font-weight: bold; margin: 10px 0;
+
+    .badge-error {
+        background-color: rgba(192, 21, 71, 0.15);
+        color: #C01547;
     }
-    .daily-challenge-box {
-        padding: 15px; background-color: #e7f3ff; border: 2px solid #2196f3; border-radius: 10px; margin: 10px 0;
-    }
-    .leaderboard-box {
-        padding: 15px; background-color: #f3e5f5; border: 2px solid #9c27b0; border-radius: 10px; margin: 10px 0;
-    }
-    .aller-loin-box {
-        padding: 15px; border-radius: 10px; background-color: #fff5f0; margin: 10px 0; border-left: 5px solid #ff6b6b;
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 640px) {
+        h1 { font-size: 24px; }
+        h2 { font-size: 18px; }
     }
     </style>
     """
+    st.markdown(css, unsafe_allow_html=True)
+
+def setup_ui():
+    """Initialise toute l'UI"""
+    load_custom_css()
