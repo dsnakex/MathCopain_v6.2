@@ -26,7 +26,8 @@ from monnaie_utils import (  # ← NOUVEAU MODULE
 # Modules refactorisés Phase 3
 # ✅ Deprecated: Now using core.exercise_generator
 # from modules.exercices import generer_addition, generer_soustraction, generer_tables, generer_division
-from modules.ui.styles import local_css
+from modules.ui.styles import setup_ui
+from modules.ui.components import metric_card, progress_bar, info_box, badge
 
 # =============== SESSION INIT ===============
 def init_session_state():
@@ -190,7 +191,9 @@ def main():
         st.session_state['profil'] = profil
     
     init_session_state()
-    st.markdown(local_css(), unsafe_allow_html=True)
+
+    # ✅ Design System Figma Integration
+    setup_ui()
 
     with st.sidebar:
         # --- Section PROFIL ÉLÈVE ---
