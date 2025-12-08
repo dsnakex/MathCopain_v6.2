@@ -7,6 +7,7 @@ Extracted from app.py during Phase 2 refactoring
 import streamlit as st
 from datetime import date
 from core import SkillTracker, exercise_generator
+from utilisateur import auto_save_profil
 
 # Helper functions needed by callbacks
 def maj_streak(correct):
@@ -39,33 +40,9 @@ def verifier_badges(points, badges_actuels):
             nouveaux_badges.append(badge['nom'])
     return nouveaux_badges
 
-def auto_save_profil(succes):
-    from datetime import datetime
-    from utilisateur import sauvegarder_utilisateur
-    
-    if "utilisateur" not in st.session_state or "profil" not in st.session_state:
-        return
-    nom = st.session_state["utilisateur"]
-    profil = st.session_state["profil"]
-    profil["niveau"] = st.session_state.niveau
-    profil["points"] = st.session_state.points
-    profil["badges"] = st.session_state.badges
-    profil["exercices_reussis"] = profil.get("exercices_reussis", 0)
-    profil["exercices_totaux"] = profil.get("exercices_totaux", 0)
-    if succes:
-        profil["exercices_reussis"] += 1
-    profil["exercices_totaux"] += 1
-    profil["taux_reussite"] = int(100 * profil["exercices_reussis"] / profil["exercices_totaux"]) if profil["exercices_totaux"] > 0 else 0
-    profil["date_derniere_session"] = datetime.now().strftime("%Y-%m-%dT%H:%M")
-    if "stats_par_niveau" in st.session_state:
-        from app import calculer_progression
-        progression = calculer_progression(st.session_state.stats_par_niveau)
-        profil["progression"] = progression
-    sauvegarder_utilisateur(nom, profil)
-    st.session_state["profil"] = profil
+# ✅ REFACTORED: auto_save_profil is now imported from utilisateur.py (line 10)
+# Removed duplicate definition to avoid conflicts
 
-# =============== EXERCICE RAPIDE SECTION ===============
-# Callbacks pour éliminer st.rerun()
 # =============== EXERCICE RAPIDE SECTION ===============
 # Callbacks pour éliminer st.rerun()
 def _callback_exercice_addition():

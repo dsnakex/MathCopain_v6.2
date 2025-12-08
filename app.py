@@ -5,7 +5,7 @@ from datetime import date, datetime
 from __version__ import __version__, __title__
 from authentification import init_fichier_securise
 from ui_authentification import verifier_authentification
-from utilisateur import charger_utilisateur, sauvegarder_utilisateur, obtenir_tous_eleves, profil_par_defaut  # ← AJOUTER
+from utilisateur import charger_utilisateur, sauvegarder_utilisateur, obtenir_tous_eleves, profil_par_defaut, auto_save_profil, calculer_progression  # ← AJOUTER
 from fractions_utils import pizza_interactive, afficher_fraction_droite, dessiner_pizza  # ← VÉRIFIER
 from division_utils import generer_division_simple, generer_division_reste  # ← AJOUTER
 
@@ -67,35 +67,7 @@ def init_session_state():
         st.session_state.feedback_engine = TransformativeFeedback()
 
 # =============== PROFIL: Auto-save ===============
-def calculer_progression(stats_par_niveau):
-    progression = {}
-    for niveau in ['CE1', 'CE2', 'CM1', 'CM2']:
-        total = stats_par_niveau[niveau]['total']
-        correct = stats_par_niveau[niveau]['correct']
-        pourcentage = (correct / total * 100) if total > 0 else 0
-        progression[niveau] = min(int(pourcentage), 100)
-    return progression
-
-def auto_save_profil(succes):
-    if "utilisateur" not in st.session_state or "profil" not in st.session_state:
-        return
-    nom = st.session_state["utilisateur"]
-    profil = st.session_state["profil"]
-    profil["niveau"] = st.session_state.niveau
-    profil["points"] = st.session_state.points
-    profil["badges"] = st.session_state.badges
-    profil["exercices_reussis"] = profil.get("exercices_reussis", 0)
-    profil["exercices_totaux"] = profil.get("exercices_totaux", 0)
-    if succes:
-        profil["exercices_reussis"] += 1
-    profil["exercices_totaux"] += 1
-    profil["taux_reussite"] = int(100 * profil["exercices_reussis"] / profil["exercices_totaux"]) if profil["exercices_totaux"] > 0 else 0
-    profil["date_derniere_session"] = datetime.now().strftime("%Y-%m-%dT%H:%M")
-    if "stats_par_niveau" in st.session_state:
-        progression = calculer_progression(st.session_state.stats_par_niveau)
-        profil["progression"] = progression
-    sauvegarder_utilisateur(nom, profil)
-    st.session_state["profil"] = profil
+# ✅ REFACTORED: calculer_progression and auto_save_profil moved to utilisateur.py
 
 # =============== EXERCICES GENERATEURS ===============
 # ✅ REFACTORED Phase 2: Moved to core/exercise_generator.py

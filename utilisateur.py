@@ -225,6 +225,40 @@ def profil_par_defaut():
 # UTILITY FUNCTIONS
 # =============================================================================
 
+def calculer_progression(stats_par_niveau):
+    """Calculate progression percentage for each level."""
+    progression = {}
+    for niveau in ['CE1', 'CE2', 'CM1', 'CM2']:
+        total = stats_par_niveau[niveau]['total']
+        correct = stats_par_niveau[niveau]['correct']
+        pourcentage = (correct / total * 100) if total > 0 else 0
+        progression[niveau] = min(int(pourcentage), 100)
+    return progression
+
+
+def auto_save_profil(succes):
+    """Auto-save user profile after an exercise."""
+    if "utilisateur" not in st.session_state or "profil" not in st.session_state:
+        return
+    nom = st.session_state["utilisateur"]
+    profil = st.session_state["profil"]
+    profil["niveau"] = st.session_state.niveau
+    profil["points"] = st.session_state.points
+    profil["badges"] = st.session_state.badges
+    profil["exercices_reussis"] = profil.get("exercices_reussis", 0)
+    profil["exercices_totaux"] = profil.get("exercices_totaux", 0)
+    if succes:
+        profil["exercices_reussis"] += 1
+    profil["exercices_totaux"] += 1
+    profil["taux_reussite"] = int(100 * profil["exercices_reussis"] / profil["exercices_totaux"]) if profil["exercices_totaux"] > 0 else 0
+    profil["date_derniere_session"] = datetime.now().strftime("%Y-%m-%dT%H:%M")
+    if "stats_par_niveau" in st.session_state:
+        progression = calculer_progression(st.session_state.stats_par_niveau)
+        profil["progression"] = progression
+    sauvegarder_utilisateur(nom, profil)
+    st.session_state["profil"] = profil
+
+
 def afficher_mode_stockage():
     """Display current storage mode (for debugging)."""
     mode = get_storage_mode()
