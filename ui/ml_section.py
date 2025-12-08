@@ -62,8 +62,6 @@ def ml_adaptive_section():
     """
     Section principale pour les fonctionnalités ML adaptatives
     """
-    init_ml_models()
-
     st.title("🤖 Intelligence Artificielle Adaptative")
     st.markdown("""
     Cette section utilise l'**intelligence artificielle** pour personnaliser ton apprentissage !
@@ -71,6 +69,23 @@ def ml_adaptive_section():
     """)
 
     st.markdown("---")
+
+    # Vérifier la connexion DB avant de continuer
+    user_id = get_user_id()
+    if user_id is None:
+        st.warning("⚠️ **Fonctionnalité non disponible**")
+        st.info("""
+        La section Intelligence IA nécessite une base de données PostgreSQL ou Supabase.
+
+        **Pour activer cette fonctionnalité :**
+        1. Configurez Supabase dans le fichier `.env`
+        2. Ou installez PostgreSQL localement
+
+        **En attendant**, vous pouvez utiliser les autres sections de MathCopain ! 🎓
+        """)
+        return
+
+    init_ml_models()
 
     # Tabs pour différentes fonctionnalités ML
     tab1, tab2, tab3, tab4 = st.tabs([
